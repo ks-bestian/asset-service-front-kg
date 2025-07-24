@@ -1,0 +1,12 @@
+/* Box */
+
+.v_box {
+	padding: 2rem;
+	border: 1px solid $border-color;
+	border-radius: 2rem;
+
+	&.bg_primary {
+		border-color: transparent;
+		background-color: #F5FBFE;
+	}
+}

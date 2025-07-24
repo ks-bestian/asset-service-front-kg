@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+// 
+// Content
+//
+
+
+// Variables
+
+@import "variables";
+
+// Funtions
+
+@import "mixins";
+
+// Content
+
+@import "pages/mainPages"; // Main
+
+@import "pages/subPages"; // serve
+

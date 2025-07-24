@@ -1,0 +1,59 @@
+//
+// variables
+//
+
+// Site basic setting
+
+// channel
+$url-img: "../images" !default;
+$url-img-common: "../images/common" !default;
+
+// COLORS
+$default: #3B4044 !default;
+$white: #fff !default;
+$primary: #0094D3 !default;
+$secondary: #5B74CF !default;
+$neutral: #F3F5F6 !default;
+$green: #00AA02 !default;
+$orange: #F86800 !default;
+$red: #E22A21 !default;
+$blue: #3A88FF !default;
+$gray: #66707A !default;
+$invalid: $red !default;
+$border-color: #DCE0E5 !default;
+$placeholder-color: #A8B3BD;
+$disabled-color: rgba(24, 26, 27, .4);
+
+$colors: () !default;
+$colors: map-merge(("default": $default,
+	"white": $white,
+	"primary": $primary,
+	"secondary": $secondary,
+	"neutral": $neutral,
+	"green": $green,
+	"orange": $orange,
+	"red": $red,
+	"blue": $blue,
+	"gray": $gray,
+	"invalid": $invalid,
+),
+$colors);
+
+// Font
+$font-family-base: "Pretendard",
+"malgun gothic",
+Arial,
+sans-serif !default;
+
+$font-size-xs: 1.2rem !default;
+$font-size-sm: 1.3rem !default;
+$font-size-base: 1.4rem !default;
+$font-size-lg: 1.5rem !default;
+$font-size-xl: 1.6rem !default;
+
+// grid
+$spacing: 1.5rem !default;
+$form-height: 3.6rem;
+
+// Hover style
+$shadow: 1rem 1rem 2rem 0 rgba(0, 0, 0, .1);

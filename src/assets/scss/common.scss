@@ -1,0 +1,82 @@
+@charset "utf-8";
+
+//
+// commonness Component
+//
+
+// variables
+@import "variables";
+
+// funtions
+@import "mixins";
+
+// global
+@import "fonts";
+@import "default";
+
+// utilities
+@import "utilities/spacing";
+@import "utilities/align";
+@import "utilities/typo";
+
+// plugins
+@import "plugins/swiper";
+
+// components
+@import "components/icons";
+@import "components/bullets";
+@import "components/buttons";
+@import "components/forms";
+@import "components/boxs";
+@import "components/tabmenus";
+@import "components/popups";
+@import "components/tables";
+
+// pages
+@import "pages/guidePages"; // UI Component guide
+
+/* primevue dialog header */
+.p-dialog-header {
+    padding: 0 !important;
+}
+
+.p-dialog-header-actions {
+    background-color: #0094D3;
+    height: 100%;
+    border-top-right-radius: 12px;
+    color: white;
+    padding-right: 20px;
+}
+
+.p-dialog {
+    border: none !important;
+}
+
+/* primevue confirmpopup */
+.p-confirmpopup {
+    padding: 10px;
+    z-index: 99999999 !important;
+}
+
+.p-confirmpopup-accept-button {
+	font-size: 1.3rem !important;
+}
+.p-confirmpopup-reject-button {
+	font-size: 1.3rem !important;
+}
+
+.ico_reset_primary {
+    width: 2.4rem;
+    height: 2.4rem;
+    line-height: 2.4rem;
+    background-image: url("../images/common/ico_reset_primary.png");
+}
+
+.no_data {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    height: 10rem; 
+}

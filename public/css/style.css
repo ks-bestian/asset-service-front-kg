@@ -1,0 +1,8 @@
+@charset "utf-8";
+
+/* Common style -Be sure to modify at SCSS */
+@import url("common.css");
+@import url("layout.css");
+@import url("content.css");
+
+/* Override style by site -Add CSS at the bottom */

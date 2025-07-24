@@ -1,0 +1,148 @@
+<script setup>
+import { ref, onMounted, defineProps } from 'vue'
+import DataView from 'primevue/dataview';
+import Divider from 'primevue/divider';
+import img1 from '@/assets/images/content/회의1.png'
+import img2 from '@/assets/images/content/회의2.png'
+import img3 from '@/assets/images/content/회의3.png'
+import SelectButton from 'primevue/selectbutton';
+const props = defineProps({
+    instlList: Array
+})
+const mdfyYn = ref(false)
+const layout = ref('list');
+const options = ref(['list', 'grid']);
+const imgList = ref([img1, img2, img3, img1, img2, img3])
+
+const fnSave = () => {
+    mdfyYn.value = false;
+}
+</script>
+
+<template>
+    <DataView :value="props.instlList" :layout="layout">
+        <template #header>
+            <div class="board_info ml_8">
+                <div class="left">
+                    <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ props.instlList.length
+                            }}</span>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <SelectButton v-model="layout" :options="options" :allowEmpty="false">
+                        <template #option="{ option }">
+                            <i :class="[option === 'list' ? 'pi pi-bars' : 'pi pi-table']"></i>
+                        </template>
+                    </SelectButton>
+                </div>
+            </div>
+        </template>
+
+        <template #list="slotProps">
+            <template v-for="(item, index) in slotProps.items" :key="index">
+
+                <div class="flex_container m_5">
+                    <div>
+                        <img :src="imgList[index]" :alt="item.name" style="width: 30rem; height: 20rem;" class="m_2" />
+                        <sapn style="display: flex; justify-content: center;">{{ item.instlPicNm }}</sapn>
+                    </div>
+
+                    <div class="text_container m2">
+                        <div class="header_item">
+                            <div v-if="mdfyYn" class="text_xl text_bold m_2"><input type="text"
+                                    class="form_control full" v-model="item.instlPlc"></div>
+                            <div v-else class="text_xl text_bold m_2">{{ `[${item.instlPlcNm}] ${item.instlPlcDtl1}` }}
+                            </div>
+                            <i class="pi pi-pencil" style="font-size: 1.7rem;"></i>
+                        </div>
+                        <div class="text_lg m_2"><span class="info_text">{{ '설치자' }}</span>{{ item.rgtrId }}</div>
+                        <div class="text_lg m_2"><span class="info_text">{{ '설치일' }}</span>{{ item.instlYmd }}</div>
+                        <div class="text_lg m_2"><span class="info_text">{{ '폐기일' }}</span>{{ item.dscdYmd }}</div>
+                        <div class="text_lg m_2">
+                            <span class="info_text">{{ '비고' }}</span>
+                            <input v-if="mdfyYn" type="text" class="form_control full" v-model="item.rmk">
+                            <template v-else>{{ item.rmrk }}</template>
+                        </div>
+
+                        <div v-if="mdfyYn"><button type="button" class="v_btn btn_primary btn_md" @click="fnSave">{{
+                            '저장' }}</button></div>
+                        <!-- <div v-else class="installer text_lg m_2">{{ `${item.rgstId} [${item.instlYmd}]` }}</div> -->
+                    </div>
+                </div>
+                <Divider />
+            </template>
+        </template>
+
+
+
+        <template #grid="slotProps">
+            <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px;">
+                <div v-for="(item, j) in slotProps.items" :key="j" class="col_class v_box mt_3">
+                    <img :src="imgList[j]" :alt="item.name" style="height: 300px; width: 100%;" />
+                        <sapn style="display: flex; justify-content: center;">{{ item.instlPicNm }}</sapn>
+
+                    <div style="display: flex;justify-content: flex-end;"><i class="pi pi-pencil mt_2"
+                            style="font-size: 1.7rem;"></i></div>
+                    <div class="text_xl text_bold m_2">{{ `[${item.instlPlcNm}] ${item.instlPlcDtl1}` }}</div>
+                    <div class="text_lg m_2"><span class="info_text">{{ '설치자' }}</span>{{ item.rgtrId }}</div>
+                    <div class="text_lg m_2"><span class="info_text">{{ '설치일' }}</span>{{ item.instlYmd }}</div>
+                    <div class="text_lg m_2"><span class="info_text">{{ '폐기일' }}</span>{{ item.dscdYmd }}</div>
+                    <div class="text_lg m_2" style="display: flex;">
+                        <span class="info_text">{{ '비고' }}</span>
+                        <div>{{ item.rmrk }}</div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </DataView>
+</template>
+
+
+<style scoped>
+.col_class {
+    /* 기존의 flex와 max-width 속성 조정 */
+    /* 4열을 기준으로 할 때 (100% - 3 * gap) / 4 */
+    /* 예를 들어 gap이 16px이라면: (100% - 48px) / 4 */
+    flex: 0 0 calc(25% - (3 * 16px / 4));
+    /* 25% - 12px */
+    max-width: calc(25% - (3 * 16px / 4));
+    /* 25% - 12px */
+
+    /* 기존의 벤더 프리픽스도 유지 */
+    -webkit-box-flex: 0 !important;
+    -ms-flex: 0 0 calc(25% - (3 * 16px / 4)) !important;
+
+    /* 각 col_3 박스 내부에 여백을 주고 싶다면 padding을 사용하세요. */
+    /* padding: 10px; */
+    /* 이렇게 하면 박스 자체의 크기는 유지한 채 내부 콘텐츠에 여백이 생깁니다. */
+}
+
+.text_container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+}
+
+.installer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.header_item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.info_text {
+    color: #929292;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-right: 20px;
+    display: inline-block;
+    min-width: 5rem;
+}
+</style>

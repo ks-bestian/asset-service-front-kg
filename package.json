@@ -1,0 +1,45 @@
+{
+  "name": "vue-project-router",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "local": "vite --mode development.local",
+    "dev": "vite --mode development build",
+    "build": "vite --mode production build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mayasabha/ckeditor4-vue3": "^1.0.9",
+    "@primevue/forms": "^4.2.5",
+    "@primevue/themes": "^4.2.4",
+    "@stomp/stompjs": "^7.1.0",
+    "axios": "^1.7.9",
+    "chart.js": "^4.4.7",
+    "dayjs": "^1.11.13",
+    "jwt-decode": "^4.0.0",
+    "lodash": "^4.17.21",
+    "pinia": "^2.3.0",
+    "pinia-plugin-persistedstate": "^4.2.0",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.2.4",
+    "quill": "^2.0.3",
+    "sass": "^1.77.8",
+    "sass-loader": "^14.2.1",
+    "swiper": "^11.2.4",
+    "uuid": "^11.1.0",
+    "vee-validate": "^4.15.1",
+    "vue": "^3.5.13",
+    "vue-cookies": "^1.8.5",
+    "vue-i18n": "^12.0.0-alpha.2",
+    "vue-router": "^4.4.5",
+    "vuedraggable": "^4.1.0",
+    "xlsx-js-style": "^1.2.0",
+    "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.1",
+    "vite-plugin-vue-devtools": "^7.6.5"
+  }
+}
