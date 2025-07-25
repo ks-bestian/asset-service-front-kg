@@ -7,9 +7,11 @@ import Column from 'primevue/column';
 import 'primeicons/primeicons.css'
 import { useFormStore, useStore } from "@/store";
 import { useRouter } from "vue-router";
+import { useI18n } from 'vue-i18n'
 import VideoModal from '@/views/content/asset/manul/VideoModal.vue'
 import QnaSample from "./QnaSample.vue";
 
+const { t } = useI18n()
 const router = useRouter();
 const store = useStore();
 const formStore = useFormStore();
@@ -18,21 +20,21 @@ const list = ref([])
 const dialog = ref(false)
 const dialogQna = ref(false)
 
+const eqpmntSeList = store.getComCodes('1037');
+
 //검색 조건 보류
 const searchBz = ref('')
 const searchEq = ref('')
 
+
 const fnTabChange = () => { //todo
-    if (tab.value === 'bb') {
-        list.value = []
-    } else {
-        fnSearch();
-    }
+    fnSearch();
 }
 
 const fnSearch = () => {
     let params = {
         searchEq: searchEq.value,
+        searchSe: tab.value,
     }
 
     store.API_LIST('equip', params).then((data) => {
@@ -70,16 +72,22 @@ onMounted(() => {
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
-                    <li :class="{ on: tab == 'aa' }" @click="tab = 'aa'; fnTabChange()"><a href="javascript:void(0)">{{
-                            '전체' }}</a></li>
+                    
+                    <li :class="{ on: tab == '' }" @click="tab = ''; fnTabChange()"><a href="javascript:void(0)">{{
+                            t('10066') }}</a></li>
+                            <!--
                     <li :class="{ on: tab == 'bb' }" @click="tab = 'bb'; fnTabChange()"><a href="javascript:void(0)">{{
                             '마이크' }}</a></li>
                     <li :class="{ on: tab == 'cc' }" @click="tab = 'cc'; fnTabChange()"><a href="javascript:void(0)">{{
                             '카메라' }}</a></li>
-                    <!-- <li :class="{ on: tab == 'dd' }" @click="tab = 'dd'; fnTabChange()"><a href="javascript:void(0)">{{
+                     <li :class="{ on: tab == 'dd' }" @click="tab = 'dd'; fnTabChange()"><a href="javascript:void(0)">{{
                             '카메라' }}</a></li>
                     <li :class="{ on: tab == 'ee' }" @click="tab = 'ee'; fnTabChange()"><a href="javascript:void(0)">{{
                             '소프트웨어' }}</a></li> -->
+                    <template v-for="(item, i) in eqpmntSeList" :key="i">
+                        <li :class="{ on: tab == item.codeId }" @click="tab = item.codeId; fnTabChange()"><a href="javascript:void(0)">{{item.codeNm }}</a></li>
+
+                    </template>
                 </ul>
             </nav>
 

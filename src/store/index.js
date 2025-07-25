@@ -19,6 +19,7 @@ export const useStore = defineStore('main', {
         ageList: [],
         deptList: [],
         ccofList: [],
+        bzentyList: [],
         profileImgUrl: null,
         menuList: [],
         quickMenuList: [],
@@ -60,6 +61,7 @@ export const useStore = defineStore('main', {
             };
             this.ageList = [];
             this.ccofList = [];
+            this.bzentyList = [];
             this.profileImgUrl = null;
             this.menuList = [];
             this.quickMenuList = [];
@@ -85,6 +87,24 @@ export const useStore = defineStore('main', {
         //         });
         //     });
         // },
+        getBzentys() {
+            const list = this.bzentyList;
+            const lang = localStorage.getItem('languageType');
+
+            for(var i = 0; i < list.length; ++i) {
+                list[i].codeId = list[i].bzentyId;
+                if(lang == 'lng_type_1') {
+                    list[i].codeNm = list[i].bzentyNm1;
+                }
+                else if(lang == 'lng_type_2'){
+                    list[i].codeNm = list[i].bzentyNm2;
+                } 
+                else {
+                    list[i].codeNm = list[i].bzentyNm3;
+                }
+            }
+            return list;
+        },
         getComCodes(grpCode) {
             const list = this.comCodes.filter(comCode => comCode.grpCode == grpCode);
             const lang = localStorage.getItem('languageType');
@@ -585,7 +605,7 @@ export const useStore = defineStore('main', {
     },
     persist: {
         storage: sessionStorage,
-        pick: ['jwtToken', 'loginInfo', 'comCodes', 'ageObj', 'ageList', 'ccofList', 'profileImgUrl', 'menuList', 'quickMenuList']
+        pick: ['jwtToken', 'loginInfo', 'comCodes', 'ageObj', 'ageList', 'ccofList', 'bzentyList', 'profileImgUrl', 'menuList', 'quickMenuList']
     },
 })
 export const usePageStore = defineStore('page', {

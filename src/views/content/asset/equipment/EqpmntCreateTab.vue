@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, onMounted } from 'vue';
 import testform from '../mng/testform.vue';
 import { formSchemas } from '@/schemas/AssetSchemas';
 
@@ -11,6 +11,7 @@ const props = defineProps({
 
 //(설정) 해당 필드 가져오기
 const fields = ref(formSchemas.equipment.fields);
+
 </script>
 
 
