@@ -11,6 +11,7 @@ const store = useStore();
 const lang = ref(localStorage.getItem("languageType"));
 const list = ref([]);
 const searchBzentyNm = ref('');
+
 const fnBzentyList = () => {
     let param = {
         lang: lang.value,
@@ -45,7 +46,7 @@ const fnReset = () => {
 }
 
 onMounted(() => {
-    const nameError = msg.validation.missing('이름');
+    //const nameError = msg.validation.missing('이름');
     //alert(nameError);
     
     fnBzentyList();

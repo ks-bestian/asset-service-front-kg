@@ -1,15 +1,19 @@
 import i18n from '@/i18n'
+import { useFormStore, useStore } from "@/store";
+const store = useStore();
+
+
 
 export const formSchemas = {
   equipment: {
     fields: [
       [ //1. 배열 1행 or 2행으로 넘겨야함 2. name db컬럼명과 일치 3.입력 type 및 필수 여부(db not null) 설정 
         { name: "eqpmntNm", label: '장비명', type: 'text', required: true },
-        { name: "eqpmntCd", label: '장비코드', type: 'select' },
+        { name: "eqpmntCd", label: '장비코드', type: 'text' },
       ],
       [
-        { name: "bzentyId", label: '업체아이디', type: 'number' },
-        { name: "eqpmntSe", label: '업체구분', type: 'text' },
+        { name: "bzentyId", label: '공급업체', type: 'select', items:store.getBzentys(), default: ''},
+        { name: "eqpmntSe", label: '장비구분', type: 'select', items:store.getComCodes('1037'), default: '' },
       ],
       [
         { name: "expln", label: '설명', type: 'text' },
@@ -29,7 +33,7 @@ export const formSchemas = {
   installVo: {
     fields: [
       [
-        { name: 'instlPlcCd', label: '설치장소', type: 'select' },
+        { name: 'instlPlcCd', label: '설치장소', type: 'select', items:store.getComCodes('1038'), default: '' },
         { name: 'instlPlcDtl1', label: '상세장소', type: 'text' },
       ],
       [

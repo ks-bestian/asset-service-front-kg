@@ -22,7 +22,7 @@ const type = ref(route.params.type)
 const equipDetailVo = ref({})
 const mnulList = ref([])
 const installList = ref([])
-const eqpmntId = ref(route.params.eqpmntId)
+const eqpmntId = ref(route.params.eqpmntId);
 
 const fnSave = async () => {
     let mnulVo = []
@@ -143,12 +143,10 @@ onMounted(() => {
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
-                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{
-                        t('39') }}</a></li>
-                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ '영상메뉴얼'
-                    }}</a></li>
-                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{
-                        '설치 정보' }}</a></li>
+                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{ t('10732') }}</a></li>
+                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ t('10733') }}</a></li>
+                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{ t('10734') }}</a></li>
+
                 </ul>
             </nav>
 

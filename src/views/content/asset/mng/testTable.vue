@@ -15,7 +15,6 @@ const props = defineProps({
 
 
 const fieldStore = reactive({})
-const initialValues = ref({})
 const files = reactive({});
 function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -25,11 +24,22 @@ function generateUUID() {
   });
 }
 
+function getInitialValuesFromFields(fields) {
+  const result = {};
+  fields.flat().forEach(field => {
+    result[field.name] = field.default ?? '';
+  });
+  return result;
+}
+
 const formkey = ref(typeof crypto?.randomUUID === 'function' ? crypto.randomUUID() : generateUUID());
 const schema = createYupValidate(props.fields);
+const initialValues = getInitialValuesFromFields(props.fields);
 const { values, errors, defineField, validate, resetForm } = useYupForm(schema, initialValues);
 
 onMounted(() => {
+
+
     props.fields.forEach(item => {
         item.forEach(col => {
             const [value, attrs] = defineField(col.name)
@@ -40,6 +50,8 @@ onMounted(() => {
     if (props.type === 'update') {
 
         resetForm({ values: { ...props.detailDatas } })
+    } else {
+        resetForm({ values: initialValues.value })
     }
 
     formStore.fieldStore = fieldStore;
@@ -58,7 +70,8 @@ onMounted(() => {
                         <template v-if="field.type === 'select'">
                             <!--todo select list api_list -->
                             <select class="form_control" v-model="fieldStore[field.name].value">
-                                <option  v-for="(item, i) in props.codeList" :key="i" :value="item.cdId">{{ item.cdNm1 }}</option>
+                                <option  value="">{{ field.label }}</option>
+                                <option  v-for="(item, i) in field.items" :key="i" :value="item.codeId">{{ item.codeNm }}</option>
                             </select>
                         </template>
 
