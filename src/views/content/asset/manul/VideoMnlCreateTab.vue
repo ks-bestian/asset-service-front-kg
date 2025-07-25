@@ -24,19 +24,10 @@ const fnDelManual = (id) => {
 
     const deleteItems = []
     deleteItems.push(id)
-
-    // formStore.fieldArr.forEach((item) => {
-    //     Object.entries(item).forEach(([key, value]) => {
-    //         if (key === 'mnlId') {
-    //             if (value.value === id) {
-    //                 formStore.fieldArr = formStore.fieldArr.filter(item => { return item.mnlId !== id })
-    //             }
-    //         }
-    //     })
-    // })
-
-
     store.API_DELETE('/mnul', deleteItems).then((data) => {
+        formStore.fieldArr = formStore.fieldArr.filter(item => {
+            return item.mnlId?.value !== id
+        })
     }).catch(({ message }) => {
         console.error(message)
     })

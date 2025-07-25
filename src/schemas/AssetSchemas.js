@@ -3,7 +3,7 @@ import i18n from '@/i18n'
 export const formSchemas = {
   equipment: {
     fields: [
-      [ //1. 배열 1행 or 2행으로 넘겨야함 2. name db컬럼명과 일치 3.입력 type 및 필수 여부(db not null) 설정
+      [ //1. 배열 1행 or 2행으로 넘겨야함 2. name db컬럼명과 일치 3.입력 type 및 필수 여부(db not null) 설정 
         { name: "eqpmntNm", label: '장비명', type: 'text', required: true },
         { name: "eqpmntCd", label: '장비코드', type: 'select' },
       ],

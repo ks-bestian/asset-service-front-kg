@@ -31,7 +31,6 @@ onMounted(() => {
             time: '02:48:55'
         }
     )
-
 })
 </script>
 
@@ -54,13 +53,13 @@ onMounted(() => {
 
         <div class="col_3 v_box">
             <!-- <div class="text_xl text_bold mb_3">{{ eqpmntInfo.eqpmntCd + ' | ' + eqpmntInfo.eqpmntSeNm + ' 메뉴얼'}}</div> -->
-
             <template v-for="(item, i) in product" :key="i">
-                <div class="m1_5" style="display: flex; align-items: center;">
+                <div class="m1_5" style="display: flex; align-items: center; ">
                     <i class="pi pi-play-circle mr_1 " style="font-size: 1.8rem;"></i>
                     <button type="button" class="m_1 text_xl text_bold">{{ item.title }}</button>
+                    <span class="m_1 text_lg">{{ item.time }}</span>
+                    <i class="pi pi-download" style="margin-left: auto;"></i>
                 </div>
-                <div class="m_1 text_lg">{{ item.time }}</div>
                 <Divider />
             </template>
         </div>

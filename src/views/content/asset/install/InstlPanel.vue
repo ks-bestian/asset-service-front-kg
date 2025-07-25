@@ -43,8 +43,7 @@ const fnDelFile = (fileNm) => {
     <Panel header="Header" toggleable class="mb_3">
         <template #header>
             <div style="display: flex; align-items: center;" class="text_bold text_xl p_2">
-                <Button icon="pi pi-trash" rounded class="mr_3 text_white" variant="outlined"
-                    @click="fnDelInstall"></Button>
+                <Button icon="pi pi-trash" rounded class="mr_3 text_white" variant="outlined" @click="fnDelInstall"></Button>
                 <span class="text_white" style="font-size: 1.5rem;">{{ '설치정보 추가 ' + props.index }}</span>
             </div>
         </template>
@@ -53,7 +52,7 @@ const fnDelFile = (fileNm) => {
         </template>
 
         <div class="content_section mt_3">
-            <div class="v_table">
+            <div class="v_table"> 
                 <Testform :fields="fields" :type="props.type" :detailDatas="props.detailDatas" :codeList="codeList"/>
             </div>
         </div>

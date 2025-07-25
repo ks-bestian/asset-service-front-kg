@@ -6,11 +6,12 @@ import img1 from '@/assets/images/content/회의1.png'
 import img2 from '@/assets/images/content/회의2.png'
 import img3 from '@/assets/images/content/회의3.png'
 import SelectButton from 'primevue/selectbutton';
+
 const props = defineProps({
     instlList: Array
 })
 const mdfyYn = ref(false)
-const layout = ref('list');
+const layout = ref('grid');
 const options = ref(['list', 'grid']);
 const imgList = ref([img1, img2, img3, img1, img2, img3])
 
@@ -54,7 +55,7 @@ const fnSave = () => {
                                     class="form_control full" v-model="item.instlPlc"></div>
                             <div v-else class="text_xl text_bold m_2">{{ `[${item.instlPlcNm}] ${item.instlPlcDtl1}` }}
                             </div>
-                            <i class="pi pi-pencil" style="font-size: 1.7rem;"></i>
+                            <!-- <i class="pi pi-pencil" style="font-size: 1.7rem;"></i> -->
                         </div>
                         <div class="text_lg m_2"><span class="info_text">{{ '설치자' }}</span>{{ item.rgtrId }}</div>
                         <div class="text_lg m_2"><span class="info_text">{{ '설치일' }}</span>{{ item.instlYmd }}</div>
@@ -82,8 +83,9 @@ const fnSave = () => {
                     <img :src="imgList[j]" :alt="item.name" style="height: 300px; width: 100%;" />
                         <sapn style="display: flex; justify-content: center;">{{ item.instlPicNm }}</sapn>
 
-                    <div style="display: flex;justify-content: flex-end;"><i class="pi pi-pencil mt_2"
-                            style="font-size: 1.7rem;"></i></div>
+                    <div style="display: flex;justify-content: flex-end;">
+                        <!-- <i class="pi pi-pencil mt_2" style="font-size: 1.7rem;"></i> -->
+                    </div>
                     <div class="text_xl text_bold m_2">{{ `[${item.instlPlcNm}] ${item.instlPlcDtl1}` }}</div>
                     <div class="text_lg m_2"><span class="info_text">{{ '설치자' }}</span>{{ item.rgtrId }}</div>
                     <div class="text_lg m_2"><span class="info_text">{{ '설치일' }}</span>{{ item.instlYmd }}</div>
@@ -101,21 +103,10 @@ const fnSave = () => {
 
 <style scoped>
 .col_class {
-    /* 기존의 flex와 max-width 속성 조정 */
-    /* 4열을 기준으로 할 때 (100% - 3 * gap) / 4 */
-    /* 예를 들어 gap이 16px이라면: (100% - 48px) / 4 */
     flex: 0 0 calc(25% - (3 * 16px / 4));
-    /* 25% - 12px */
     max-width: calc(25% - (3 * 16px / 4));
-    /* 25% - 12px */
-
-    /* 기존의 벤더 프리픽스도 유지 */
     -webkit-box-flex: 0 !important;
     -ms-flex: 0 0 calc(25% - (3 * 16px / 4)) !important;
-
-    /* 각 col_3 박스 내부에 여백을 주고 싶다면 padding을 사용하세요. */
-    /* padding: 10px; */
-    /* 이렇게 하면 박스 자체의 크기는 유지한 채 내부 콘텐츠에 여백이 생깁니다. */
 }
 
 .text_container {

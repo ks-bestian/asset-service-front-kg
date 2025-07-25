@@ -25,7 +25,6 @@ const installList = ref([])
 const eqpmntId = ref(route.params.eqpmntId)
 
 const fnSave = async () => {
-
     let mnulVo = []
     let installVo = []
     let params = {}
@@ -36,7 +35,6 @@ const fnSave = async () => {
         let isManual = false;
 
         Object.entries(item).forEach(([key, value]) => {
-
             if (mnulField.value.includes(key)) {
                 obj[key] = value.value;
                 isManual = true;
@@ -65,20 +63,47 @@ const fnSave = async () => {
         sendData.eqpmntId = eqpmntId.value
     }
 
+    const formData = new FormData();
+
+    for (const key in sendData) {
+        const value = sendData[key]
+
+        if (key === 'files') {
+            if (value) {
+                for (var i = 0; i < value.length; i++) {
+                    formData.append('files', value[i])
+                }
+            }
+        } else if (typeof value === 'object' && value !== null) {
+            formData.append(key, JSON.stringify(value))
+        } else {
+            formData.append(key, value)
+        }
+    }
+
     formStore.fnSubmit().then((result) => {
         if (result) {
+            // store.API_SAVE_FILE('/equip', formData).then((data) => {
+
+            // }).catch(({ message }) => {
+            //     console.log(message)
+            // })
+
+            
             formStore.fnSave(sendData).then(r => {
-                if(type.value === 'update') {
-                router.push({ name: 'asset.mng.dtl', params: {eqpmntId: eqpmntId.value} })
+                if (type.value === 'update') {
+                    router.push({ name: 'asset.mng.dtl', params: { eqpmntId: eqpmntId.value } })
                 } else {
-                    router.push({ name: 'asset.mng'})
+                    router.push({ name: 'asset.mng' })
                 }
             })
         }
     })
 }
 
+
 const fnDetail = () => {
+    formStore.fieldArr = []
     let params = {
         eqpmntId: eqpmntId.value
     }
@@ -118,9 +143,12 @@ onMounted(() => {
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
-                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{ t('39') }}</a></li>
-                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ '영상 메뉴얼' }}</a></li>
-                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{ '설치 정보' }}</a></li>
+                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{
+                        t('39') }}</a></li>
+                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ '영상메뉴얼'
+                    }}</a></li>
+                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{
+                        '설치 정보' }}</a></li>
                 </ul>
             </nav>
 
@@ -133,7 +161,7 @@ onMounted(() => {
             <button type="button" class="v_btn btn_outline_secondary btn_md" v-if="type === 'update'"
                 @click="fnDelete">{{ '삭제' }}</button>
             <button type="button" class="v_btn btn_outline_primary btn_md"
-                @click="router.push({ name: 'asset.mng' })">{{ '목록' }}</button>
+                @click="router.push({ name: 'asset.mng' }); formStore.fieldArr = [];">{{ '목록' }}</button>
         </div>
     </div>
 
