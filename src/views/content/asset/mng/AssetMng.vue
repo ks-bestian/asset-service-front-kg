@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue"
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
+import TitleComp from "@/components/TitleComp.vue";
 import Column from 'primevue/column';
 import 'primeicons/primeicons.css'
 import { useFormStore, useStore } from "@/store";
@@ -46,7 +47,8 @@ const fnGoDetail = (e) => {
 }
 
 const fnReset = () => {
-    searchEq.value = ''
+    searchEq.value = '';
+    fnSearch();
 }
 
 const fnVideoModal = () => {
@@ -61,22 +63,9 @@ onMounted(() => {
 
 <template>
     <div class="content_inner">
-        <!--
+
         <TitleComp />
-        -->
-        <div class="content_util">
-            <div class="title_wrap">
-                <h2 class="content_tit">장비유지관리</h2>
-                <button type="button" class="v_btn btn_favorite" @click="toggleQuickMenu"><i class="v_ico ico_bookmark"></i></button>
-            </div>
-            <nav class="v_breadcrumb">
-                <ul class="path">
-                    <li><i class="v_ico ico_home"></i></li>
-                    <li>장비유지관리</li>
-                    <li>장비유지관리</li>
-                </ul>
-            </nav>
-        </div>
+
         <!-- 본문 영역 -->
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">

@@ -17,7 +17,15 @@ const props = defineProps({
 const fieldStore = reactive({})
 const initialValues = ref({})
 const files = reactive({});
-const formkey = ref(crypto.randomUUID());
+function generateUUID() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
+const formkey = ref(typeof crypto?.randomUUID === 'function' ? crypto.randomUUID() : generateUUID());
 const schema = createYupValidate(props.fields);
 const { values, errors, defineField, validate, resetForm } = useYupForm(schema, initialValues);
 
@@ -30,6 +38,7 @@ onMounted(() => {
     })
 
     if (props.type === 'update') {
+
         resetForm({ values: { ...props.detailDatas } })
     }
 

@@ -234,8 +234,8 @@ const routes = [
       { path: 'asset/mng/dtl/:eqpmntId', name: 'asset.mng.dtl', props: true, component: () => import('@/views/content/asset/mng/AssetDetail.vue'), },
       //업체관리
       { path: 'asset/bzenty', name: 'asset.bzenty', component: () => import('@/views/content/bzenty/BzentyList.vue'), },
-      { path: 'asset/bzenty/create', name: 'asset.bzenty.create', component: () => import('@/views/content/bzenty/BzentyCreate.vue'), },
-      { path: 'asset/bzenty/detail', name: 'asset.bzenty.detail', component: () => import('@/views/content/bzenty/BzentyDetail.vue')},
+      { path: 'asset/bzenty/form/:bzentyId/:type', name: 'asset.bzenty.form', props: true, component: () => import('@/views/content/bzenty/BzentyCreate.vue'), },
+      { path: 'asset/bzenty/detail/:bzentyId', name: 'asset.bzenty.detail', component: () => import('@/views/content/bzenty/BzentyDetail.vue')},
       
 
             

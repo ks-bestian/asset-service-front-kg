@@ -1,6 +1,7 @@
 <script setup>
 import {  defineProps } from 'vue';
 import testTable from './testTable.vue';
+import testTableDtl from './testTableDtl.vue';
 
 const props = defineProps({
   fields: Array,
@@ -22,7 +23,8 @@ const props = defineProps({
         <col>
       </colgroup>
       <tbody>
-            <testTable :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-if="Object.keys(props.detailDatas).length > 0 || type === 'create'" :codeList="codeList"/>
+            <testTable :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-if="(props.detailDatas.bzentyId && type === 'update') || type === 'create'" :codeList="codeList"/>
+            <testTableDtl :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-else-if="(props.detailDatas.bzentyId && type === 'detail')" :codeList="codeList"/>
       </tbody>
     </table>
   </div>

@@ -29,15 +29,19 @@ const fnSearch = () => {
 }
 
 const fnRouteCreate = () => {
-    router.push({
-        name : 'asset.bzenty.create'
-    });
+    router.push({name : 'asset.bzenty.form', params: { type: 'create', bzentyId: 'new' }});
 }
 
 const fnGoDetail = (e) => {
+    console.log('e :: ',e)
     router.push({
-        name : 'asset.bzenty.detail', query : { id : e.data.bzentyId }
+        name : 'asset.bzenty.detail', params: { bzentyId: e.data.bzentyId }
     })
+}
+
+const fnReset = () => {
+    searchBzentyNm.value = '';
+    fnSearch();
 }
 
 onMounted(() => {
@@ -50,22 +54,9 @@ onMounted(() => {
 
 <template>
     <div class="content_inner">
-        <!--
+
         <TitleComp />
-        -->
-        <div class="content_util">
-            <div class="title_wrap">
-                <h2 class="content_tit">업체정보</h2>
-                <button type="button" class="v_btn btn_favorite" :class="{on: isFavorite}" @click="toggleQuickMenu"><i class="v_ico ico_bookmark"></i></button>
-            </div>
-            <nav class="v_breadcrumb">
-                <ul class="path">
-                    <li><i class="v_ico ico_home"></i></li>
-                    <li>장비유지관리</li>
-                    <li>업체정보</li>
-                </ul>
-            </nav>
-        </div>
+
         <div class="content_section">
             <div class="board_search">
                 <div class="search_inner">
@@ -73,7 +64,7 @@ onMounted(() => {
 
                         <div class="input_item">
                             <label class="form_label">{{ "업체명" }}</label>
-                            <input type="text" class="form_control" v-model="searchBzentyNm">
+                            <input type="text" class="form_control" v-model="searchBzentyNm" @keydown.enter="fnSearch">
                         </div>
                     </div>
                 </div>
@@ -89,14 +80,18 @@ onMounted(() => {
 
             <div class="board_info mt_6">
                 <div class="left">
-                    <div class="total_num">{{ "Total" }} <span class="text_primary">{{ "106" }}</span></div>
+                    <div class="total_num">{{ "Total" }} <span class="text_primary">{{ list.length }}</span></div>
                 </div>
                 <div class="right">
                     <div class="btn_wrap">
                         <button type="button" class="v_btn btn_outline_primary btn_sm" @click="fnRouteCreate">{{ "신규" }}</button>
+                        <!--
                         <button type="button" class="v_btn btn_outline_secondary btn_sm">{{ "선택 삭제" }}</button>
+                        -->
+                        <!--
                         <button type="button" class="v_btn btn_outline_secondary btn_sm">
                             <i class="v_ico ico_download_secondary"></i><span>{{ "엑셀 다운로드" }}</span></button>
+                            -->
                     </div>
                 </div>
             </div>
@@ -105,11 +100,9 @@ onMounted(() => {
             <div class="v_table table_list">
                 <DataTable :value="list" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
                     tableStyle="min-width: 50rem;" @row-dblclick="fnGoDetail" >
-                    <Column field="selection" selectionMode="multiple" style="width: 3%;" class="text_center"></Column>
-                    <Column field="bzentyNm1" header="업체명" class="text_center" sortable></Column>
+                    <Column :field="lang === 'lng_type_1' ? 'bzentyNm1' : (lang === 'lng_type_2' ? 'bzentyNm2' : 'bzentyNm3')" header="업체명" class="text_center" sortable></Column>
                     <Column field="telno" header="전화번호" class="text_center" style="width: 9%;" sortable></Column>
                     <Column field="eml" header="담당자 이메일" class="text_center" sortable></Column>
-                    <Column field="app" header="와치앱" class="text_center" sortable></Column>
                     <Column field="picNm" header="담당자" class="text_center" sortable></Column>
                     <template #empty>
                         <div class="no_data">

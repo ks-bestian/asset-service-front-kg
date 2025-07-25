@@ -93,5 +93,28 @@ export const formSchemas = {
       ]
     ]
   },
+  bzenty: {
+    fields: [
+      [
+        { name: 'bzentyNm1', label: '업체명1', type: 'text', required: true }
+      ],
+      [
+        { name: 'bzentyNm2', label: '업체명2', type: 'text', required: true }
+      ],
+      [
+        { name: 'bzentyNm3', label: '업체명3', type: 'text', required: true }
+      ],
+      [
+        { name: 'telno', label: '전화번호', type: 'text' },
+        { name: 'eml', label: '이메일', type: 'text' }
+      ],
+      [
+        { name: 'picNm', label: '담당자', type: 'text' }
+      ],
+      [
+        { name: 'useYn', label: '사용여부', type: 'radio' }
+      ]
+    ]
+  },
 }
 
