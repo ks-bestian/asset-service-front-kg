@@ -6,7 +6,8 @@ import InstlDtlTab from '@/views/content/asset/install/InstlDtlTab.vue'
 import { useRouter, useRoute } from 'vue-router'
 import TitleComp from "@/components/TitleComp.vue";
 import { useStore, useFormStore } from '@/store';
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
 const formStore = useFormStore();
 const store = useStore()
 const route = useRoute();
@@ -35,22 +36,25 @@ onMounted(() => {
 </script>
 <template>
     <div class="content_inner">
+
+        <TitleComp />
+<!--
         <div class="content_util">
             <div class="title_wrap">
                 <h2 class="content_tit">{{ eqpmntInfo.eqpmntNm || '' }}</h2>
             </div>
         </div>
-
+-->
 
         <!-- 본문 영역 -->
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
                     <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{
-                            '제품정보' }}</a></li>
-                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ '영상 메뉴얼' }}</a></li>
+                            t('10732') }}</a></li>
+                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ t('10733') }}</a></li>
                     <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{
-                            '설치정보' }}</a></li>
+                            t('10734') }}</a></li>
                 </ul>
             </nav>
             <EqpmntDtlTab v-if="tab == 'productInf'" :eqpmntInfo="eqpmntInfo" />
@@ -59,8 +63,8 @@ onMounted(() => {
         </div>
         <div class="btn_group_fixed">
             <button type="submit" class="v_btn btn_primary btn_md" v-if="tab == 'productInf'"
-                @click="$router.push({ name: 'asset.mng.form', params: { type: 'update', eqpmntId: eqpmntId } })">{{ '수정' }}</button>
-            <button type="button" class="v_btn btn_outline_primary btn_md" @click="router.push({ name: 'asset.mng' })">{{ '목록' }}</button>
+                @click="$router.push({ name: 'asset.mng.form', params: { type: 'update', eqpmntId: eqpmntId } })">{{ t('10744') }}</button>
+            <button type="button" class="v_btn btn_outline_primary btn_md" @click="router.push({ name: 'asset.mng' })">{{ t('10750') }}</button>
         </div>
     </div>
 </template>

@@ -11,6 +11,7 @@ import VideoModal from '@/views/content/asset/manul/VideoModal.vue'
 import QnaSample from "./QnaModal.vue";
 import SelectButton from 'primevue/selectbutton';
 import TitleComp from "@/components/TitleComp.vue";
+const lang = ref(localStorage.getItem("languageType"));
 
 const layout = ref('list');
 const options = ref(['list', 'grid']);
@@ -20,7 +21,7 @@ const { t } = useI18n()
 const router = useRouter();
 const store = useStore();
 const formStore = useFormStore();
-const tab = ref('aa') /* todo 임시 tab value 값 수정하기*/
+const tab = ref('') /* todo 임시 tab value 값 수정하기*/
 const list = ref([])
 const dialog = ref(false)
 const dialogQna = ref(false)
@@ -30,6 +31,7 @@ const eqpmntSeList = store.getComCodes('1037');
 //검색 조건 보류
 const searchBz = ref('')
 const searchEq = ref('')
+const searchSe = ref('')
 
 
 const fnTabChange = () => { //todo
@@ -40,6 +42,7 @@ const fnSearch = () => {
     let params = {
         searchEq: searchEq.value,
         searchSe: tab.value,
+        searchBz: searchBz.value
     }
 
     store.API_LIST('equip', params).then((data) => {
@@ -92,16 +95,22 @@ onMounted(() => {
             <div class="board_search">
                 <div class="search_inner">
                     <div class="form_row">
+                        
                         <div class="input_item">
-                            <label class="form_label">{{ "제품구분" }}</label>
-                            <select class="form_control">
-                                <option>하드웨어</option>
-                                <option>소프트웨어</option>
+                            <label class="form_label">{{ t("10752") }}</label>
+                            <select class="form_control" v-model="searchBz">
+                                <option  value="">{{ t("10752") }}</option>
+                                <option  v-for="(item, i) in store.getBzentys()" :key="i" :value="item.codeId">{{ item.codeNm }}</option>
                             </select>
                         </div>
+                        <!--                        <div class="input_item">
+                            <label class="form_label">{{ t("10752") }}</label>
+                            <input type="text" class="form_control" v-model="searchBz" @keydown.enter="fnSearch">
+                        </div>
+                        -->
 
                         <div class="input_item">
-                            <label class="form_label">{{ "장비명" }}</label>
+                            <label class="form_label">{{ t("10751") }}</label>
                             <input type="text" class="form_control" v-model="searchEq" @keydown.enter="fnSearch">
                         </div>
                     </div>
@@ -109,7 +118,7 @@ onMounted(() => {
 
                 <div class="search_btn">
                     <button type="button" class="v_btn btn_primary btn_md">
-                        <i class="v_ico ico_search_white" @click="fnSearch"></i><span>{{ "검색" }}</span></button>
+                        <i class="v_ico ico_search_white" @click="fnSearch"></i><span>{{ t("10053") }}</span></button>
                     <button type="button" @click="fnReset" class="v_btn btn_outline_primary btn_md">
                         <i class="v_ico ico_reset_primary"></i><span></span></button>
                 </div>
@@ -122,13 +131,12 @@ onMounted(() => {
                 </div>
                 <div class="right">
                     <div class="btn_wrap">
-
+<!--
                         <button type="button" class="v_btn btn_outline_secondary btn_sm" @click="fnExcelDownload"><i
                                 class="v_ico ico_download_secondary"></i><span>{{ '엑셀 다운로드' }}</span></button>
-
+-->
                         <button type="button" class="v_btn btn_outline_primary btn_sm mb_3"
-                            @click="$router.push({ name: 'asset.mng.form', params: { type: 'create', eqpmntId: 'new' } })">{{
-                                "신규" }}</button>
+                            @click="$router.push({ name: 'asset.mng.form', params: { type: 'create', eqpmntId: 'new' } })">{{ t("10746") }}</button>
                         <!-- <button type="button" class="v_btn btn_outline_secondary btn_sm" @click="fnDelete">{{ "선택 삭제" }}</button> -->
 
                     </div>
@@ -149,29 +157,29 @@ onMounted(() => {
             <div class="v_table table_list" v-if="layout === 'list'">
                 <DataTable :value="list" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
                     @row-click="fnGoDetail" tableStyle="min-width: 50rem;">
-                    <Column field="img" header="이미지" class="text_center">
+                    <Column field="img" :header="t('10729')" class="text_center">
                         <template #body="{ data }">
                             <img src="@/assets/images/common/ico_cannon.png" alt=""
                                 style="width: 28rem; height: 15rem;">
                         </template>
                     </Column>
-                    <Column field="eqpmntCd" header="장비코드" class="text_center" style="width: 8%;"></Column>
-                    <Column field="eqpmntNm" header="장비명" class="text_center"></Column>
-                    <Column field="expln" header="설명" style="width: 40%;"></Column>
-                    <Column field="eqpmntSeNm" header="제품구분" class="text_center" style="width: 6%;"></Column>
-                    <Column field="bzentyNm" header="업체명" class="text_center" style="width: 7%;"></Column>
-                    <Column field="mnl" header="메뉴얼" class="text_center" style="width: 3%;">
+                    <Column field="eqpmntCd" :header="t('10725')" class="text_center" style="width: 8%;"></Column>
+                    <Column field="eqpmntNm" :header="t('10751')" class="text_center"></Column>
+                    <Column field="expln" :header="t('10728')" style="width: 33%;"></Column>
+                    <Column :field="lang === 'lng_type_1' ? 'eqpmntSeNm1' : (lang === 'lng_type_2' ? 'eqpmntSeNm2' : 'eqpmntSeNm3')" :header="t('10727')" class="text_center" style="width: 6%;"></Column>
+                    <Column :field="lang === 'lng_type_1' ? 'bzentyNm1' : (lang === 'lng_type_2' ? 'bzentyNm2' : 'bzentyNm3')" :header="t('10752')" class="text_center" style="width: 7%;"></Column>
+                    <Column field="mnl" :header="t('10755')" class="text_center" style="width: 5%;">
                         <template #body="{ data }">
                             <img src="@/assets/images/common/ico_file_pdf.png" alt="" style="width: 25px;">
                         </template>
                     </Column>
-                    <Column field="video" header="비디오" class="text_center" style="width: 5%;">
+                    <Column field="video" :header="t('10733')" class="text_center" style="width: 10%;">
                         <template #body="{ data }">
                             <Button severity="danger" @click="fnVideoModal"><i class="pi pi-play-circle"></i><span
                                     style="font-size: 1.2rem;">Play</span></Button>
                         </template>
                     </Column>
-                    <Column field="qna" header="Q&A" class="text_center" style="width: 7%;">
+                    <Column field="qna" :header="t('10760')" class="text_center" style="width: 7%;">
                         <template #body="{ data }">
                             <Button severity="info" rounded @click="dialogQna = true"><i
                                     class="pi pi-question-circle"></i>
@@ -189,7 +197,10 @@ onMounted(() => {
                     @click="$router.push({ name: 'asset.mng.dtl', params: { eqpmntId: item.eqpmntId } })">
                     <img src="@/assets/images/common/ico_cannon.png" :alt="item.name"
                         style="height: 230px; width: 100%;" />
-                    <sapn style="display: flex; justify-content: center;">{{ `${item.eqpmntCd} | ${item.eqpmntSeNm}` }}
+                    <sapn style="display: flex; justify-content: center;">
+                        {{ `${item.eqpmntCd} | ${    lang === 'lng_type_1' ? item.eqpmntSeNm1 :
+                                                    lang === 'lng_type_2' ? item.eqpmntSeNm2 :
+                                                    item.eqpmntSeNm3}` }}
                     </sapn>
 
                     <div style="display: flex;justify-content: flex-end;">
@@ -199,9 +210,20 @@ onMounted(() => {
                     </div>
 
                     <div class="text_xl text_bold m_2">{{ item.eqpmntNm }}</div>
-                    <div class="text_lg m_2"><span class="info_text">{{ '업체명' }}</span>{{ item.bzentyNm }}</div>
-                    <div class="text_lg m_2"><span class="info_text">{{ '메뉴얼' }}</span>{{ item.instlYmd }}</div>
-                    <div class="text_lg m_2"><span class="info_text">{{ '영상메뉴얼' }}</span>{{ item.dscdYmd }}</div>
+                    <div class="text_lg m_2"><span class="info_text">{{ t('10752') }}</span>
+                        {{  lang === 'lng_type_1' ? item.bzentyNm1 :
+                            lang === 'lng_type_2' ? item.bzentyNm2 :
+                                                    item.bzentyNm3 }}
+                    </div>
+                    <div class="text_lg m_2"><span class="info_text">{{ t('10755') }}</span>
+                        
+                            <img src="@/assets/images/common/ico_file_pdf.png" alt="" style="width: 25px;">
+                    </div><!-- 메뉴얼로 바꿔야함-->
+                    <div class="text_lg m_2"><span class="info_text">{{ t('10733') }}</span>
+                        <Button severity="danger" @click="fnVideoModal"><i class="pi pi-play-circle"></i>
+                            <span style="font-size: 1.2rem;">Play</span>
+                        </Button>
+                    </div><!-- 영상 메뉴얼로 바꿔야함-->
                 </div>
             </div>
 

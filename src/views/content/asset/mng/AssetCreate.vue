@@ -155,11 +155,11 @@ onMounted(() => {
             <InstlCreateTab :show="tab === 'installInf'" :detailDatas="installList" :type="type" />
         </div>
         <div class="btn_group_fixed">
-            <button type="submit" class="v_btn btn_primary btn_md" @click="fnSave">{{ '저장' }}</button>
+            <button type="submit" class="v_btn btn_primary btn_md" @click="fnSave">{{ t('10743') }}</button><!-- 저장 -->
             <button type="button" class="v_btn btn_outline_secondary btn_md" v-if="type === 'update'"
-                @click="fnDelete">{{ '삭제' }}</button>
+                @click="fnDelete">{{ t('10745') }}</button><!-- 삭제 -->
             <button type="button" class="v_btn btn_outline_primary btn_md"
-                @click="router.push({ name: 'asset.mng' }); formStore.fieldArr = [];">{{ '목록' }}</button>
+                @click="router.push({ name: 'asset.mng' }); formStore.fieldArr = [];">{{ t('10750') }}</button> <!-- 목록 -->
         </div>
     </div>
 

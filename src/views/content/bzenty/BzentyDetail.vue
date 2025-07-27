@@ -4,6 +4,8 @@ import BzentyInfoComp from '@/views/content/bzenty/BzentyInfoComp.vue'
 import TitleComp from "@/components/TitleComp.vue";
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from '@/store';
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
 const store = useStore();
 const router = useRouter();
 const route = useRoute();
@@ -37,8 +39,8 @@ onMounted(() => {
             <BzentyInfoComp v-if="bzenty.bzentyId" :show="true" :detailDatas="bzenty" :type="'detail'"/>
         </div>
         <div class="btn_group_fixed">
-            <button type="submit" class="v_btn btn_primary btn_md" @click="router.push({ name: 'asset.bzenty.form', params: { type: 'update', bzentyId: bzentyId } })">{{ '수정' }}</button>
-            <button type="button" class="v_btn btn_outline_primary btn_md" @click="router.push({name: 'asset.bzenty'})">{{ '목록' }}</button>
+            <button type="submit" class="v_btn btn_primary btn_md" @click="router.push({ name: 'asset.bzenty.form', params: { type: 'update', bzentyId: bzentyId } })">{{ t('10744') }}</button>
+            <button type="button" class="v_btn btn_outline_primary btn_md" @click="router.push({name: 'asset.bzenty'})">{{ t('10750') }}</button>
         </div>
     </div>
 

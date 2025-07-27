@@ -5,7 +5,8 @@ import Button from 'primevue/button';
 import VideoBookmarkPanel from '@/views/content/asset/manul/VideoBookmarkPanel.vue'
 import Testform from '../mng/testform.vue';
 import { formSchemas } from '@/schemas/AssetSchemas';
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
 const fields = ref(formSchemas.mnulVo.fields)
 const emit = defineEmits(['delManual'])
 const props = defineProps({
@@ -27,7 +28,7 @@ const fnDelManual = () => {
             <div style="display: flex; align-items: center;" class="text_bold text_xl p_2">
                 <Button icon="pi pi-trash" rounded class="mr_3 text_white" variant="outlined"
                     @click="fnDelManual"></Button>
-                <span class="text_white" style=" font-size: 1.5rem;">{{ '영상 메뉴얼' + props.index }}</span>
+                <span class="text_white" style=" font-size: 1.5rem;">{{ t('10733') + props.index }}</span>
             </div>
         </template>
 

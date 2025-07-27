@@ -4,7 +4,8 @@ import BzentyInfoComp from '@/views/content/bzenty/BzentyInfoComp.vue'
 import TitleComp from "@/components/TitleComp.vue";
 import { useRouter, useRoute } from 'vue-router'
 import { useStore, useFormStore } from '@/store';
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const store = useStore();
@@ -92,9 +93,9 @@ onMounted(() => {
             <BzentyInfoComp :show="true" :detailDatas="bzenty" :type="type"/>
         </div>
         <div class="btn_group_fixed">
-            <button type="submit" class="v_btn btn_primary btn_md" @click="fnSave">{{ '저장' }}</button>
-            <button type="button" class="v_btn btn_outline_secondary btn_md" v-if="type === 'update'" @click="fnDelete">{{ '삭제' }}</button>
-            <button type="button" class="v_btn btn_outline_primary btn_md" @click="router.push({name: 'asset.bzenty'})">{{ '목록' }}</button>
+            <button type="submit" class="v_btn btn_primary btn_md" @click="fnSave">{{ t('10743') }}</button>
+            <button type="button" class="v_btn btn_outline_secondary btn_md" v-if="type === 'update'" @click="fnDelete">{{ t('10745') }}</button>
+            <button type="button" class="v_btn btn_outline_primary btn_md" @click="router.push({name: 'asset.bzenty'})">{{ t('10750') }}</button>
         </div>
     </div>
 

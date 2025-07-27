@@ -3,7 +3,8 @@ import { ref, onMounted, defineProps } from 'vue'
 import Divider from 'primevue/divider';
 import { object } from 'yup';
 import { useStore } from '@/store';
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
 const store = useStore()
 const product = ref([])
 const props = defineProps({

@@ -4,7 +4,8 @@ import Panel from 'primevue/panel';
 import Button from 'primevue/button';
 import { formSchemas } from '@/schemas/AssetSchemas';
 import Testform from '../mng/testform.vue';
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
 const fields = ref(formSchemas.installVo.fields)
 const detailImgs = ref([]);
 const emit = defineEmits(['delInstall']);
@@ -44,7 +45,7 @@ const fnDelFile = (fileNm) => {
         <template #header>
             <div style="display: flex; align-items: center;" class="text_bold text_xl p_2">
                 <Button icon="pi pi-trash" rounded class="mr_3 text_white" variant="outlined" @click="fnDelInstall"></Button>
-                <span class="text_white" style="font-size: 1.5rem;">{{ '설치정보 추가 ' + props.index }}</span>
+                <span class="text_white" style="font-size: 1.5rem;">{{ t('10734') + props.index }}</span>
             </div>
         </template>
         <template #toggleicon="{ collapsed }">
