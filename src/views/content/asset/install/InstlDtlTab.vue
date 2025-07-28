@@ -49,7 +49,7 @@ const fnSave = () => {
                 <div class="flex_container m_5">
                     <div>
                         <img :src="imgList[index]" :alt="item.name" style="width: 30rem; height: 20rem;" class="m_2" />
-                        <sapn style="display: flex; justify-content: center;">{{ item.instlPicNm }}</sapn>
+                        <span style="display: flex; justify-content: center;">{{ item.instlPicNm }}</span>
                     </div>
 
                     <div class="text_container m2">
@@ -91,7 +91,7 @@ const fnSave = () => {
             <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px;">
                 <div v-for="(item, j) in slotProps.items" :key="j" class="col_class v_box mt_3">
                     <img :src="imgList[j]" :alt="item.name" style="height: 300px; width: 100%;" />
-                        <sapn style="display: flex; justify-content: center;">{{ item.instlPicNm }}</sapn>
+                        <span style="display: flex; justify-content: center;">{{ item.instlPicNm }}</span>
 
                     <div style="display: flex;justify-content: flex-end;">
                         <!-- <i class="pi pi-pencil mt_2" style="font-size: 1.7rem;"></i> -->

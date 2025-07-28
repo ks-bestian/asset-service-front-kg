@@ -197,11 +197,11 @@ onMounted(() => {
                     @click="$router.push({ name: 'asset.mng.dtl', params: { eqpmntId: item.eqpmntId } })">
                     <img src="@/assets/images/common/ico_cannon.png" :alt="item.name"
                         style="height: 230px; width: 100%;" />
-                    <sapn style="display: flex; justify-content: center;">
+                    <span style="display: flex; justify-content: center;">
                         {{ `${item.eqpmntCd} | ${    lang === 'lng_type_1' ? item.eqpmntSeNm1 :
                                                     lang === 'lng_type_2' ? item.eqpmntSeNm2 :
                                                     item.eqpmntSeNm3}` }}
-                    </sapn>
+                    </span>
 
                     <div style="display: flex;justify-content: flex-end;">
                         <Button severity="info" rounded @click="dialogQna = true"><i class="pi pi-question-circle"></i>

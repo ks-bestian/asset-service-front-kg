@@ -38,10 +38,16 @@ const fnDelInstall = (id) => {
         console.error(message)
     })
 };
-
+/*
 watch(() => props.detailDatas, (newval) => {
     installList.value = [...newval]
 })
+*/
+watch(() => props.detailDatas, (newval) => {
+    if (newval && newval.length) {
+        installList.value = [...newval];
+    }
+}, { immediate: true, deep: true });
 
 
 

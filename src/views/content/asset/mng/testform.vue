@@ -36,8 +36,8 @@ const colWidths = computed(() => {
         </template>
       </colgroup>
       <tbody>
-            <testTable :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-if="(props.detailDatas.bzentyId && type === 'update') || type === 'create'" :codeList="codeList"/>
-            <testTableDtl :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-else-if="(props.detailDatas.bzentyId && type === 'detail')" :codeList="codeList"/>
+            <testTable :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'update') || type === 'create'" :codeList="codeList"/>
+            <testTableDtl :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-else-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'detail')" :codeList="codeList"/>
       </tbody>
     </table>
   </div>
