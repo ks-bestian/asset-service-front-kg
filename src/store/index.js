@@ -730,15 +730,12 @@ export const useFormStore = defineStore('form', {
       return allvalid
     },
 
-    fnSave(sendData) { //sendData: 기본 format이 아닌경우 백단의 reuqest와 일치 시켜 전달한다.
+    fnSave() { 
       let params = {};
-      if (sendData) {
-        params = { ...sendData }
-      } else { //기본 입력 format인 경우
+
         Object.entries(this.fieldStore).forEach(([key, obj]) => {
           params[key] = obj.value
         })
-      }
 
       return useStore()[this.apiMethod](this.apiPath, params).then((data) => {
         return true;

@@ -216,7 +216,8 @@ onMounted(() => {
                                                     item.bzentyNm3 }}
                     </div>
                     <div class="text_lg m_2"><span class="info_text">{{ t('10755') }}</span>
-                        
+
+                        {{ '카메라 동작법.pdf' }}
                             <img src="@/assets/images/common/ico_file_pdf.png" alt="" style="width: 25px;">
                     </div><!-- 메뉴얼로 바꿔야함-->
                     <div class="text_lg m_2"><span class="info_text">{{ t('10733') }}</span>

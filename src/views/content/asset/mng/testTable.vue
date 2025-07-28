@@ -10,7 +10,6 @@ const props = defineProps({
     fields: Array,
     type: String,
     detailDatas: Object,
-    codeList: Array
 })
 
 
@@ -69,7 +68,7 @@ onMounted(() => {
                     <td v-bind="(row.length === 1) ? { colspan: 3 } : {}">
                         <template v-if="field.type === 'select'">
                             <!--todo select list api_list -->
-                            <select class="form_control" v-model="fieldStore[field.name].value">
+                            <select class="form_control" v-model="fieldStore[field.name].value" v-bind="fieldStore[field.name].attrs">
                                 <option  value="">{{ field.label }}</option>
                                 <option  v-for="(item, i) in field.items" :key="i" :value="item.codeId">{{ item.codeNm }}</option>
                             </select>

@@ -12,9 +12,7 @@ const props = defineProps({
 const store = useStore();
 const installList = ref([]);
 const type = ref(props.type)
-
 const formStore = useFormStore();
-
 
 const fnAddInstall = () => {
     installList.value.push({
@@ -44,16 +42,12 @@ watch(() => props.detailDatas, (newval) => {
 })
 
 
-
 onMounted(() => {
-    
-    if(props.type === 'create') {
-
+    if (props.type === 'create') {
         installList.value.push({
             instlId: '1'
         })
     }
-        
 })
 </script>
 
@@ -63,12 +57,8 @@ onMounted(() => {
             <button type="button" class="v_btn btn_primary btn_sm" @click="fnAddInstall">{{ t('10748') }}</button><!--설치정보추가-->
         </div>
     </div>
-
-    <template  v-for="(item, i) in installList" :key="item.instlId">
-        <InstlPanel :id="item.instlId" @del-install="fnDelInstall" :index="(i + 1)" v-show="show"
-            :type="type" :detailDatas="item"/>
-
+    <template v-for="(item, i) in installList" :key="item.instlId">
+        <InstlPanel :id="item.instlId" @del-install="fnDelInstall" :index="(i + 1)" v-show="show" :type="type"
+            :detailDatas="item"  />
     </template>
-
-
 </template>

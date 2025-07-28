@@ -15,7 +15,6 @@ const props = defineProps({
     index: Number,
     detailDatas: Object,
     type: String,
-    codeList: Array
 })
 
 
@@ -54,7 +53,7 @@ const fnDelFile = (fileNm) => {
 
         <div class="content_section mt_3">
             <div class="v_table"> 
-                <Testform :fields="fields" :type="props.type" :detailDatas="props.detailDatas" :codeList="codeList"/>
+                <Testform :fields="fields" :type="props.type" :detailDatas="props.detailDatas"/>
             </div>
         </div>
     </Panel>

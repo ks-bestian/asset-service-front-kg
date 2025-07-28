@@ -59,22 +59,19 @@ const fnSave = async () => {
         installVoList: installVo
     }
 
-    if (type.value === 'create') {
-        formStore.apiMethod = "API_SAVE"
-    } else if (type.value === 'update') {
-        formStore.apiMethod = "API_UPDATE"
-        sendData.eqpmntId = eqpmntId.value
-    }
+    console.log(sendData.installVoList)
+    console.log('sendData')
 
+    //파일저장
     const formData = new FormData();
 
     for (const key in sendData) {
         const value = sendData[key]
 
-        if (key === 'files') {
+        if (key === 'files' || key === 'dtlImg') {
             if (value) {
                 for (var i = 0; i < value.length; i++) {
-                    formData.append('files', value[i])
+                    formData.append(key, value[i])
                 }
             }
         } else if (typeof value === 'object' && value !== null) {
@@ -84,26 +81,18 @@ const fnSave = async () => {
         }
     }
 
+
     formStore.fnSubmit().then((result) => {
-        console.log(formData)
-        console.log('formData')
         if (result) {
-            store.API_SAVE_FILE('/equip', formData).then((data) => {
-
-            }).catch(({ message }) => {
-                console.log(message)
-            })
-
-
-            // formStore.fnSave(sendData).then(r => {
-            //     if (type.value === 'update') {
-            //         router.push({ name: 'asset.mng.dtl', params: { eqpmntId: eqpmntId.value } })
-            //     } else {
-            //         router.push({ name: 'asset.mng' })
-            //     }
-            // })
-
-
+            if (type.value === 'create') {
+                store.API_SAVE_FILE('/equip', formData).then((data) => {
+                    router.push({ name: 'asset.mng' })
+                }).catch(({ message }) => {
+                    console.log(message)
+                })
+            } else if (type.value === 'update') {
+                router.push({ name: 'asset.mng.dtl', params: { eqpmntId: eqpmntId.value } })
+            }
         }
     })
 }
@@ -151,21 +140,12 @@ onMounted(() => {
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
-<<<<<<< HEAD
                     <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{
-                        t('39') }}</a></li>
-                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ '영상메뉴얼'
-                            }}</a></li>
+                        t('10732') }}</a></li>
+                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{
+                        t('10733') }}</a></li>
                     <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{
-                        '설치 정보' }}</a></li>
-                    <li :class="{ on: tab == 'faqInf' }" @click="tab = 'faqInf'"><a href="javascript:void(0)">{{
-                        'FAQ' }}</a></li>
-=======
-                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{ t('10732') }}</a></li>
-                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ t('10733') }}</a></li>
-                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{ t('10734') }}</a></li>
-
->>>>>>> main
+                        t('10734') }}</a></li>
                 </ul>
             </nav>
             <EqpmntCreateTab :show="tab === 'productInf'" :detailDatas="equipDetailVo" :type="type" />
@@ -178,7 +158,8 @@ onMounted(() => {
             <button type="button" class="v_btn btn_outline_secondary btn_md" v-if="type === 'update'"
                 @click="fnDelete">{{ t('10745') }}</button><!-- 삭제 -->
             <button type="button" class="v_btn btn_outline_primary btn_md"
-                @click="router.push({ name: 'asset.mng' }); formStore.fieldArr = [];">{{ t('10750') }}</button> <!-- 목록 -->
+                @click="router.push({ name: 'asset.mng' }); formStore.fieldArr = [];">{{ t('10750') }}</button>
+            <!-- 목록 -->
         </div>
     </div>
 
