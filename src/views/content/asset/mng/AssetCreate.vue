@@ -2,8 +2,9 @@
 import { ref, onMounted } from 'vue'
 import EqpmntCreateTab from '@/views/content/asset/equipment/EqpmntCreateTab.vue'
 import VideoMnlCreateTab from '@/views/content/asset/manul/VideoMnlCreateTab.vue'
-import { useRouter, useRoute } from 'vue-router'
 import InstlCreateTab from '@/views/content/asset/install/InstlCreateTab.vue'
+import FaqCreateTab from '@/views/content/asset/faq/FaqCreateTab.vue'
+import { useRouter, useRoute } from 'vue-router'
 import TitleComp from "@/components/TitleComp.vue";
 import { useStore, useFormStore } from '@/store';
 import { useI18n } from 'vue-i18n'
@@ -19,23 +20,24 @@ const tab = ref('productInf')
 formStore.apiPath = "/equip"
 const instlField = ref(formSchemas.installVo.fields.flatMap(row => row.map(col => col.name)));
 const mnulField = ref(formSchemas.mnulVo.fields.flatMap(row => row.map(col => col.name)))
+const faqField = ref(formSchemas.faqVo.fields.flatMap(row => row.map(col => col.name)))
 const type = ref(route.params.type)
 const equipDetailVo = ref({})
 const mnulList = ref([])
 const installList = ref([])
 const faqList = ref([])
-const eqpmntId = ref(route.params.eqpmntId)
-
-
+const eqpmntId = ref(route.params.eqpmntId);
 const fnSave = async () => {
     let mnulVo = []
     let installVo = []
+    let faqVo = []
     let params = {}
 
     formStore.fieldArr.forEach((item) => {
         const obj = {};
         let isInstall = false;
         let isManual = false;
+        let isFaq = false;
 
         Object.entries(item).forEach(([key, value]) => {
             if (mnulField.value.includes(key)) {
@@ -44,6 +46,9 @@ const fnSave = async () => {
             } else if (instlField.value.includes(key)) {
                 obj[key] = value.value;
                 isInstall = true;
+            } else if (faqField.value.includes(key)) {
+                obj[key] = value.value;
+                isFaq = true;                
             } else {
                 params[key] = value.value;
             }
@@ -51,12 +56,14 @@ const fnSave = async () => {
 
         if (isInstall) installVo.push(obj);
         if (isManual) mnulVo.push(obj);
+        if (isFaq) faqVo.push(obj);
     })
 
     const sendData = {
         ...params,
         mnulVoList: mnulVo,
-        installVoList: installVo
+        installVoList: installVo,
+        faqVoList: faqVo
     }
 
     console.log(sendData.installVoList)
@@ -86,7 +93,8 @@ const fnSave = async () => {
         if (result) {
             if (type.value === 'create') {
                 store.API_SAVE_FILE('/equip', formData).then((data) => {
-                    router.push({ name: 'asset.mng' })
+                    router.push({ name: 'asset.mng' });
+                    formStore.fieldArr = [];
                 }).catch(({ message }) => {
                     console.log(message)
                 })
@@ -140,18 +148,16 @@ onMounted(() => {
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
-                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{
-                        t('10732') }}</a></li>
-                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{
-                        t('10733') }}</a></li>
-                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{
-                        t('10734') }}</a></li>
+                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{ t('10732') }}</a></li>
+                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ t('10733') }}</a></li>
+                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{ t('10734') }}</a></li>
+                    <li :class="{ on: tab == 'faq' }" @click="tab = 'faq'"><a href="javascript:void(0)">{{ '문의' }}</a></li>
                 </ul>
             </nav>
             <EqpmntCreateTab :show="tab === 'productInf'" :detailDatas="equipDetailVo" :type="type" />
             <VideoMnlCreateTab :show="tab === 'manual'" :detailDatas="mnulList" :type="type" />
             <InstlCreateTab :show="tab === 'installInf'" :detailDatas="installList" :type="type" />
-            <FaqCreateTab :show="tab === 'faqInf'" :detailDatas="faqList" :type="type" />
+            <FaqCreateTab :show="tab === 'faq'" :detailDatas="faqList" :type="type" />
         </div>
         <div class="btn_group_fixed">
             <button type="submit" class="v_btn btn_primary btn_md" @click="fnSave">{{ t('10743') }}</button><!-- 저장 -->
