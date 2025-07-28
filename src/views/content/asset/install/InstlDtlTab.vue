@@ -53,8 +53,7 @@ const fnSave = () => {
                         <div class="header_item">
                             <div v-if="mdfyYn" class="text_xl text_bold m_2"><input type="text"
                                     class="form_control full" v-model="item.instlPlc"></div>
-                            <div v-else class="text_xl text_bold m_2">{{ `[${item.instlPlcNm}] ${item.instlPlcDtl1}` }}
-                            </div>
+                            <div v-else class="text_xl text_bold m_2">{{ `[${item.instlPlcNm}] ${item.instlPlcDtl1}` }}</div>
                             <!-- <i class="pi pi-pencil" style="font-size: 1.7rem;"></i> -->
                         </div>
                         <div class="text_lg m_2"><span class="info_text">{{ '설치자' }}</span>{{ item.rgtrId }}</div>
@@ -66,8 +65,7 @@ const fnSave = () => {
                             <template v-else>{{ item.rmrk }}</template>
                         </div>
 
-                        <div v-if="mdfyYn"><button type="button" class="v_btn btn_primary btn_md" @click="fnSave">{{
-                            '저장' }}</button></div>
+                        <div v-if="mdfyYn"><button type="button" class="v_btn btn_primary btn_md" @click="fnSave">{{ '저장' }}</button></div>
                         <!-- <div v-else class="installer text_lg m_2">{{ `${item.rgstId} [${item.instlYmd}]` }}</div> -->
                     </div>
                 </div>

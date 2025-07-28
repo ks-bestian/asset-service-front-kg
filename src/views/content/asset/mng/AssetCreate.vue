@@ -8,6 +8,7 @@ import TitleComp from "@/components/TitleComp.vue";
 import { useStore, useFormStore } from '@/store';
 import { useI18n } from 'vue-i18n'
 import { formSchemas } from '@/schemas/AssetSchemas'
+import FaqCreateTab from '../faq/FaqCreateTab.vue'
 
 const store = useStore();
 const formStore = useFormStore();
@@ -22,6 +23,7 @@ const type = ref(route.params.type)
 const equipDetailVo = ref({})
 const mnulList = ref([])
 const installList = ref([])
+const faqList = ref([])
 const eqpmntId = ref(route.params.eqpmntId)
 
 const fnSave = async () => {
@@ -82,21 +84,25 @@ const fnSave = async () => {
     }
 
     formStore.fnSubmit().then((result) => {
+        console.log(formData)
+        console.log('formData')
         if (result) {
-            // store.API_SAVE_FILE('/equip', formData).then((data) => {
+            store.API_SAVE_FILE('/equip', formData).then((data) => {
 
-            // }).catch(({ message }) => {
-            //     console.log(message)
+            }).catch(({ message }) => {
+                console.log(message)
+            })
+
+
+            // formStore.fnSave(sendData).then(r => {
+            //     if (type.value === 'update') {
+            //         router.push({ name: 'asset.mng.dtl', params: { eqpmntId: eqpmntId.value } })
+            //     } else {
+            //         router.push({ name: 'asset.mng' })
+            //     }
             // })
 
-            
-            formStore.fnSave(sendData).then(r => {
-                if (type.value === 'update') {
-                    router.push({ name: 'asset.mng.dtl', params: { eqpmntId: eqpmntId.value } })
-                } else {
-                    router.push({ name: 'asset.mng' })
-                }
-            })
+
         }
     })
 }
@@ -111,6 +117,7 @@ const fnDetail = () => {
         equipDetailVo.value = data.data.data.equipDetailVo
         mnulList.value = data.data.data.mnulList
         installList.value = data.data.data.installList
+        faqList.value = data.data.data.faqList
     }).catch(({ message }) => {
         console.log(message)
     })
@@ -146,15 +153,17 @@ onMounted(() => {
                     <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{
                         t('39') }}</a></li>
                     <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ '영상메뉴얼'
-                    }}</a></li>
+                            }}</a></li>
                     <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{
                         '설치 정보' }}</a></li>
+                    <li :class="{ on: tab == 'faqInf' }" @click="tab = 'faqInf'"><a href="javascript:void(0)">{{
+                        'FAQ' }}</a></li>
                 </ul>
             </nav>
-
             <EqpmntCreateTab :show="tab === 'productInf'" :detailDatas="equipDetailVo" :type="type" />
             <VideoMnlCreateTab :show="tab === 'manual'" :detailDatas="mnulList" :type="type" />
             <InstlCreateTab :show="tab === 'installInf'" :detailDatas="installList" :type="type" />
+            <FaqCreateTab :show="tab === 'faqInf'" :detailDatas="faqList" :type="type" />
         </div>
         <div class="btn_group_fixed">
             <button type="submit" class="v_btn btn_primary btn_md" @click="fnSave">{{ '저장' }}</button>

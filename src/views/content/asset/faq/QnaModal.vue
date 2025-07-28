@@ -2,6 +2,7 @@
 import { ref, defineProps, defineEmits } from 'vue';
 import Dialog from 'primevue/dialog'
 import Fieldset from 'primevue/fieldset';
+import Panel from 'primevue/panel';
 
 
 const props = defineProps({
@@ -15,10 +16,10 @@ const visible = ref(props.dialog)
 
 <template>
 
-    <Dialog v-model:visible="visible" modal :style="{ width: '50vw', minHeight: '25vh' }" @hide="emit('close')">
+    <Dialog v-model:visible="visible" modal :style="{ width: '50vw', minHeight: '25vh', overflow: 'auto' }" @hide="emit('close')">
         <template #header>
             <div class="popup_header" style="width: 100%; border-top-left-radius: 12px;">
-                <h2 class="popup_tit">{{ 'Question' }}</h2>
+                <h2 class="popup_tit">{{ 'FAQ' }}</h2>
             </div>
         </template>
 
@@ -35,6 +36,20 @@ const visible = ref(props.dialog)
                                         <div class="text_lg m_2"><span class="info_text">{{ '전화번호' }}</span>{{ '' }}</div>
                                     </Fieldset>
                                 </div>
+
+
+                                <select class="form_control">
+                                    <option value="">전체</option>
+                                    <option value="">장비관리</option>
+                                </select>
+
+                                <Panel header="" toggleable :collapsed="true" class="mb_3">
+                                    <template #header>
+                                        <div>{{ '고장난 장비 문의는 어디로 하면 되나요?' }}</div>
+                                    </template>
+                                  
+                                    <div>{{ '장비문의는5468476로 주세요' }}</div>
+                                </Panel>
                             </div>
                         </div>
                     </div>

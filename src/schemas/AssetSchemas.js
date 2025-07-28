@@ -18,7 +18,7 @@ export const formSchemas = {
         { name: "thumbnail", label: '썸네일', type: 'thumbnail' },
       ],
       [
-        { name: "file", label: '파일', type: 'file' },
+        { name: "files", label: '파일', type: 'file' },
       ],
        [
         { name: "tkcgDeptId", label: '담당부서아이디', type: 'file', hidden: true },
@@ -116,5 +116,21 @@ export const formSchemas = {
       ]
     ]
   },
+  faq: {
+    fields: [
+      [
+        { name: 'eqpmntId', label: '장비아이디', type: 'text', hidden: true }
+      ],
+      [
+        { name: '질문유형', label: 'faqSe', type: 'radio', required: true }
+      ],
+       [
+        { name: '질문', label: 'qstn', type: 'test', required: true }
+      ],
+       [
+        { name: '답변', label: 'ans', type: 'textarea', required: true }
+      ],
+    ]
+  }
 }
 

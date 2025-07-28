@@ -76,7 +76,7 @@ onMounted(() => {
                                 <div class="form_col type4">
                                     <div class="input_item">
                                         <div class="input_group">
-                                            <input type="file" class="form_file" id="videoManual"
+                                            <input type="file" class="form_file" id="videoManual" multiple
                                                 @change="e => fieldStore[field.name].value = e.target.files"
                                                 v-bind="fieldStore[field.name].attrs">
                                             <input type="text" class="form_control file_name">

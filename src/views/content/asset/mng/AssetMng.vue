@@ -7,7 +7,7 @@ import 'primeicons/primeicons.css'
 import { useFormStore, useStore } from "@/store";
 import { useRouter } from "vue-router";
 import VideoModal from '@/views/content/asset/manul/VideoModal.vue'
-import QnaSample from "./QnaModal.vue";
+import QnaModal from "../faq/QnaModal.vue";
 import SelectButton from 'primevue/selectbutton';
 import TitleComp from "@/components/TitleComp.vue";
 
@@ -164,11 +164,11 @@ onMounted(() => {
                                     style="font-size: 1.2rem;">Play</span></Button>
                         </template>
                     </Column>
-                    <Column field="qna" header="Q&A" class="text_center" style="width: 7%;">
+                    <Column field="qna" header="FAQ" class="text_center" style="width: 7%;">
                         <template #body="{ data }">
                             <Button severity="info" rounded @click="dialogQna = true"><i
                                     class="pi pi-question-circle"></i>
-                                <span style="font-size: 1.2rem;">Question</span>
+                                <span style="font-size: 1.2rem;">FAQ</span>
                             </Button>
                         </template>
                     </Column>
@@ -186,8 +186,8 @@ onMounted(() => {
                     </sapn>
 
                     <div style="display: flex;justify-content: flex-end;">
-                        <Button severity="info" rounded @click="dialogQna = true"><i class="pi pi-question-circle"></i>
-                            <span style="font-size: 1.2rem;">Question</span>
+                        <Button severity="info" rounded @click.stop="dialogQna = true"><i class="pi pi-question-circle"></i>
+                            <span style="font-size: 1.2rem;">FAQ</span>
                         </Button>
                     </div>
 
@@ -202,7 +202,7 @@ onMounted(() => {
         <!-- // 본문 영역 -->
     </div>
     <VideoModal v-if="dialog" @close="dialog = false" :dialog="dialog" />
-    <QnaSample v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" />
+    <QnaModal v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" />
 </template>
 
 <style scoped>
