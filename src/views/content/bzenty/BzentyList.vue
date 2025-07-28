@@ -6,11 +6,14 @@ import TitleComp from "@/components/TitleComp.vue";
 import { useStore } from "@/store";
 import { useRouter } from 'vue-router'
 import msg from '@/utils/message'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
 const router = useRouter();
 const store = useStore();
 const lang = ref(localStorage.getItem("languageType"));
 const list = ref([]);
 const searchBzentyNm = ref('');
+
 const fnBzentyList = () => {
     let param = {
         lang: lang.value,
@@ -45,7 +48,7 @@ const fnReset = () => {
 }
 
 onMounted(() => {
-    const nameError = msg.validation.missing('이름');
+    //const nameError = msg.validation.missing('이름');
     //alert(nameError);
     
     fnBzentyList();
@@ -63,7 +66,7 @@ onMounted(() => {
                     <div class="form_row">
 
                         <div class="input_item">
-                            <label class="form_label">{{ "업체명" }}</label>
+                            <label class="form_label">{{ t('10752') }}</label>
                             <input type="text" class="form_control" v-model="searchBzentyNm" @keydown.enter="fnSearch">
                         </div>
                     </div>
@@ -71,7 +74,7 @@ onMounted(() => {
 
                 <div class="search_btn">
                     <button type="button" class="v_btn btn_primary btn_md" @click="fnSearch">
-                        <i class="v_ico ico_search_white"></i><span>{{ "검색" }}</span></button>
+                        <i class="v_ico ico_search_white"></i><span>{{ t("10053") }}</span></button>
                     <button type="button" @click="fnReset" class="v_btn btn_outline_primary btn_md">
                         <i class="v_ico ico_reset_primary"></i><span></span></button>
                 </div>
@@ -84,7 +87,7 @@ onMounted(() => {
                 </div>
                 <div class="right">
                     <div class="btn_wrap">
-                        <button type="button" class="v_btn btn_outline_primary btn_sm" @click="fnRouteCreate">{{ "신규" }}</button>
+                        <button type="button" class="v_btn btn_outline_primary btn_sm" @click="fnRouteCreate">{{ t("10746") }}</button>
                         <!--
                         <button type="button" class="v_btn btn_outline_secondary btn_sm">{{ "선택 삭제" }}</button>
                         -->
@@ -100,14 +103,14 @@ onMounted(() => {
             <div class="v_table table_list">
                 <DataTable :value="list" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
                     tableStyle="min-width: 50rem;" @row-dblclick="fnGoDetail" >
-                    <Column :field="lang === 'lng_type_1' ? 'bzentyNm1' : (lang === 'lng_type_2' ? 'bzentyNm2' : 'bzentyNm3')" header="업체명" class="text_center" sortable></Column>
-                    <Column field="telno" header="전화번호" class="text_center" style="width: 9%;" sortable></Column>
-                    <Column field="eml" header="담당자 이메일" class="text_center" sortable></Column>
-                    <Column field="picNm" header="담당자" class="text_center" sortable></Column>
+                    <Column :field="lang === 'lng_type_1' ? 'bzentyNm1' : (lang === 'lng_type_2' ? 'bzentyNm2' : 'bzentyNm3')" :header="t('10752')" class="text_center" sortable></Column>
+                    <Column field="telno" :header="t('10358')" class="text_center" style="width: 9%;" sortable></Column>
+                    <Column field="eml" :header="t('10359')" class="text_center" sortable></Column>
+                    <Column field="picNm" :header="t('10759')" class="text_center" sortable></Column>
                     <template #empty>
                         <div class="no_data">
                             <i class="v_ico ico_error"></i>
-                            <span class="text_msg">데이터가 없습니다</span>
+                            <span class="text_msg">No data.</span>
                         </div>
                     </template>
                 </DataTable>

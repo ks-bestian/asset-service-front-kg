@@ -7,7 +7,9 @@ import caimg1 from '@/assets/images/content/카메라상세1.jpg'
 import ci1 from '@/assets/images/content/ci1.jpg'
 import { useRoute } from 'vue-router';
 import Carousel from 'primevue/carousel';
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
+const lang = ref(localStorage.getItem("languageType"));
 
 const route = useRoute();
 const store = useStore();
@@ -48,13 +50,30 @@ onMounted(() => {
 
         <div class="text_info text_xl ml_4">
             <div class="text_bold mb_3 ml_2 text_xl">{{ props.eqpmntInfo.eqpmntNm }}</div>
-            <div> <span class="info_text">{{ '제품코드' }}</span>{{ props.eqpmntInfo.eqpmntCd }}</div>
-            <div><span class="info_text">{{ '제품구분' }}</span>{{ props.eqpmntInfo.eqpmntSeNm }}</div>
-            <div> <span class="info_text">{{ '업체명' }}</span>{{ props.eqpmntInfo.bzentyNm }}</div>
+            <div> <span class="info_text">{{ t('10725') }}</span>{{ props.eqpmntInfo.eqpmntCd }}</div><!--제품코드-->
+            <div><span class="info_text">{{ t('10727') }}</span><!--제품구분-->
+                {{ 
+                    lang === 'lng_type_1' ? props.eqpmntInfo.eqpmntSeNm1  :
+                    lang === 'lng_type_2' ? props.eqpmntInfo.eqpmntSeNm2 :
+                                            props.eqpmntInfo.eqpmntSeNm3 
+                }}
+            </div>
+            <div> <span class="info_text">{{ t('10752') }}</span><!--업체명-->
+                {{  lang === 'lng_type_1' ? props.eqpmntInfo.bzentyNm1 :
+                    lang === 'lng_type_2' ? props.eqpmntInfo.bzentyNm2 :
+                                            props.eqpmntInfo.bzentyNm3 
+                }}                
+            
+            </div>
+            <!--
+            담당부서는 사용 안될거같다.
             <div class="border_class"> <span class="info_text ">{{ '담당부서 |' }}</span> {{ props.eqpmntInfo.tkcgDeptId }}
             </div>
+            -->
         </div>
+        <!--
         <button class="qna_btn v_btn btn_primary btn_sm">{{ 'Question' }}</button>
+        -->
     </div>
 
     <div class="v_table mt_8 text_lg">
@@ -65,13 +84,13 @@ onMounted(() => {
             </colgroup>
             <tbody>
                 <tr>
-                    <th scope="row">{{ '설명' }}</th>
+                    <th scope="row">{{ t('10728') }}</th>
                     <td>
                         {{ props.eqpmntInfo.expln }}
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row">{{ 'PDF 메뉴얼' }}</th>
+                    <th scope="row">{{ t('10755') }}</th>
                     <td>
                         <div style="display: flex; align-items: center;">
                             {{ '캐논 카메라 매뉴얼.pdf' }}
@@ -81,7 +100,7 @@ onMounted(() => {
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row">{{ '상세 이미지' }}</th>
+                    <th scope="row">{{ t('10754') }}</th>
                     <td>
                         <div>
                             <div class="pb_2">{{ '캐논 카메라 전면.jpg' }}</div>

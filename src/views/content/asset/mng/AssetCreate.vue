@@ -26,6 +26,7 @@ const installList = ref([])
 const faqList = ref([])
 const eqpmntId = ref(route.params.eqpmntId)
 
+
 const fnSave = async () => {
     let mnulVo = []
     let installVo = []
@@ -150,6 +151,7 @@ onMounted(() => {
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
+<<<<<<< HEAD
                     <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{
                         t('39') }}</a></li>
                     <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ '영상메뉴얼'
@@ -158,6 +160,12 @@ onMounted(() => {
                         '설치 정보' }}</a></li>
                     <li :class="{ on: tab == 'faqInf' }" @click="tab = 'faqInf'"><a href="javascript:void(0)">{{
                         'FAQ' }}</a></li>
+=======
+                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{ t('10732') }}</a></li>
+                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ t('10733') }}</a></li>
+                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{ t('10734') }}</a></li>
+
+>>>>>>> main
                 </ul>
             </nav>
             <EqpmntCreateTab :show="tab === 'productInf'" :detailDatas="equipDetailVo" :type="type" />
@@ -166,11 +174,11 @@ onMounted(() => {
             <FaqCreateTab :show="tab === 'faqInf'" :detailDatas="faqList" :type="type" />
         </div>
         <div class="btn_group_fixed">
-            <button type="submit" class="v_btn btn_primary btn_md" @click="fnSave">{{ '저장' }}</button>
+            <button type="submit" class="v_btn btn_primary btn_md" @click="fnSave">{{ t('10743') }}</button><!-- 저장 -->
             <button type="button" class="v_btn btn_outline_secondary btn_md" v-if="type === 'update'"
-                @click="fnDelete">{{ '삭제' }}</button>
+                @click="fnDelete">{{ t('10745') }}</button><!-- 삭제 -->
             <button type="button" class="v_btn btn_outline_primary btn_md"
-                @click="router.push({ name: 'asset.mng' }); formStore.fieldArr = [];">{{ '목록' }}</button>
+                @click="router.push({ name: 'asset.mng' }); formStore.fieldArr = [];">{{ t('10750') }}</button> <!-- 목록 -->
         </div>
     </div>
 

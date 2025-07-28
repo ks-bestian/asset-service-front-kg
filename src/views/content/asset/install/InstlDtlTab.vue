@@ -6,6 +6,9 @@ import img1 from '@/assets/images/content/회의1.png'
 import img2 from '@/assets/images/content/회의2.png'
 import img3 from '@/assets/images/content/회의3.png'
 import SelectButton from 'primevue/selectbutton';
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
+const lang = ref(localStorage.getItem("languageType"));
 
 const props = defineProps({
     instlList: Array
@@ -53,19 +56,28 @@ const fnSave = () => {
                         <div class="header_item">
                             <div v-if="mdfyYn" class="text_xl text_bold m_2"><input type="text"
                                     class="form_control full" v-model="item.instlPlc"></div>
-                            <div v-else class="text_xl text_bold m_2">{{ `[${item.instlPlcNm}] ${item.instlPlcDtl1}` }}</div>
+
+                            <div v-else class="text_xl text_bold m_2">
+                                {{ `[${lang === 'lng_type_1' ? item.instlPlcNm1 :
+                                        lang === 'lng_type_2' ? item.instlPlcNm2 :
+                                                                item.instlPlcNm3}
+                                ] ${lang === 'lng_type_1' ? item.instlPlcDtl1 :
+                                    lang === 'lng_type_2' ? item.instlPlcDtl2 :
+                                                            item.instlPlcDtl3}` 
+                                }}
+                            </div>
                             <!-- <i class="pi pi-pencil" style="font-size: 1.7rem;"></i> -->
                         </div>
-                        <div class="text_lg m_2"><span class="info_text">{{ '설치자' }}</span>{{ item.rgtrId }}</div>
-                        <div class="text_lg m_2"><span class="info_text">{{ '설치일' }}</span>{{ item.instlYmd }}</div>
-                        <div class="text_lg m_2"><span class="info_text">{{ '폐기일' }}</span>{{ item.dscdYmd }}</div>
+                        <div class="text_lg m_2"><span class="info_text">{{ t('10099') }}</span>{{ item.rgtrId }}</div>
+                        <div class="text_lg m_2"><span class="info_text">{{ t('10738') }}</span>{{ item.instlYmd }}</div>
+                        <div class="text_lg m_2"><span class="info_text">{{ t('10740') }}</span>{{ item.dscdYmd }}</div>
                         <div class="text_lg m_2">
-                            <span class="info_text">{{ '비고' }}</span>
+                            <span class="info_text">{{ t('10742') }}</span>
                             <input v-if="mdfyYn" type="text" class="form_control full" v-model="item.rmk">
                             <template v-else>{{ item.rmrk }}</template>
                         </div>
-
-                        <div v-if="mdfyYn"><button type="button" class="v_btn btn_primary btn_md" @click="fnSave">{{ '저장' }}</button></div>
+                        <div v-if="mdfyYn"><button type="button" class="v_btn btn_primary btn_md" @click="fnSave">
+                            {{ t('10743') }}</button></div>
                         <!-- <div v-else class="installer text_lg m_2">{{ `${item.rgstId} [${item.instlYmd}]` }}</div> -->
                     </div>
                 </div>
@@ -84,12 +96,20 @@ const fnSave = () => {
                     <div style="display: flex;justify-content: flex-end;">
                         <!-- <i class="pi pi-pencil mt_2" style="font-size: 1.7rem;"></i> -->
                     </div>
-                    <div class="text_xl text_bold m_2">{{ `[${item.instlPlcNm}] ${item.instlPlcDtl1}` }}</div>
-                    <div class="text_lg m_2"><span class="info_text">{{ '설치자' }}</span>{{ item.rgtrId }}</div>
-                    <div class="text_lg m_2"><span class="info_text">{{ '설치일' }}</span>{{ item.instlYmd }}</div>
-                    <div class="text_lg m_2"><span class="info_text">{{ '폐기일' }}</span>{{ item.dscdYmd }}</div>
+                    <div class="text_xl text_bold m_2">
+                        {{ `[${lang === 'lng_type_1' ? item.instlPlcNm1 :
+                                lang === 'lng_type_2' ? item.instlPlcNm2 :
+                                                        item.instlPlcNm3}
+                        ] ${lang === 'lng_type_1' ? item.instlPlcDtl1 :
+                            lang === 'lng_type_2' ? item.instlPlcDtl2 :
+                                                    item.instlPlcDtl3}` 
+                        }}
+                    </div>
+                    <div class="text_lg m_2"><span class="info_text">{{ t('10099') }}</span>{{ item.rgtrId }}</div>
+                    <div class="text_lg m_2"><span class="info_text">{{ t('10738') }}</span>{{ item.instlYmd }}</div>
+                    <div class="text_lg m_2"><span class="info_text">{{ t('10740') }}</span>{{ item.dscdYmd }}</div>
                     <div class="text_lg m_2" style="display: flex;">
-                        <span class="info_text">{{ '비고' }}</span>
+                        <span class="info_text">{{ t('10742') }}</span>
                         <div>{{ item.rmrk }}</div>
                     </div>
                 </div>

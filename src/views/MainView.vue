@@ -14,7 +14,16 @@ import { useStore } from '@/store'
 
 // const route = useRoute()
 const store = useStore();
-
+const fnBzentyList = () => {
+    let param = {
+    }
+    store.API_LIST('/asset/bzenty', param).then((data) => {
+        store.bzentyList = data.data.data;
+        console.log(list.value)
+    }).catch(({ message }) => {
+        console.log(message)
+    })
+}
 // const userId = 'gduser1'; // User ID currently logged in
 
 // const notifications = ref([]);
@@ -58,7 +67,7 @@ onMounted(() => {
 
 //   });
 
-
+	fnBzentyList();
 });
 
 </script>

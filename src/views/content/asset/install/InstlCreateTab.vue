@@ -2,8 +2,8 @@
 import { ref, onMounted, watch, defineEmits } from 'vue'
 import InstlPanel from "@/views/content/asset/install/InstlPanel.vue"
 import { useStore, useFormStore } from '@/store'
-
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
 const props = defineProps({
     show: Boolean,
     detailDatas: Array,
@@ -12,8 +12,9 @@ const props = defineProps({
 const store = useStore();
 const installList = ref([]);
 const type = ref(props.type)
-const codeList = ref([])
+
 const formStore = useFormStore();
+
 
 const fnAddInstall = () => {
     installList.value.push({
@@ -42,34 +43,31 @@ watch(() => props.detailDatas, (newval) => {
     installList.value = [...newval]
 })
 
-const fnPlcList = () => {
-    let params = {}
-    store.API_LIST('install/place/list').then((data) => {
-        codeList.value = data.data.data
-    }).catch(({ message }) => {
-        console.error(message)
-    })
-}
+
 
 onMounted(() => {
-    // fnPlcList();
-    if (props.type === 'create') {
+    
+    if(props.type === 'create') {
+
         installList.value.push({
             instlId: '1'
         })
     }
+        
 })
 </script>
 
 <template>
     <div class="board_info" v-show="show">
         <div class="right">
-            <button type="button" class="v_btn btn_primary btn_sm" @click="fnAddInstall">{{ '설치정보 추가' }}</button>
+            <button type="button" class="v_btn btn_primary btn_sm" @click="fnAddInstall">{{ t('10748') }}</button><!--설치정보추가-->
         </div>
     </div>
-    <template v-for="(item, i) in installList" :key="item.instlId">
-        <InstlPanel :id="item.instlId" @del-install="fnDelInstall" :index="(i + 1)" v-show="show" :type="type"
-            :detailDatas="item" :codeList="codeList" />
+
+    <template  v-for="(item, i) in installList" :key="item.instlId">
+        <InstlPanel :id="item.instlId" @del-install="fnDelInstall" :index="(i + 1)" v-show="show"
+            :type="type" :detailDatas="item"/>
+
     </template>
 
 

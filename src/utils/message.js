@@ -48,34 +48,34 @@ export const msg = {
     missing(fieldName = 'default') {
       //return replaceParams(i18n.global.t('000000(메세지)'), { fieldName: i18n.global.t('000000(라벨)') });
       //return `${fieldName}은(는) 필수 입력입니다.`
-      console.log(i18n.global.t('4'));
+      console.log(i18n.global.t('10697'));
       console.log(fieldName);
       //return replaceParams(i18n.global.t('4'), { fieldName: fieldName });
-      return i18n.global.t('4',{ fieldName: fieldName });
+      return i18n.global.t('10697',{ fieldName: fieldName });
     },
     duplicate(fieldName = 'default') {
       if(fieldName == 'default'){
-        return i18n.global.t('5')
+        return i18n.global.t('10698')
       }else{
         //return `이미 존재하는 ${fieldName}입니다.`
-        return i18n.global.t('6', { fieldName: fieldName });
+        return i18n.global.t('10699', { fieldName: fieldName });
       }
     },
     format: {
       file(fieldName = 'default') {
         if(fieldName == 'default'){
-          return i18n.global.t('7')
+          return i18n.global.t('10700')
         }else{
           //return `지원하지 않는 파일 형식입니다. ${fieldName} 형식을 확인해주세요.`
-          return i18n.global.t('8', { fieldName: fieldName });
+          return i18n.global.t('10701', { fieldName: fieldName });
         }
       },
       text(fieldName = 'default') {
         if(fieldName == 'default'){
-          return i18n.global.t('9')
+          return i18n.global.t('10702')
         }else{
           //return `${fieldName} 형식을 확인해주세요.`
-          return i18n.global.t('10', { fieldName: fieldName });
+          return i18n.global.t('10703', { fieldName: fieldName });
         }
       },
     },
@@ -83,89 +83,89 @@ export const msg = {
   confirm: {
     create(fieldName = 'default'){
       if(fieldName == 'default'){
-        return i18n.global.t('11')
+        return i18n.global.t('10704')
       }else{
         //return `${fieldName}을 등록하시겠습니까?`
-        return i18n.global.t('12', { fieldName: fieldName });
+        return i18n.global.t('10705', { fieldName: fieldName });
       }
     }, 
     update(fieldName = 'default'){
       if(fieldName == 'default'){
-        return i18n.global.t('13')
+        return i18n.global.t('10706')
       }else{
         //return `${fieldName}을 수정하시겠습니까?`
-        return i18n.global.t('14', { fieldName: fieldName });
+        return i18n.global.t('10707', { fieldName: fieldName });
       }
     },
     delete(fieldName = 'default'){
       if(fieldName == 'default'){
-        return i18n.global.t('15')
+        return i18n.global.t('10708')
       }else{
         //return `${fieldName}을 삭제하시겠습니까?`
-        return i18n.global.t('16', { fieldName: fieldName });
+        return i18n.global.t('10709', { fieldName: fieldName });
       }
     }
   },
   completed: {
     create(fieldName = 'default'){
       if(fieldName == 'default'){
-        return i18n.global.t('17')
+        return i18n.global.t('10710')
       }else{
         //return `${fieldName}이 등록되었습니다.`
-        return i18n.global.t('18', { fieldName: fieldName });
+        return i18n.global.t('10711', { fieldName: fieldName });
       }
     }, 
     update(fieldName = 'default'){
       if(fieldName == 'default'){
-        return i18n.global.t('19')
+        return i18n.global.t('10712')
       }else{
         //return `${fieldName}이 수정되었습니다.`
-        return i18n.global.t('20', { fieldName: fieldName });
+        return i18n.global.t('10713', { fieldName: fieldName });
       }
     },
     delete(fieldName = 'default'){
       if(fieldName == 'default'){
-        return i18n.global.t('21')
+        return i18n.global.t('10714')
       }else{
         //return `${fieldName}이 삭제되었습니다.`
-        return i18n.global.t('22', { fieldName: fieldName });
+        return i18n.global.t('10715', { fieldName: fieldName });
       }
     }
   },
   failed: {
     create(fieldName = 'default'){
       if(fieldName == 'default'){
-        return i18n.global.t('23')
+        return i18n.global.t('10716')
       }else{
         //return `${fieldName} 등록에 실패했습니다. 다시 시도해주세요.`
-        return i18n.global.t('24', { fieldName: fieldName });
+        return i18n.global.t('10717', { fieldName: fieldName });
       }
     }, 
     update(fieldName = 'default'){
       if(fieldName == 'default'){
-        return i18n.global.t('25')
+        return i18n.global.t('10718')
       }else{
         //return `${fieldName} 수정에 실패했습니다. 다시 시도해주세요.`
-        return i18n.global.t('26', { fieldName: fieldName });
+        return i18n.global.t('10719', { fieldName: fieldName });
       }
     },
     delete(fieldName = 'default'){
       if(fieldName == 'default'){
-        return i18n.global.t('27')
+        return i18n.global.t('10720')
       }else{
         //return `${fieldName} 삭제에 실패했습니다. 다시 시도해주세요.`
-        return i18n.global.t('28', { fieldName: fieldName });
+        return i18n.global.t('10721', { fieldName: fieldName });
       }
     }
   },
   info: {
     send() {
-      return i18n.global.t('29')
+      return i18n.global.t('10722')
     },
   },
   error: {
     system() {
-      return i18n.global.t('30')
+      return i18n.global.t('10723')
     },
   },
 }

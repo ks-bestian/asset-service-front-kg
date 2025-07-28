@@ -2,7 +2,8 @@
 import { ref, defineProps, onMounted, watch, defineEmits } from 'vue'
 import VideoPanel from '@/views/content/asset/manul/VideoPanel.vue'
 import { useStore, useFormStore } from '@/store'
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
 const props = defineProps({
     show: Boolean,
     detailDatas: Array,
@@ -50,7 +51,7 @@ onMounted(() => {
 <template>
     <div class="board_info" v-show="show">
         <div class="right">
-            <button type="button" class="v_btn btn_primary btn_sm" @click="fnAddManual">{{ '메뉴얼 추가' }}</button>
+            <button type="button" class="v_btn btn_primary btn_sm" @click="fnAddManual">{{ t('10749') }}</button>
         </div>
     </div>
     <template v-for="(item, i) in manualList" :key="item.mnlId">
