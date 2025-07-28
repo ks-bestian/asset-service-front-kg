@@ -71,6 +71,19 @@ export const formSchemas = {
       ],
     ]
   },
+  faqVo: {
+    fields: [
+      [
+        { name: 'faqSe', label: '문의구분', type: 'select', items:store.getComCodes('1040'), default: '', required: true }, //문의구분
+      ],
+      [
+        { name: 'qstn', label: '질문', type: 'textarea', required: true }, //질문
+      ],
+      [
+        { name: 'ans', label: '답변', type: 'textarea', required: true }, //답변
+      ]
+    ]
+  },
   bzenty: {
     fields: [
       [

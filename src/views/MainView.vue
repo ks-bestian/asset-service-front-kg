@@ -19,7 +19,7 @@ const fnBzentyList = () => {
     }
     store.API_LIST('/asset/bzenty', param).then((data) => {
         store.bzentyList = data.data.data;
-        console.log(list.value)
+
     }).catch(({ message }) => {
         console.log(message)
     })

@@ -67,7 +67,7 @@ const fnSave = () => {
                             </div>
                             <!-- <i class="pi pi-pencil" style="font-size: 1.7rem;"></i> -->
                         </div>
-                        <div class="text_lg m_2"><span class="info_text">{{ t('10099') }}</span>{{ item.rgtrId }}</div>
+                        <div class="text_lg m_2"><span class="info_text">{{ t('10099') }}</span>{{ lang === 'lng_type_1' ? item.regNm1 : item.regNm2 }}</div>
                         <div class="text_lg m_2"><span class="info_text">{{ t('10738') }}</span>{{ item.instlYmd }}</div>
                         <div class="text_lg m_2"><span class="info_text">{{ t('10740') }}</span>{{ item.dscdYmd }}</div>
                         <div class="text_lg m_2">
@@ -105,7 +105,7 @@ const fnSave = () => {
                                                     item.instlPlcDtl3}` 
                         }}
                     </div>
-                    <div class="text_lg m_2"><span class="info_text">{{ t('10099') }}</span>{{ item.rgtrId }}</div>
+                    <div class="text_lg m_2"><span class="info_text">{{ t('10099') }}</span>{{ lang === 'lng_type_1' ? item.regNm1 : item.regNm2 }}</div>
                     <div class="text_lg m_2"><span class="info_text">{{ t('10738') }}</span>{{ item.instlYmd }}</div>
                     <div class="text_lg m_2"><span class="info_text">{{ t('10740') }}</span>{{ item.dscdYmd }}</div>
                     <div class="text_lg m_2" style="display: flex;">
