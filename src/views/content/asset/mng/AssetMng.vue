@@ -25,6 +25,8 @@ const list = ref([])
 const dialog = ref(false)
 const dialogQna = ref(false)
 
+const eqpmntId = ref('');
+
 const eqpmntSeList = store.getComCodes('1037');
 
 //검색 조건 보류
@@ -180,7 +182,7 @@ onMounted(() => {
                     </Column>
                     <Column field="qna" :header="t('10760')" class="text_center" style="width: 7%;">
                         <template #body="{ data }">
-                            <Button severity="info" rounded @click="dialogQna = true"><i
+                            <Button severity="info" rounded @click="eqpmntId = data.eqpmntId; dialogQna = true; "><i
                                     class="pi pi-question-circle"></i>
                                 <span style="font-size: 1.2rem;">FAQ</span>
                             </Button>
@@ -196,11 +198,11 @@ onMounted(() => {
                     @click="$router.push({ name: 'asset.mng.dtl', params: { eqpmntId: item.eqpmntId } })">
                     <img src="@/assets/images/common/ico_cannon.png" :alt="item.name"
                         style="height: 230px; width: 100%;" />
-                    <sapn style="display: flex; justify-content: center;">
+                    <span style="display: flex; justify-content: center;">
                         {{ `${item.eqpmntCd} | ${    lang === 'lng_type_1' ? item.eqpmntSeNm1 :
                                                     lang === 'lng_type_2' ? item.eqpmntSeNm2 :
                                                     item.eqpmntSeNm3}` }}
-                    </sapn>
+                    </span>
 
                     <div style="display: flex;justify-content: flex-end;">
                         <Button severity="info" rounded @click.stop="dialogQna = true"><i class="pi pi-question-circle"></i>
@@ -231,7 +233,7 @@ onMounted(() => {
         <!-- // 본문 영역 -->
     </div>
     <VideoModal v-if="dialog" @close="dialog = false" :dialog="dialog" />
-    <!-- <QnaModal v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" /> -->
+    <QnaSample v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" :eqpmntId="eqpmntId" />
 </template>
 
 <style scoped>

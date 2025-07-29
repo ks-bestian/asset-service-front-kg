@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import EqpmntDtlTab from '@/views/content/asset/equipment/EqpmntDtlTab.vue'
 import VideoMnlDtlTab from '@/views/content/asset/manul/VideoMnlDtlTab.vue'
 import InstlDtlTab from '@/views/content/asset/install/InstlDtlTab.vue'
+import FaqDtlTab from '@/views/content/asset/faq/FaqDtlTab.vue'
 import { useRouter, useRoute } from 'vue-router'
 import TitleComp from "@/components/TitleComp.vue";
 import { useStore, useFormStore } from '@/store';
@@ -17,6 +18,7 @@ const eqpmntId = route.params.eqpmntId
 const eqpmntInfo = ref({})
 const instlList = ref({})
 const videoList = ref({})
+const faqList = ref({})
 
 const fnDetail = () => {
     let params = { eqpmntId: eqpmntId }
@@ -24,6 +26,7 @@ const fnDetail = () => {
         eqpmntInfo.value = data.data.data.equipDetailVo
         instlList.value = data.data.data.installList
         videoList.value = data.data.data.mnulList
+        faqList.value = data.data.data.faqList
     }).catch(({ message }) => {
         console.error(message)
     })
@@ -53,13 +56,14 @@ onMounted(() => {
                     <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{
                             t('10732') }}</a></li>
                     <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ t('10733') }}</a></li>
-                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{
-                            t('10734') }}</a></li>
+                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{ t('10734') }}</a></li>
+                    <li :class="{ on: tab == 'faq' }" @click="tab = 'faq'"><a href="javascript:void(0)">{{ 'FAQ' }}</a></li>
                 </ul>
             </nav>
             <EqpmntDtlTab v-if="tab == 'productInf'" :eqpmntInfo="eqpmntInfo" />
             <VideoMnlDtlTab v-if="tab == 'manual'" :videoList="videoList" :eqpmntInfo="eqpmntInfo" />
             <InstlDtlTab v-if="tab == 'installInf'" :instlList="instlList" />
+            <FaqDtlTab v-if="tab == 'faq'" :faqList="faqList" />
         </div>
         <div class="btn_group_fixed">
             <button type="submit" class="v_btn btn_primary btn_md" v-if="tab == 'productInf'"
