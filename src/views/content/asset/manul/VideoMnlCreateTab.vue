@@ -33,9 +33,12 @@ const fnDelManual = (id) => {
         console.error(message)
     })
 }
-watch(() => props.detailDatas, (val) => {
-    manualList.value = [...val].sort((a, b) => a.seq - b.seq)
-})
+
+watch(() => props.detailDatas, (newval) => {
+    if (newval && newval.length) {
+        manualList.value = [...newval].sort((a, b) => a.seq - b.seq)
+    }
+}, { immediate: true, deep: true });
 
 
 onMounted(() => {

@@ -40,8 +40,10 @@ const fnDelFaq = (id) => {
 };
 
 watch(() => props.detailDatas, (newval) => {
-    faqList.value = [...newval]
-})
+    if (newval && newval.length) {
+        faqList.value = [...newval];
+    }
+}, { immediate: true, deep: true });
 
 
 

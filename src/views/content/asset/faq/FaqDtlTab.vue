@@ -14,9 +14,7 @@ const props = defineProps({
     faqList: Array
 })
 const mdfyYn = ref(false)
-const layout = ref('grid');
-const options = ref(['list', 'grid']);
-const imgList = ref([img1, img2, img3, img1, img2, img3])
+const layout = ref('list');
 
 const fnSave = () => {
     mdfyYn.value = false;
@@ -31,38 +29,47 @@ const fnSave = () => {
                     <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ props.faqList.length }}</span>
                     </div>
                 </div>
-
-
+<!--
+                <div class="flex justify-end">
+                    <SelectButton v-model="layout" :options="options" :allowEmpty="false">
+                        <template #option="{ option }">
+                            <i :class="[option === 'list' ? 'pi pi-bars' : 'pi pi-table']"></i>
+                        </template>
+                    </SelectButton>
+                </div>
+-->
             </div>
         </template>
-
-            <template v-for="(item, index) in props.faqList" :key="index">
+        <template #list="slotProps">
+            <template v-for="(item, index) in slotProps.items" :key="index">
 
                 <div class="flex_container m_5">
 
 
                     <div class="text_container m2">
-
+                        <div class="header_item">
+                            <div class="text_xl text_bold m_2">
+                                {{item.qstn}}
+                            </div>
+                        </div>
                         <div class="text_lg m_2">
-                            <span class="info_text">{{'질문'}}</span>
-                            <input v-if="mdfyYn" type="text" class="form_control full" v-model="item.qstn">
-                            <template>{{ item.qstn }}</template>
+                            <span class="info_text">{{'문의구분'}}</span>
+                            {{ lang === 'lng_type_1' ? item.faqSeNm1 :
+                                        lang === 'lng_type_2' ? item.faqSeNm2 :
+                                                                item.faqSeNm3 }}
                         </div>
                         
                         <div class="text_lg m_2">
                             <span class="info_text">{{'답변'}}</span>
-                            <input v-if="mdfyYn" type="text" class="form_control full" v-model="item.ans">
-                            <template>{{ item.ans }}</template>
+                            {{ item.ans }}
                         </div>
 
-                        <div v-if="mdfyYn"><button type="button" class="v_btn btn_primary btn_md" @click="fnSave">
-                            {{ t('10743') }}</button></div>
                         <!-- <div v-else class="installer text_lg m_2">{{ `${item.rgstId} [${item.instlYmd}]` }}</div> -->
                     </div>
                 </div>
                 <Divider />
             </template>
-
+        </template>
 
     </DataView>
 </template>
