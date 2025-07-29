@@ -24,7 +24,7 @@ const fnSave = () => {
 </script>
 
 <template>
-    <DataView :value="props.instlList" :layout="layout">
+    <DataView :value="props.instlList" :layout="layout" paginator :rows="4">
         <template #header>
             <div class="board_info ml_8">
                 <div class="left">
@@ -81,7 +81,9 @@ const fnSave = () => {
                         <!-- <div v-else class="installer text_lg m_2">{{ `${item.rgstId} [${item.instlYmd}]` }}</div> -->
                     </div>
                 </div>
+                <!--
                 <Divider />
+                -->
             </template>
         </template>
 

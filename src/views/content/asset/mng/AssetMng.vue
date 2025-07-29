@@ -26,6 +26,8 @@ const list = ref([])
 const dialog = ref(false)
 const dialogQna = ref(false)
 
+const eqpmntId = ref('');
+
 const eqpmntSeList = store.getComCodes('1037');
 
 //검색 조건 보류
@@ -181,7 +183,7 @@ onMounted(() => {
                     </Column>
                     <Column field="qna" :header="t('10760')" class="text_center" style="width: 7%;">
                         <template #body="{ data }">
-                            <Button severity="info" rounded @click="dialogQna = true"><i
+                            <Button severity="info" rounded @click="eqpmntId = data.eqpmntId; dialogQna = true; "><i
                                     class="pi pi-question-circle"></i>
                                 <span style="font-size: 1.2rem;">Question</span>
                             </Button>
@@ -231,7 +233,7 @@ onMounted(() => {
         <!-- // 본문 영역 -->
     </div>
     <VideoModal v-if="dialog" @close="dialog = false" :dialog="dialog" />
-    <QnaSample v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" />
+    <QnaSample v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" :eqpmntId="eqpmntId" />
 </template>
 
 <style scoped>

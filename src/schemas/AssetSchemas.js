@@ -12,7 +12,7 @@ export const formSchemas = {
         { name: "eqpmntCd", label: i18n.global.t('10725'), type: 'text' },  //장비코드
       ],
       [
-        { name: "bzentyId", label: i18n.global.t('10752'), type: 'select', items:store.getBzentys(), default: ''}, //공급업체
+        { name: "bzentyId", label: i18n.global.t('10752'), type: 'select', items:store.getBzentys(), required: true, default: ''}, //공급업체
         { name: "eqpmntSe", label: i18n.global.t('10727'), type: 'select', items:store.getComCodes('1037'), default: '' }, //장비구분
       ],
       [

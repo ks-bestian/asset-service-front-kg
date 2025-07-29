@@ -22,7 +22,7 @@ const fnSave = () => {
 </script>
 
 <template>
-    <DataView :value="props.faqList" :layout="layout">
+    <DataView :value="props.faqList" :layout="layout" paginator :rows="5">
         <template #header>
             <div class="board_info ml_8">
                 <div class="left">
