@@ -49,9 +49,7 @@ onMounted(() => {
     if (props.type === 'update') {
 
         resetForm({ values: { ...props.detailDatas } })
-    } else {
-        resetForm({ values: initialValues.value })
-    }
+    } 
 
     formStore.fieldStore = fieldStore;
     formStore.fnRegister(formkey.value, validate, fieldStore)

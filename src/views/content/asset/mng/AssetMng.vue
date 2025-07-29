@@ -8,7 +8,6 @@ import { useFormStore, useStore } from "@/store";
 import { useRouter } from "vue-router";
 import { useI18n } from 'vue-i18n'
 import VideoModal from '@/views/content/asset/manul/VideoModal.vue'
-import QnaModal from "../faq/QnaModal.vue";
 import SelectButton from 'primevue/selectbutton';
 import TitleComp from "@/components/TitleComp.vue";
 const lang = ref(localStorage.getItem("languageType"));
@@ -232,7 +231,7 @@ onMounted(() => {
         <!-- // 본문 영역 -->
     </div>
     <VideoModal v-if="dialog" @close="dialog = false" :dialog="dialog" />
-    <QnaModal v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" />
+    <!-- <QnaModal v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" /> -->
 </template>
 
 <style scoped>

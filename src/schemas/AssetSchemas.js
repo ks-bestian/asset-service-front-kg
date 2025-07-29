@@ -63,12 +63,12 @@ export const formSchemas = {
       [
         { name: 'mnlLng1', label: i18n.global.t('10238'), type: 'select', items: store.getComCodes('1039'), default: 'mnlLng01', width: '15%', required: true }, //언어
         { name: 'mnlNm1', label: i18n.global.t('10735'), type: 'text', required: true }, //메뉴얼명
-        { name: 'filePath1', label: i18n.global.t('10733'), type: 'file', required: true }, //영상 메뉴얼
+        { name: 'videoFile1', label: i18n.global.t('10733'), type: 'file', required: true }, //영상 메뉴얼
       ],
       [
         { name: 'mnlLng2', label: i18n.global.t('10238'), type: 'select', items: store.getComCodes('1039'), default: '', width: '15%' }, //언어
         { name: 'mnlNm2', label: i18n.global.t('10735'), type: 'text' }, //메뉴얼명
-        { name: 'filePath2', label: i18n.global.t('10733'), type: 'file' }, //영상 메뉴얼
+        { name: 'videoFile2', label: i18n.global.t('10733'), type: 'file' }, //영상 메뉴얼
       ],
     ]
   },

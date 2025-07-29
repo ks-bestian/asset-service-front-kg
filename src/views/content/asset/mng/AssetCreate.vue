@@ -9,7 +9,6 @@ import TitleComp from "@/components/TitleComp.vue";
 import { useStore, useFormStore } from '@/store';
 import { useI18n } from 'vue-i18n'
 import { formSchemas } from '@/schemas/AssetSchemas'
-import FaqCreateTab from '../faq/FaqCreateTab.vue'
 
 const store = useStore();
 const formStore = useFormStore();
@@ -32,6 +31,7 @@ const fnSave = async () => {
     let installVo = []
     let faqVo = []
     let params = {}
+    const formData = new FormData();
 
     formStore.fieldArr.forEach((item) => {
         const obj = {};
@@ -39,8 +39,17 @@ const fnSave = async () => {
         let isManual = false;
         let isFaq = false;
 
+
         Object.entries(item).forEach(([key, value]) => {
             if (mnulField.value.includes(key)) {
+                if (key === 'videoFile1' || key === 'videoFile2') {
+                    if (value.value) {
+                        for (var i = 0; i < value.value.length; i++) {
+                            formData.append('videoFiles', value.value[i])
+                        }
+                    }
+                }
+
                 obj[key] = value.value;
                 isManual = true;
             } else if (instlField.value.includes(key)) {
@@ -48,43 +57,36 @@ const fnSave = async () => {
                 isInstall = true;
             } else if (faqField.value.includes(key)) {
                 obj[key] = value.value;
-                isFaq = true;                
+                isFaq = true;
             } else {
-                params[key] = value.value;
+                if (key === 'files' || key === 'dtlImg') {
+                    if (value) {
+                        for (var i = 0; i < value.length; i++) {
+                            formData.append(key, value[i])
+                        }
+                    }
+                } else {
+                    formData.append(key, value)
+                }
             }
         })
 
         if (isInstall) installVo.push(obj);
         if (isManual) mnulVo.push(obj);
-        if (isFaq) faqVo.push(obj);
+        // if (isFaq) faqVo.push(obj);
     })
 
     const sendData = {
-        ...params,
+        // ...params,
         mnulVoList: mnulVo,
         installVoList: installVo,
-        faqVoList: faqVo
+        // faqVoList: faqVo
     }
-
-    console.log(sendData.installVoList)
-    console.log('sendData')
-
-    //파일저장
-    const formData = new FormData();
 
     for (const key in sendData) {
         const value = sendData[key]
-
-        if (key === 'files' || key === 'dtlImg') {
-            if (value) {
-                for (var i = 0; i < value.length; i++) {
-                    formData.append(key, value[i])
-                }
-            }
-        } else if (typeof value === 'object' && value !== null) {
+        if (typeof value === 'object' && value !== null) {
             formData.append(key, JSON.stringify(value))
-        } else {
-            formData.append(key, value)
         }
     }
 
@@ -148,10 +150,14 @@ onMounted(() => {
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
-                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{ t('10732') }}</a></li>
-                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ t('10733') }}</a></li>
-                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{ t('10734') }}</a></li>
-                    <li :class="{ on: tab == 'faq' }" @click="tab = 'faq'"><a href="javascript:void(0)">{{ '문의' }}</a></li>
+                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{
+                        t('10732') }}</a></li>
+                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{
+                        t('10733') }}</a></li>
+                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{
+                        t('10734') }}</a></li>
+                    <li :class="{ on: tab == 'faq' }" @click="tab = 'faq'"><a href="javascript:void(0)">{{ '문의' }}</a>
+                    </li>
                 </ul>
             </nav>
             <EqpmntCreateTab :show="tab === 'productInf'" :detailDatas="equipDetailVo" :type="type" />
