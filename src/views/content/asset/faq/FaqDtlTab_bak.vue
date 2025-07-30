@@ -1,7 +1,11 @@
 <script setup>
-import { ref, onMounted, defineProps, computed, watch } from 'vue'
+import { ref, onMounted, defineProps, computed } from 'vue'
 import DataView from 'primevue/dataview';
-import FaqPanel from "@/views/content/asset/faq/FaqPanel.vue"
+import Divider from 'primevue/divider';
+import img1 from '@/assets/images/content/회의1.png'
+import img2 from '@/assets/images/content/회의2.png'
+import img3 from '@/assets/images/content/회의3.png'
+import SelectButton from 'primevue/selectbutton';
 import { useI18n } from 'vue-i18n'
 import { useStore } from "@/store";
 const { t } = useI18n();
@@ -22,12 +26,7 @@ const filteredFaqList = computed(() => {
     if (!faqFilter.value) return props.faqList
     return props.faqList.filter(item => item.faqSe === faqFilter.value)
 })
-
-
-
 </script>
-
-
 
 <template>
     <DataView :value="filteredFaqList" :layout="layout" paginator :rows="5">
@@ -46,16 +45,46 @@ const filteredFaqList = computed(() => {
                                 </select>
                             </div>
                 </div>
-
+<!--
+                <div class="flex justify-end">
+                    <SelectButton v-model="layout" :options="options" :allowEmpty="false">
+                        <template #option="{ option }">
+                            <i :class="[option === 'list' ? 'pi pi-bars' : 'pi pi-table']"></i>
+                        </template>
+                    </SelectButton>
+                </div>
+-->
             </div>
         </template>
         <template #list="slotProps">
+            <template v-for="(item, index) in slotProps.items" :key="index">
 
-            <template  v-for="(item, index) in slotProps.items" :key="index" class="mt_3">
-                <FaqPanel :id="item.faqId" :index="(index + 1)" :type="'detail'" :detailDatas="item"/>
+                <div class="flex_container m_5">
 
+
+                    <div class="text_container m2">
+                        <div class="header_item">
+                            <div class="text_xl text_bold m_2">
+                                {{item.qstn}}
+                            </div>
+                        </div>
+                        <div class="text_lg m_2">
+                            <span class="info_text">{{'문의구분'}}</span>
+                            {{ lang === 'lng_type_1' ? item.faqSeNm1 :
+                                        lang === 'lng_type_2' ? item.faqSeNm2 :
+                                                                item.faqSeNm3 }}
+                        </div>
+                        
+                        <div class="text_lg m_2">
+                            <span class="info_text">{{'답변'}}</span>
+                            {{ item.ans }}
+                        </div>
+
+                        <!-- <div v-else class="installer text_lg m_2">{{ `${item.rgstId} [${item.instlYmd}]` }}</div> -->
+                    </div>
+                </div>
+                <Divider v-if="index !== slotProps.items.length - 1" />
             </template>
-
         </template>
 
     </DataView>

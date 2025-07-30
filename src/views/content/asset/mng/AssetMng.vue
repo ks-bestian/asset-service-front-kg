@@ -49,6 +49,7 @@ const fnSearch = () => {
 
     store.API_LIST('equip', params).then((data) => {
         list.value = data.data.data
+        console.log('list.value :: ',list.value)
     }).catch(({ message }) => {
         console.error(message)
     })

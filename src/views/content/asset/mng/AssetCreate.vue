@@ -73,14 +73,14 @@ const fnSave = async () => {
 
         if (isInstall) installVo.push(obj);
         if (isManual) mnulVo.push(obj);
-        // if (isFaq) faqVo.push(obj);
+        if (isFaq) faqVo.push(obj);
     })
 
     const sendData = {
-        // ...params,
+         ...params,
         mnulVoList: mnulVo,
         installVoList: installVo,
-        // faqVoList: faqVo
+        faqVoList: faqVo
     }
 
     for (const key in sendData) {

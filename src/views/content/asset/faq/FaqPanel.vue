@@ -38,14 +38,16 @@ const fnDelFile = (fileNm) => {
     detailImgs.value = detailImgs.value.filter(file => file.name != fileNm);
 }
 
+
+
 </script>
 
 <template>
-    <Panel header="Header" toggleable class="mb_3">
+    <Panel header="Header" toggleable class="mb_3 mt_3">
         <template #header>
             <div style="display: flex; align-items: center;" class="text_bold text_xl p_2">
-                <Button icon="pi pi-trash" rounded class="mr_3 text_white" variant="outlined" @click="fnDelFaq"></Button>
-                <span class="text_white" style="font-size: 1.5rem;">{{ 'FAQ' + props.index }}</span>
+                <Button v-if="props.type!=='detail'" icon="pi pi-trash" rounded class="mr_3 text_white" variant="outlined" @click="fnDelFaq"></Button>
+                <span class="text_white" style="font-size: 1.5rem;">{{ 'Question ' + props.index  }}</span>
             </div>
         </template>
         <template #toggleicon="{ collapsed }">
@@ -54,7 +56,7 @@ const fnDelFile = (fileNm) => {
 
         <div class="content_section mt_3">
             <div class="v_table"> 
-                <Testform :fields="fields" :type="props.type" :detailDatas="props.detailDatas" :codeList="codeList"/>
+                <Testform :fields="fields" :type="props.type" :detailDatas="props.detailDatas"/>
             </div>
         </div>
     </Panel>

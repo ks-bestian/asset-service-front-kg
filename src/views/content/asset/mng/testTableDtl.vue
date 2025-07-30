@@ -1,10 +1,10 @@
 <script setup>
 import ThumbnailUpload from "@/views/content/asset/equipment/ThumbnailUpload.vue";
-import { useFormStore } from "@/store";
+import { useFormStore, useStore } from "@/store";
 import { ref, onMounted, reactive, defineProps, computed, watch, toRaw } from 'vue';
 import { createYupValidate, useYupForm } from '@/utils/YupValidate';
 // import useYupForm from '@/utils/UseYupForm';
-
+const store = useStore();
 const formStore = useFormStore();
 const props = defineProps({
     fields: Array,
@@ -25,9 +25,9 @@ function generateUUID() {
   });
 }
 
-function getCodeName(code) {
-    const match = props.codeList.find(item => item.cdId === code);
-    return match ? match.cdNm1 : '-'; // 일치하는 항목 없을 시 대시(-) 처리
+function getCodeName(items, code) {
+    const match = items.find(item => item.codeId === code);
+    return match ? match.codeNm : '-'; // 일치하는 항목 없을 시 대시(-) 처리
 }
 
 function getRadioLabel(value) {
@@ -65,7 +65,7 @@ onMounted(() => {
                     <td v-bind="(row.length === 1) ? { colspan: 3 } : {}">
                         <template v-if="field.type === 'select'">
                             <!--todo select list api_list -->
-                            {{ getCodeName(fieldStore[field.name].value) }}
+                            {{ getCodeName(field.items, fieldStore[field.name].value) }}
                             
                         </template>
 
