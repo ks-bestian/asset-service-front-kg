@@ -24,7 +24,7 @@ const fnSave = () => {
 </script>
 
 <template>
-    <DataView :value="props.instlList" :layout="layout" paginator :rows="4">
+    <DataView :value="props.instlList" :layout="layout" paginator :rows="8">
         <template #header>
             <div class="board_info ml_8">
                 <div class="left">
@@ -81,16 +81,14 @@ const fnSave = () => {
                         <!-- <div v-else class="installer text_lg m_2">{{ `${item.rgstId} [${item.instlYmd}]` }}</div> -->
                     </div>
                 </div>
-                <!--
-                <Divider />
-                -->
+                <Divider v-if="index !== slotProps.items.length - 1" />
             </template>
         </template>
 
 
 
         <template #grid="slotProps">
-            <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px; " class="mb_3">
                 <div v-for="(item, j) in slotProps.items" :key="j" class="col_class v_box mt_3">
                     <img :src="imgList[j]" :alt="item.name" style="height: 300px; width: 100%;" />
                         <span style="display: flex; justify-content: center;">{{ item.instlPicNm }}</span>

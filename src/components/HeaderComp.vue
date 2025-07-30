@@ -176,7 +176,7 @@ const fnLoginInitPath = () => {
       router.push('/main/mtng/mainMtng1');//Lahima's plenary session
 
   } else {
-      router.push('/main');
+      router.push('/main/asset/mng');
   }
 
 }
@@ -209,10 +209,11 @@ onMounted(() => {
         </a>
       </h1>
       <div class="search_form">
-        
+        <!--
         <input type="text" class="form_control" placeholder="Search" v-model="searchItem" @keydown.enter="fnSearch">
 
         <button @click="fnSearch" type="button" class="btn_search"><i class="v_ico ico_search"></i></button>
+        -->
       </div>
       <div class="util_group">
         <div class="util_item util_user" style="margin-right: 0.2rem; cursor: pointer;">
@@ -245,7 +246,9 @@ onMounted(() => {
           <button type="button" class="v_btn" :class="{ active: lang === 'lng_type_3' }" @click="fnChangeLanguage('lng_type_3')">Ko</button>
         </div>
         <div class="util_item util_ctrl">
+          <!--
           <button type="button" class="v_btn active"><i class="v_ico ico_alarm" @click="$router.push('/myPage/msg')"></i></button>
+          -->
           <button type="button" class="v_btn" @click="fnLogout()"><i class="v_ico ico_logout"></i></button>
         </div>
       </div>
