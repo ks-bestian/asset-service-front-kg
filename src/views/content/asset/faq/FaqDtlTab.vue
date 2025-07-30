@@ -67,7 +67,7 @@ const fnSave = () => {
                         <!-- <div v-else class="installer text_lg m_2">{{ `${item.rgstId} [${item.instlYmd}]` }}</div> -->
                     </div>
                 </div>
-                <Divider />
+                <Divider v-if="index !== slotProps.items.length - 1" />
             </template>
         </template>
 

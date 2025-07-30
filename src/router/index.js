@@ -373,7 +373,7 @@ function getMenuList() {
 }
 
 async function isAuthorized(menuPath) {
-  if(menuPath === '/main' || menuPath === '/') {
+  if(menuPath === '/main/asset/mng' || menuPath === '/') {
     return true;
   }
   const menuList = await getMenuList();
@@ -412,7 +412,7 @@ router.beforeEach(async (to, from, next) => {
     if (!isTokenValid) {
       next();
     } else {
-      next('/main');
+      next('/main/asset/mng');
     }
 
   } else {

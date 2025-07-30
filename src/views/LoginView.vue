@@ -102,7 +102,7 @@ const fnLoginInitPath = () => {
         router.push('/main/mtng/mainMtng1');//Lahima's plenary session
 
     } else {
-        router.push('/main');
+        router.push('/main/asset/mng');
     }
 
 }
