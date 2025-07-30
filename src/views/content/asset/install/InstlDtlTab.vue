@@ -32,7 +32,7 @@ const fnSave = () => {
                             }}</span>
                     </div>
                 </div>
-
+                <!--
                 <div class="flex justify-end">
                     <SelectButton v-model="layout" :options="options" :allowEmpty="false">
                         <template #option="{ option }">
@@ -40,6 +40,8 @@ const fnSave = () => {
                         </template>
                     </SelectButton>
                 </div>
+                -->
+
             </div>
         </template>
 
@@ -60,8 +62,7 @@ const fnSave = () => {
                             <div v-else class="text_xl text_bold m_2">
                                 {{ `[${lang === 'lng_type_1' ? item.instlPlcNm1 :
                                         lang === 'lng_type_2' ? item.instlPlcNm2 :
-                                                                item.instlPlcNm3}
-                                ] ${lang === 'lng_type_1' ? item.instlPlcDtl1 :
+                                                                item.instlPlcNm3}] ${lang === 'lng_type_1' ? item.instlPlcDtl1 :
                                     lang === 'lng_type_2' ? item.instlPlcDtl2 :
                                                             item.instlPlcDtl3}` 
                                 }}

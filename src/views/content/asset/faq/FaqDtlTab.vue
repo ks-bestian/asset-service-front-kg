@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, defineProps } from 'vue'
+import { ref, onMounted, defineProps, computed } from 'vue'
 import DataView from 'primevue/dataview';
 import Divider from 'primevue/divider';
 import img1 from '@/assets/images/content/회의1.png'
@@ -7,9 +7,11 @@ import img2 from '@/assets/images/content/회의2.png'
 import img3 from '@/assets/images/content/회의3.png'
 import SelectButton from 'primevue/selectbutton';
 import { useI18n } from 'vue-i18n'
+import { useStore } from "@/store";
 const { t } = useI18n();
+const store = useStore();
 const lang = ref(localStorage.getItem("languageType"));
-
+const faqFilter = ref('')
 const props = defineProps({
     faqList: Array
 })
@@ -19,15 +21,29 @@ const layout = ref('list');
 const fnSave = () => {
     mdfyYn.value = false;
 }
+
+const filteredFaqList = computed(() => {
+    if (!faqFilter.value) return props.faqList
+    return props.faqList.filter(item => item.faqSe === faqFilter.value)
+})
 </script>
 
 <template>
-    <DataView :value="props.faqList" :layout="layout" paginator :rows="5">
+    <DataView :value="filteredFaqList" :layout="layout" paginator :rows="5">
         <template #header>
             <div class="board_info ml_8">
                 <div class="left">
-                    <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ props.faqList.length }}</span>
+                    <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ filteredFaqList.length }}</span>
                     </div>
+                </div>
+                <div class="right">
+                            <div class="input_item">
+                                <label class="form_label">{{ '문의구분' }}</label>
+                                <select class="form_control ml_2"  v-model="faqFilter">
+                                    <option  value="">{{ '문의구분' }}</option>
+                                    <option  v-for="(item, i) in store.getComCodes('1040')" :key="i" :value="item.codeId">{{ item.codeNm }}</option>
+                                </select>
+                            </div>
                 </div>
 <!--
                 <div class="flex justify-end">
