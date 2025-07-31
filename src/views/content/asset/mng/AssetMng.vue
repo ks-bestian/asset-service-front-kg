@@ -8,6 +8,7 @@ import { useFormStore, useStore } from "@/store";
 import { useRouter } from "vue-router";
 import { useI18n } from 'vue-i18n'
 import VideoModal from '@/views/content/asset/manul/VideoModal.vue'
+import QnaSample from '@/views/content/asset/mng/QnaModal.vue'
 import SelectButton from 'primevue/selectbutton';
 import TitleComp from "@/components/TitleComp.vue";
 const lang = ref(localStorage.getItem("languageType"));

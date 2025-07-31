@@ -27,6 +27,7 @@ const fnDetail = () => {
         instlList.value = data.data.data.installList
         videoList.value = data.data.data.mnulList
         faqList.value = data.data.data.faqList
+        console.log('faqList.value :: ',faqList.value)
     }).catch(({ message }) => {
         console.error(message)
     })
