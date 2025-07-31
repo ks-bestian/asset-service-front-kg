@@ -12,7 +12,15 @@ export default defineConfig({
     // vueDevTools(),
   ],
   server :{
-    host: true
+    host: true,
+    proxy: {
+      // ✅ /equip으로 시작하는 요청은 localhost:8081로 프록시
+      '/equip': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+        rewrite: (path) => path, // 경로 그대로 유지
+      },
+    },
   },
   resolve: {
     alias: {

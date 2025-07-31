@@ -3,6 +3,7 @@ import { ref, onMounted, defineProps } from 'vue'
 import DataView from 'primevue/dataview';
 import Divider from 'primevue/divider';
 import SelectButton from 'primevue/selectbutton';
+import ImgView from '@/views/content/asset/img/ImgView.vue'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n();
 const lang = ref(localStorage.getItem("languageType"));
@@ -87,7 +88,8 @@ const fnSave = () => {
         <template #grid="slotProps">
             <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px; " class="mb_3">
                 <div v-for="(item, j) in slotProps.items" :key="j" class="col_class v_box mt_3">
-                    <img :src="`http://localhost:8081/install/imgs/${item.instlId}`" :alt="item.name" style="height: 300px; width: 100%;" />
+                    <!-- <img :src="`http://localhost:8081/install/imgs/${item.instlId}`" :alt="item.name" style="height: 300px; width: 100%;" /> -->
+                    <ImgView :imgVo="item" :imgSe="'installImg'"/>
                         <span style="display: flex; justify-content: center;">{{ item.instlPicNm }}</span>
 
                     <div style="display: flex;justify-content: flex-end;">
