@@ -27,9 +27,10 @@ const imgList = ref([
     { id: ci1 },
 ]);
 
-const fnMorImg = () => {
-    posts.value.push({ userImage: caimg })
+const fnGetImgList = () => {
+    store.API_LIST('/detail/')
 }
+
 
 watch(() => posts.value.length, (newval) => {
     if (newval >= 1) {
@@ -45,7 +46,7 @@ onMounted(() => {
 <template>
 
     <div class="board_info mt_6">
-        <img src="@/assets/images/common/ico_cannon.png" alt="" style="width: 50rem;">
+        <img :src="`http://localhost:8081/equip/thumbnail/${eqpmntId}`" alt="" style="width: 50rem;">
         <Divider layout="vertical" />
 
         <div class="text_info text_xl ml_4">
@@ -121,17 +122,6 @@ onMounted(() => {
             </template>
         </Carousel>
     </div>
-
-
-
-    <!-- <template v-for="(item, i) in posts" :key="i">
-        <div class="m_4 more_img">
-            <img :src="item.userImage" style="height: 35rem; width: 55rem;">
-        </div>
-    </template>
-    <div class="btn_group_fixed">
-        <button class="v_btn btn_outline_primary btn_sm" @click="fnMorImg" v-if="moreYn">{{ '+더보기' }}</button>
-    </div> -->
 </template>
 
 

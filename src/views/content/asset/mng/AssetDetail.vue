@@ -41,7 +41,7 @@ onMounted(() => {
     <div class="content_inner">
 
         <TitleComp />
-<!--
+        <!--
         <div class="content_util">
             <div class="title_wrap">
                 <h2 class="content_tit">{{ eqpmntInfo.eqpmntNm || '' }}</h2>
@@ -52,23 +52,44 @@ onMounted(() => {
         <!-- 본문 영역 -->
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
-                <ul class="tab_list">
-                    <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a href="javascript:void(0)">{{
-                            t('10732') }}</a></li>
-                    <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{ t('10733') }}</a></li>
-                    <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a href="javascript:void(0)">{{ t('10734') }}</a></li>
-                    <li :class="{ on: tab == 'faq' }" @click="tab = 'faq'"><a href="javascript:void(0)">{{ 'FAQ' }}</a></li>
-                </ul>
+                <div >
+                    <ul class="tab_list">
+                        <li :class="{ on: tab == 'productInf' }" @click="tab = 'productInf'"><a
+                                href="javascript:void(0)">{{ t('10732') }}</a></li>
+                        <li :class="{ on: tab == 'manual' }" @click="tab = 'manual'"><a href="javascript:void(0)">{{
+                                t('10733') }}</a></li>
+                        <li :class="{ on: tab == 'installInf' }" @click="tab = 'installInf'"><a
+                                href="javascript:void(0)">{{ t('10734') }}</a></li>
+                        <li :class="{ on: tab == 'faq' }" @click="tab = 'faq'"><a href="javascript:void(0)">{{ 'FAQ'
+                                }}</a></li>
+                        <div class="text_xl text_bold to_list" @click="$router.push({ name: 'asset.mng' })">{{ '목록으로 >' }}</div>
+
+                    </ul>
+                </div>
             </nav>
             <EqpmntDtlTab v-if="tab == 'productInf'" :eqpmntInfo="eqpmntInfo" />
             <VideoMnlDtlTab v-if="tab == 'manual'" :videoList="videoList" :eqpmntInfo="eqpmntInfo" />
             <InstlDtlTab v-if="tab == 'installInf'" :instlList="instlList" />
             <FaqDtlTab v-if="tab == 'faq'" :faqList="faqList" />
+
         </div>
         <div class="btn_group_fixed">
             <button type="submit" class="v_btn btn_primary btn_md" v-if="tab == 'productInf'"
                 @click="$router.push({ name: 'asset.mng.form', params: { type: 'update', eqpmntId: eqpmntId } })">{{ t('10744') }}</button>
-            <button type="button" class="v_btn btn_outline_primary btn_md" @click="router.push({ name: 'asset.mng' })">{{ t('10750') }}</button>
+            <button type="button" class="v_btn btn_outline_primary btn_md"
+                @click="router.push({ name: 'asset.mng' })">{{ t('10750') }}</button>
         </div>
     </div>
 </template>
+
+<style scoped>
+.to_list {
+    margin-left: auto;
+    color: #0094D3;
+    padding-right: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+</style>

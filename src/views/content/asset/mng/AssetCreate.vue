@@ -26,6 +26,16 @@ const mnulList = ref([])
 const installList = ref([])
 const faqList = ref([])
 const eqpmntId = ref(route.params.eqpmntId);
+
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        const r = (Math.random() * 16) | 0,
+            v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}
+
+
 const fnSave = async () => {
     let mnulVo = []
     let installVo = []
@@ -41,52 +51,71 @@ const fnSave = async () => {
 
 
         Object.entries(item).forEach(([key, value]) => {
+
             if (mnulField.value.includes(key)) {
-                if (key === 'videoFile1' || key === 'videoFile2') {
-                    if (value.value) {
-                        for (var i = 0; i < value.value.length; i++) {
-                            formData.append('videoFiles', value.value[i])
+                if (value.value) {
+                    for (var i = 0; i < value.value.length; i++) {
+                        const ranId = generateUUID();
+                        if (key === 'videoFile') {
+                            formData.append(ranId, value.value[i])
                         }
+
+                        obj['fileId'] = ranId;
+                        obj[key] = value.value;
+                    }
+                }
+                isManual = true;
+
+            } else if (instlField.value.includes(key)) {
+                if (value.value) {
+                    for (var i = 0; i < value.value.length; i++) {
+                        const ranId = generateUUID();
+                        if (key === 'instlFile') {
+                            formData.append(ranId, value.value[i])
+                        }
+
+                        obj['fileId'] = ranId
+                        obj[key] = value.value;
                     }
                 }
 
-                obj[key] = value.value;
-                isManual = true;
-            } else if (instlField.value.includes(key)) {
-                obj[key] = value.value;
+
                 isInstall = true;
             } else if (faqField.value.includes(key)) {
                 obj[key] = value.value;
                 isFaq = true;
             } else {
-                if (key === 'files' || key === 'dtlImg') {
-                    if (value) {
-                        for (var i = 0; i < value.length; i++) {
-                            formData.append(key, value[i])
-                        }
-                    }
-                } else {
-                    formData.append(key, value)
-                }
+                params[key] = value.value;
             }
         })
 
         if (isInstall) installVo.push(obj);
         if (isManual) mnulVo.push(obj);
-        // if (isFaq) faqVo.push(obj);
+        if (isFaq) faqVo.push(obj);
     })
 
     const sendData = {
-        // ...params,
+        ...params,
         mnulVoList: mnulVo,
         installVoList: installVo,
-        // faqVoList: faqVo
+        faqVoList: faqVo
     }
+
+    console.log(mnulVo)
 
     for (const key in sendData) {
         const value = sendData[key]
-        if (typeof value === 'object' && value !== null) {
+
+        if (key === 'files' || key === 'dtlImg' || key === 'thumbnail') {
+            if (value) {
+                for (var i = 0; i < value.length; i++) {
+                    formData.append(key, value[i])
+                }
+            }
+        } else if (typeof value === 'object' && value !== null) {
             formData.append(key, JSON.stringify(value))
+        } else {
+            formData.append(key, value)
         }
     }
 
@@ -106,6 +135,8 @@ const fnSave = async () => {
         }
     })
 }
+
+
 
 
 const fnDetail = () => {

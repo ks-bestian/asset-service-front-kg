@@ -11,12 +11,18 @@ const props = defineProps({
     videoList: Array,
     eqpmntInfo: Object
 })
-const id = ('video')
+const lang = ref(localStorage.getItem("languageType"));
+
+
+const fnGetVideoList = () => {
+
+}
 
 onMounted(() => {
+    fnGetVideoList();
     product.value.push(
         {
-            title: '카메라 조작 메뉴얼',
+            title: '카메라 조작 메뉴얼 카메라 조작 메뉴얼 카메라 조작 메뉴얼 카메라 조작 메뉴얼 카메라 조작 메뉴얼',
             time: '02:48:55'
         },
         {
@@ -38,17 +44,19 @@ onMounted(() => {
 <template>
     <div class="content_row">
         <div class="col_9 v_box">
-            <!-- 
+            
             <div class="tit_header mb_4">
                 <div class="left">
                     <h4 class="v_tit m_2">{{ eqpmntInfo.eqpmntNm }}</h4>
-                    <span class="e_info m_2 text_lg">{{ eqpmntInfo.eqpmntCd + ' | ' + eqpmntInfo.eqpmntSeNm }}</span>
+                    <span class="e_info m_2 text_lg">{{ eqpmntInfo.eqpmntCd + ' | ' + ((lang === 'lng_type_1') ? eqpmntInfo.eqpmntSeNm1 : (lang === 'lng_type_2') ? eqpmntInfo.eqpmntSeNm2 : eqpmntInfo.eqpmntSeNm3) }}</span>
                 </div>
-            </div> -->
+            </div>
 
             <div>
-                <video poster="`@/assets/images/content/cannonposter.png`" controls width="100%"
-                    src="http://localhost:8080/mnul/preview" style="border-radius: 1rem;"></video>
+                <video controls width="100%" height="700px" :src="`http://localhost:8081/mnul/preview/${props.eqpmntInfo.eqpmntId}`"
+                    style="border-radius: 1rem;"></video>
+
+                    <div class="mt_4 ml_1 text_xl">{{ '카메라 조작 메뉴얼 카메라 조작 메뉴얼 카메라 조작 메뉴얼 카메라 조작 메뉴얼 카메라 조작 메뉴얼  [02:48:55]' }}</div>
             </div>
         </div>
 
@@ -57,7 +65,7 @@ onMounted(() => {
             <template v-for="(item, i) in product" :key="i">
                 <div class="m1_5" style="display: flex; align-items: center; ">
                     <i class="pi pi-play-circle mr_1 " style="font-size: 1.8rem;"></i>
-                    <button type="button" class="m_1 text_xl text_bold">{{ item.title }}</button>
+                    <button type="button" class="m_1 text_xl text_bold" style="text-align: left;">{{ item.title }}</button>
                     <span class="m_1 text_lg">{{ item.time }}</span>
                     <i class="pi pi-download" style="margin-left: auto;"></i>
                 </div>

@@ -40,14 +40,21 @@ const fnTabChange = () => { //todo
 }
 
 const fnSearch = () => {
+    list.value = []
     let params = {
         searchEq: searchEq.value,
         searchSe: tab.value,
         searchBz: searchBz.value
     }
+    console.log(params)
+    console.log('params')
 
     store.API_LIST('equip', params).then((data) => {
-        list.value = data.data.data
+    
+        data.data.data.forEach(item => {
+            list.value.push(item.equipDetailVo) 
+        });
+
     }).catch(({ message }) => {
         console.error(message)
     })
@@ -64,7 +71,6 @@ const fnReset = () => {
 
 const fnVideoModal = () => {
     dialog.value = true;
-
 }
 
 onMounted(() => {
@@ -74,21 +80,15 @@ onMounted(() => {
 
 <template>
     <div class="content_inner">
-
         <TitleComp />
 
         <!-- 본문 영역 -->
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
-
-                    
-                    <li :class="{ on: tab == '' }" @click="tab = ''; fnTabChange()"><a href="javascript:void(0)">{{
-                            t('10066') }}</a></li>
-
+                    <li :class="{ on: tab == '' }" @click="tab = ''; fnTabChange()"><a href="javascript:void(0)">{{ t('10066') }}</a></li>
                     <template v-for="(item, i) in eqpmntSeList" :key="i">
                         <li :class="{ on: tab == item.codeId }" @click="tab = item.codeId; fnTabChange()"><a href="javascript:void(0)">{{item.codeNm }}</a></li>
-
                     </template>
                 </ul>
             </nav>
@@ -104,12 +104,11 @@ onMounted(() => {
                                 <option  v-for="(item, i) in store.getBzentys()" :key="i" :value="item.codeId">{{ item.codeNm }}</option>
                             </select>
                         </div>
-                        <!--                        <div class="input_item">
+                        <!--<div class="input_item">
                             <label class="form_label">{{ t("10752") }}</label>
                             <input type="text" class="form_control" v-model="searchBz" @keydown.enter="fnSearch">
                         </div>
                         -->
-
                         <div class="input_item">
                             <label class="form_label">{{ t("10751") }}</label>
                             <input type="text" class="form_control" v-model="searchEq" @keydown.enter="fnSearch">
@@ -118,8 +117,8 @@ onMounted(() => {
                 </div>
 
                 <div class="search_btn">
-                    <button type="button" class="v_btn btn_primary btn_md">
-                        <i class="v_ico ico_search_white" @click="fnSearch"></i><span>{{ t("10053") }}</span></button>
+                    <button type="button" class="v_btn btn_primary btn_md" @click="fnSearch">
+                        <i class="v_ico ico_search_white"></i><span>{{ t("10053") }}</span></button>
                     <button type="button" @click="fnReset" class="v_btn btn_outline_primary btn_md">
                         <i class="v_ico ico_reset_primary"></i><span></span></button>
                 </div>
@@ -132,14 +131,13 @@ onMounted(() => {
                 </div>
                 <div class="right">
                     <div class="btn_wrap">
-<!--
+
                         <button type="button" class="v_btn btn_outline_secondary btn_sm" @click="fnExcelDownload"><i
                                 class="v_ico ico_download_secondary"></i><span>{{ '엑셀 다운로드' }}</span></button>
--->
+
                         <button type="button" class="v_btn btn_outline_primary btn_sm mb_3"
                             @click="$router.push({ name: 'asset.mng.form', params: { type: 'create', eqpmntId: 'new' } })">{{ t("10746") }}</button>
                         <!-- <button type="button" class="v_btn btn_outline_secondary btn_sm" @click="fnDelete">{{ "선택 삭제" }}</button> -->
-
                     </div>
                 </div>
             </div>
@@ -158,10 +156,9 @@ onMounted(() => {
             <div class="v_table table_list" v-if="layout === 'list'">
                 <DataTable :value="list" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
                     @row-click="fnGoDetail" tableStyle="min-width: 50rem;">
-                    <Column field="img" :header="t('10729')" class="text_center">
+                    <Column field="thumbnail" :header="t('10729')" class="text_center">
                         <template #body="{ data }">
-                            <img src="@/assets/images/common/ico_cannon.png" alt=""
-                                style="width: 28rem; height: 15rem;">
+                            <img :src="`http://localhost:8081/equip/thumbnail/${data.eqpmntId}`" alt="" style="width: 28rem; height: 15rem;">
                         </template>
                     </Column>
                     <Column field="eqpmntCd" :header="t('10725')" class="text_center" style="width: 8%;"></Column>
@@ -169,12 +166,12 @@ onMounted(() => {
                     <Column field="expln" :header="t('10728')" style="width: 33%;"></Column>
                     <Column :field="lang === 'lng_type_1' ? 'eqpmntSeNm1' : (lang === 'lng_type_2' ? 'eqpmntSeNm2' : 'eqpmntSeNm3')" :header="t('10727')" class="text_center" style="width: 6%;"></Column>
                     <Column :field="lang === 'lng_type_1' ? 'bzentyNm1' : (lang === 'lng_type_2' ? 'bzentyNm2' : 'bzentyNm3')" :header="t('10752')" class="text_center" style="width: 7%;"></Column>
-                    <Column field="mnl" :header="t('10755')" class="text_center" style="width: 5%;">
+                    <Column field="mnlPath" :header="t('10755')" class="text_center" style="width: 5%;">
                         <template #body="{ data }">
                             <img src="@/assets/images/common/ico_file_pdf.png" alt="" style="width: 25px;">
                         </template>
                     </Column>
-                    <Column field="video" :header="t('10733')" class="text_center" style="width: 10%;">
+                    <Column field="videoPath" :header="t('10733')" class="text_center" style="width: 10%;">
                         <template #body="{ data }">
                             <Button severity="danger" @click="fnVideoModal"><i class="pi pi-play-circle"></i><span
                                     style="font-size: 1.2rem;">Play</span></Button>
@@ -217,11 +214,11 @@ onMounted(() => {
                                                     item.bzentyNm3 }}
                     </div>
                     <div class="text_lg m_2"><span class="info_text">{{ t('10755') }}</span>
-
                         {{ '카메라 동작법.pdf' }}
                             <img src="@/assets/images/common/ico_file_pdf.png" alt="" style="width: 25px;">
                     </div><!-- 메뉴얼로 바꿔야함-->
                     <div class="text_lg m_2"><span class="info_text">{{ t('10733') }}</span>
+                        {{ '영상메뉴얼명.mp4' }}
                         <Button severity="danger" @click="fnVideoModal"><i class="pi pi-play-circle"></i>
                             <span style="font-size: 1.2rem;">Play</span>
                         </Button>
