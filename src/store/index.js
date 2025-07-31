@@ -493,11 +493,11 @@ export const useStore = defineStore('main', {
                     throw error;
                 });
         },
-        API_FILE_DOWN(fileId, fileNm) {
+        API_FILE_DOWN(fileId, fileNm, type) {
 
             this.showProgressSpinner();
 
-            const API_PATH = `/com/file/down`;
+            const API_PATH = (type === 'img') ? `/com/img/down` : `/com/mnl/down`;
             return axios.get(API_PATH, { responseType: 'blob', params: {fileId} })
                 .then(response => {
 

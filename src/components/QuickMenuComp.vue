@@ -18,7 +18,7 @@ onMounted(() => {
 
 <template>
     <div id="v_quickmenu" class="close" style="z-index: 1000;">
-        <button type="button" class="btn_quickmenu">Quick</button>
+        <!-- <button type="button" class="btn_quickmenu">Quick</button> -->
         <div class="quick_wrap">
             <div class="quick_header">
                 <span class="quick_tit">{{ t('10649') }}</span>

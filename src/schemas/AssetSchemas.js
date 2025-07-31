@@ -9,14 +9,14 @@ export const formSchemas = {
     fields: [
       [ //1. 배열 1행 or 2행으로 넘겨야함 2. name db컬럼명과 일치 3.입력 type 및 필수 여부(db not null) 설정 
         { name: "eqpmntNm", label: i18n.global.t('10751'), type: 'text', required: true }, //장비명
-        { name: "eqpmntCd", label: i18n.global.t('10725'), type: 'text' },  //장비코드
+        { name: "eqpmntCd", label: i18n.global.t('10725'), type: 'text', required: true },  //장비코드
       ],
       [
         { name: "bzentyId", label: i18n.global.t('10752'), type: 'select', items: store.getBzentys(), default: '', required: true }, //공급업체
-        { name: "eqpmntSe", label: i18n.global.t('10727'), type: 'select', items: store.getComCodes('1037'), default: '' }, //장비구분
+        { name: "eqpmntSe", label: i18n.global.t('10727'), type: 'select', items: store.getComCodes('1037'), default: '', required: true }, //장비구분
       ],
       [
-        { name: "expln", label: i18n.global.t('10728'), type: 'text' }, //설명
+        { name: "expln", label: i18n.global.t('10728'), type: 'text', required: true }, //설명
       ],
       [
         { name: "files", label: i18n.global.t('10755'), type: 'file' }, //장비 메뉴얼 파일
@@ -26,7 +26,7 @@ export const formSchemas = {
         { name: "dtlImg", label: i18n.global.t('10754'), type: 'file' }, //상세이미지
       ],
       [
-        { name: "thumbnail", label: '썸네일이미지', type: 'file' }, //썸네일이미지
+        { name: "thumbnail", label: '썸네일이미지', type: 'file', required: true }, //썸네일이미지
       ],
       [
         { name: "eqpmntId", label: 'eqpmntId', type: 'text', hidden: true }, //장비아이디

@@ -8,16 +8,17 @@ import ci1 from '@/assets/images/content/ci1.jpg'
 import { useRoute } from 'vue-router';
 import Carousel from 'primevue/carousel';
 import { useI18n } from 'vue-i18n'
+import AssetFile from '@/views/content/asset/common/assetFile.vue';
 const { t } = useI18n();
 const lang = ref(localStorage.getItem("languageType"));
 
 const route = useRoute();
 const store = useStore();
-const posts = ref([{ userImage: caimg1 }])
-const moreYn = ref(true)
-const eqpmntId = route.params.eqpmntId
-const eqpmntInfo = ref({})
 const props = defineProps(['eqpmntInfo'])
+const eqpmntId = route.params.eqpmntId
+const list = ref([]);
+
+
 const imgList = ref([
     { id: ci1 },
     { id: caimg },
@@ -28,17 +29,15 @@ const imgList = ref([
 ]);
 
 const fnGetImgList = () => {
-    store.API_LIST('/detail/')
+    let params = {eqpmntId: eqpmntId}
+    store.API_LIST('equip/img/list', params).then((data) => {
+        list.value = data.data.data
+    })
 }
 
 
-watch(() => posts.value.length, (newval) => {
-    if (newval >= 1) {
-        moreYn.value = false
-    }
-})
-
 onMounted(() => {
+    fnGetImgList();
 })
 
 </script>
@@ -46,7 +45,7 @@ onMounted(() => {
 <template>
 
     <div class="board_info mt_6">
-        <img :src="`http://localhost:8081/equip/thumbnail/${eqpmntId}`" alt="" style="width: 50rem;">
+        <img :src="`http://localhost:8081/equip/thumbnail/${eqpmntId}`" alt="" style="width: 50rem; height: 35rem;">
         <Divider layout="vertical" />
 
         <div class="text_info text_xl ml_4">
@@ -103,11 +102,11 @@ onMounted(() => {
                 <tr>
                     <th scope="row">{{ t('10754') }}</th>
                     <td>
-                        <div>
-                            <div class="pb_2">{{ '캐논 카메라 전면.jpg' }}</div>
-                            <div class="pb_2">{{ '캐논 카메라 측면.jpg' }}</div>
-                            <div>{{ '캐논 카메라 장착법.jpg' }}</div>
-                        </div>
+                        <!-- <div v-for="(item, i) in list" :key="i">
+                            <div class="p_1">{{ item.fileNm }}</div>
+                        </div> -->
+
+                        <AssetFile :fileList="list"/>
                     </td>
                 </tr>
             </tbody>

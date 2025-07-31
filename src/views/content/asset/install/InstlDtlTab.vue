@@ -2,9 +2,6 @@
 import { ref, onMounted, defineProps } from 'vue'
 import DataView from 'primevue/dataview';
 import Divider from 'primevue/divider';
-import img1 from '@/assets/images/content/회의1.png'
-import img2 from '@/assets/images/content/회의2.png'
-import img3 from '@/assets/images/content/회의3.png'
 import SelectButton from 'primevue/selectbutton';
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n();
@@ -16,7 +13,6 @@ const props = defineProps({
 const mdfyYn = ref(false)
 const layout = ref('grid');
 const options = ref(['list', 'grid']);
-const imgList = ref([img1, img2, img3, img1, img2, img3])
 
 const fnSave = () => {
     mdfyYn.value = false;
@@ -91,7 +87,7 @@ const fnSave = () => {
         <template #grid="slotProps">
             <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px; " class="mb_3">
                 <div v-for="(item, j) in slotProps.items" :key="j" class="col_class v_box mt_3">
-                    <img :src="imgList[j]" :alt="item.name" style="height: 300px; width: 100%;" />
+                    <img :src="`http://localhost:8081/install/imgs/${item.instlId}`" :alt="item.name" style="height: 300px; width: 100%;" />
                         <span style="display: flex; justify-content: center;">{{ item.instlPicNm }}</span>
 
                     <div style="display: flex;justify-content: flex-end;">
