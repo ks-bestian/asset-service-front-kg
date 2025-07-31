@@ -161,8 +161,11 @@ onMounted(() => {
                     @row-click="fnGoDetail" tableStyle="min-width: 50rem;">
                     <Column field="img" :header="t('10729')" class="text_center">
                         <template #body="{ data }">
-                            <img src="@/assets/images/common/ico_cannon.png" alt=""
-                                style="width: 28rem; height: 15rem;">
+                            <!--
+                            <img src="@/assets/images/common/ico_cannon.png" alt="" style="width: 28rem; height: 15rem;">
+
+                            -->
+                            <img :src="`/equip/thumbnail/${data.eqpmntId}`" alt="" style="width: 28rem; height: 15rem;">
                         </template>
                     </Column>
                     <Column field="eqpmntCd" :header="t('10725')" class="text_center" style="width: 8%;"></Column>
