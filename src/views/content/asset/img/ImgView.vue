@@ -1,23 +1,40 @@
 <script setup>
-import { defineEmits, defineProps, ref, watch } from 'vue'
+import { defineEmits, defineProps, ref, computed } from 'vue'
 import Panel from 'primevue/panel';
 import Button from 'primevue/button';
 import { formSchemas } from '@/schemas/AssetSchemas';
 import Testform from '../mng/testform.vue';
 import { useI18n } from 'vue-i18n'
+import { size } from 'lodash';
 const { t } = useI18n();
 
 const lang = ref(localStorage.getItem("languageType"));
 const props = defineProps({
     imgVo: Object,
-    imgSe: String
+    imgSe: String,
+    size: {
+        type: String,
+        default: 'medium' // 기본값
+    }
+})
+
+const thumbnailStyle = computed(() => {
+  switch (props.size) {
+    case 'small':
+      return { width: '15rem' }
+    case 'large':
+      return { width: '50rem' }
+    case 'medium':
+    default:
+      return { width: '100%', height: '35rem' }
+  }
 })
 
 
 
 
 </script>
-
+style="width: 50rem;"
 <template>
 
     <template v-if="props.imgSe === 'thumbnail'">
@@ -26,7 +43,7 @@ const props = defineProps({
         :src="`/equip/thumbnail/${props.imgVo.eqpmntId}`"
         @error="e => e.target.src = `/images/content/img_noimage.png`"
         :alt="props.imgVo.eqpmntNm"
-        style="height: 230px; width: 100%;"
+        :style="thumbnailStyle"
         loading="lazy"
         />
     </template>
@@ -38,7 +55,7 @@ const props = defineProps({
         :src="`/equip/img/${props.imgVo.imgId}`" 
         @error="e => e.target.src = `/images/content/img_noimage.png`"
         :alt="props.imgVo.orgnlFileNm" 
-        style="width: 100%; height: 35rem;"
+        :style="thumbnailStyle"
         loading="lazy"
         />
     </template>
@@ -55,7 +72,7 @@ const props = defineProps({
                 ] ${lang === 'lng_type_1' ? props.imgVo.instlPlcDtl1 :
                     lang === 'lng_type_2' ? props.imgVo.instlPlcDtl2 :
                                             props.imgVo.instlPlcDtl3}`"
-        style="height: 300px; width: 100%;" 
+        :style="thumbnailStyle"
         loading="lazy"
         />
     </template>

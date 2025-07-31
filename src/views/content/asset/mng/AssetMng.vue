@@ -11,6 +11,7 @@ import VideoModal from '@/views/content/asset/manul/VideoModal.vue'
 import QnaSample from '@/views/content/asset/mng/QnaModal.vue'
 import SelectButton from 'primevue/selectbutton';
 import TitleComp from "@/components/TitleComp.vue";
+import ImgView from '@/views/content/asset/img/ImgView.vue'
 const lang = ref(localStorage.getItem("languageType"));
 
 const layout = ref('list');
@@ -162,14 +163,9 @@ onMounted(() => {
                     <Column field="img" :header="t('10729')" class="text_center">
                         <template #body="{ data }">
 
-                            <img
-                            v-if="data && data.eqpmntId"
-                            :src="`/equip/thumbnail/${data.eqpmntId}`"
-                            @error="e => e.target.src = `/images/content/img_noimage.png`"
-                            :alt="data.eqpmntNm"
-                            style="height: 230px; width: 100%;"
-                            loading="lazy"
-                            />
+
+
+                            <ImgView :imgVo="data" :imgSe="'thumbnail'" :size="'small'"/>
 
 
                         </template>
@@ -206,17 +202,9 @@ onMounted(() => {
                 v-if="layout === 'grid'">
                 <div v-for="(item, j) in list" :key="j" class="col_class v_box mt_3"
                     @click="$router.push({ name: 'asset.mng.dtl', params: { eqpmntId: item.eqpmntId } })">
-<!--
-                    <img v-if="item && item.eqpmntId" :src="`/equip/thumbnail/${item.eqpmntId}`" :alt="item.eqpmntNm" >
--->
-                    <img
-                    v-if="item && item.eqpmntId"
-                    :src="`/equip/thumbnail/${item.eqpmntId}`"
-                    @error="e => e.target.src = `/images/content/img_noimage.png`"
-                    :alt="item.eqpmntNm"
-                    style="height: 230px; width: 100%;"
-                    loading="lazy"
-                    />
+
+
+                    <ImgView :imgVo="item" :imgSe="'thumbnail'" :size="'medium'"/>
 
 
 

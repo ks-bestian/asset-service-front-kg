@@ -92,7 +92,7 @@ const fnSave = () => {
         <template #grid="slotProps">
             <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px; " class="mb_3">
                 <div v-for="(item, j) in slotProps.items" :key="j" class="col_class v_box mt_3">
-                    <ImgView :imgVo="item" :imgSe="'installImg'"/>
+                    <ImgView :imgVo="item" :imgSe="'installImg'" :size="'medium'"/>
                         <span style="display: flex; justify-content: center;">{{ item.instlPicNm }}</span>
 
                     <div style="display: flex;justify-content: flex-end;">
