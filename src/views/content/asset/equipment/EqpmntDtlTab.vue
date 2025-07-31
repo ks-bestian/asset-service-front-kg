@@ -51,7 +51,9 @@ onMounted(() => {
 <template>
 
     <div class="board_info mt_6">
-        <img :src="`http://localhost:8081/equip/thumbnail/${eqpmntId}`" alt="" style="width: 50rem; height: 35rem;">
+        <!-- <img :src="`http://localhost:8081/equip/thumbnail/${eqpmntId}`" alt="" style="width: 50rem; height: 35rem;"> -->
+        <ImgView :imgVo="props.eqpmntInfo" :imgSe="'thumbnail'" :size="'large'"/>
+
         <Divider layout="vertical" />
 
         <div class="text_info text_xl ml_4">
@@ -122,7 +124,7 @@ onMounted(() => {
         <Carousel :value="imgList" :numVisible="4" :numScroll="4">
             <template #item="slotProps">
                 <div class="mr_4 ml_4" >
-                    <ImgView :imgVo="slotProps.data" :imgSe="'detail'"/>
+                    <ImgView :imgVo="slotProps.data" :imgSe="'detail'" :size="'medium'"/>
                 </div>
             </template>
         </Carousel>

@@ -89,7 +89,7 @@ const fnSave = () => {
             <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px; " class="mb_3">
                 <div v-for="(item, j) in slotProps.items" :key="j" class="col_class v_box mt_3">
                     <!-- <img :src="`http://localhost:8081/install/imgs/${item.instlId}`" :alt="item.name" style="height: 300px; width: 100%;" /> -->
-                    <ImgView :imgVo="item" :imgSe="'installImg'"/>
+                    <ImgView :imgVo="item" :imgSe="'installImg'" :size="'medium'"/>
                         <span style="display: flex; justify-content: center;">{{ item.instlPicNm }}</span>
 
                     <div style="display: flex;justify-content: flex-end;">
