@@ -8,6 +8,7 @@ import ci1 from '@/assets/images/content/ci1.jpg'
 import { useRoute } from 'vue-router';
 import Carousel from 'primevue/carousel';
 import { useI18n } from 'vue-i18n'
+import ImgView from '@/views/content/asset/img/ImgView.vue'
 const { t } = useI18n();
 const lang = ref(localStorage.getItem("languageType"));
 
@@ -19,16 +20,20 @@ const eqpmntId = route.params.eqpmntId
 const eqpmntInfo = ref({})
 const props = defineProps(['eqpmntInfo'])
 const imgList = ref([
-    { id: ci1 },
-    { id: caimg },
-    { id: caimg1 },
-    { id: caimg },
-    { id: ci1 },
-    { id: ci1 },
 ]);
 
 const fnGetImgList = () => {
     store.API_LIST('/detail/')
+}
+
+const fnDetail = () => {
+    let params = { eqpmntId: route.params.eqpmntId }
+    const apiUrl = `img/detail`;
+    store.API_LIST(apiUrl, params).then((data) => {
+        imgList.value = data.data.data;
+    }).catch(({ message }) => {
+        console.error(message)
+    })
 }
 
 
@@ -39,6 +44,8 @@ watch(() => posts.value.length, (newval) => {
 })
 
 onMounted(() => {
+    fnDetail();
+
 })
 
 </script>
@@ -117,7 +124,7 @@ onMounted(() => {
         <Carousel :value="imgList" :numVisible="4" :numScroll="4">
             <template #item="slotProps">
                 <div class="mr_4 ml_4" >
-                    <img class="v_box" :src="slotProps.data.id" :alt="slotProps.data.id" style="width: 100%; height: 35rem;">
+                    <ImgView :imgVo="slotProps.data" :imgSe="'detail'"/>
                 </div>
             </template>
         </Carousel>
