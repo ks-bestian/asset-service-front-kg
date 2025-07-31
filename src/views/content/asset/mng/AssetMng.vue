@@ -161,6 +161,7 @@ onMounted(() => {
                     @row-click="fnGoDetail" tableStyle="min-width: 50rem;">
                     <Column field="img" :header="t('10729')" class="text_center">
                         <template #body="{ data }">
+
                             <img
                             v-if="data && data.eqpmntId"
                             :src="`/equip/thumbnail/${data.eqpmntId}`"
@@ -169,6 +170,8 @@ onMounted(() => {
                             style="height: 230px; width: 100%;"
                             loading="lazy"
                             />
+
+
                         </template>
                     </Column>
                     <Column field="eqpmntCd" :header="t('10725')" class="text_center" style="width: 8%;"></Column>

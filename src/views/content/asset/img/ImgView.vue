@@ -6,6 +6,7 @@ import { formSchemas } from '@/schemas/AssetSchemas';
 import Testform from '../mng/testform.vue';
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n();
+
 const lang = ref(localStorage.getItem("languageType"));
 const props = defineProps({
     imgVo: Object,
@@ -14,9 +15,11 @@ const props = defineProps({
 
 
 
+
 </script>
 
 <template>
+
     <template v-if="props.imgSe === 'thumbnail'">
         <img
         v-if="props.imgVo && props.imgVo.eqpmntId"
@@ -58,8 +61,6 @@ const props = defineProps({
     </template>
     
 
-
-                    
 
 </template>
 
