@@ -1,25 +1,24 @@
 <script setup>
 import { useStore } from "@/store";
-import { onMounted, watch, ref } from "vue";
+import { onMounted, watch, ref, defineEmits } from "vue";
+import FileModal from "./FileModal.vue";
 
 /** Variable declaration */
 const store = useStore();
-
+const dialog = ref(false);
 const props = defineProps({
     fileList: Array,
 })
 
+const emits = defineEmits(['onFileClick'])
 const list = ref([])
 const typeImg = ref(false)
+const selectedFile = ref({})
 /** File download */
 const fnDownloadFile = (fileId, fileNm) => {
     store.API_FILE_DOWN(fileId, fileNm);
 }
 
-/** File download */
-const fnPdfViewer = (file) => {
-    store.API_PDF_VIEWER(file.fileId);
-}
 
 const getFileType = (fileName) => {
     const ext = fileName.split('.').pop().toLowerCase();
@@ -58,6 +57,15 @@ const getFileIconImgSrc = (file) => {
     // return new URL('@/assets/images/common/ico_file_etc_sm.png', import.meta.url).href;
 }
 
+const fnClickFile = (file) => {
+    if (file.orgnlFileNm.endsWith('.pdf')) {
+        dialog.value = true;
+        selectedFile.value = file;
+    } else {
+        
+    }
+}
+
 watch(() => props.fileList, (newval) => {
     if (newval) {
         list.value = [...newval]
@@ -71,14 +79,17 @@ onMounted(() => {
 <template>
     <ul class="file_list" v-for="(file, index) in list" :key="index">
         <li class="p_1">
-            <span>{{ file.fileNm }}</span>
-            <a href="javascript:void(0)" class="v_btn" @click="fnImgViewer()"><img
-                    :src="getFileIconImgSrc(file)" alt=""></a>
-                    <i class="pi pi-image" v-if="typeImg"></i>
-            <i class="pi pi-download ml_2" style="cursor: pointer;" @click="fnDownloadFile(file.filePath, file.orgnlFileNm)"></i>
-            <a href="javascript:void(0)" class="v_btn" @click="fnPdfViewer(file)" v-if="file.pdfFileId"><img src="@/assets/images/common/ico_file_pdf.png" alt=""></a>
+            <span @click="fnClickFile(file)" style="cursor: pointer;">{{ file.fileNm }}</span>
+            <a href="javascript:void(0)" class="v_btn" @click="fnClickFile(file)"><img :src="getFileIconImgSrc(file)"
+                    alt=""></a>
+            <i class="pi pi-image" v-if="typeImg"></i>
+            <i class="pi pi-download ml_2" style="cursor: pointer;"
+                @click="fnDownloadFile(file.filePath, file.orgnlFileNm)"></i>
+            <!-- <a href="javascript:void(0)" class="v_btn" v-if="file.pdfFileId"><img src="@/assets/images/common/ico_file_pdf.png" alt=""></a> -->
         </li>
     </ul>
+
+    <FileModal v-if="dialog" :dialog="dialog" :file-obj="selectedFile" @close="dialog = false" />
 </template>
 
 <style scoped></style>

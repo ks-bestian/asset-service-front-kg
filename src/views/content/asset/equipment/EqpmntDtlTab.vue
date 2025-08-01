@@ -2,14 +2,12 @@
 import { ref, watch, onMounted, defineProps } from 'vue'
 import Divider from 'primevue/divider';
 import { useStore } from '@/store';
-import caimg from '@/assets/images/content/카메라상세.jpg'
-import caimg1 from '@/assets/images/content/카메라상세1.jpg'
-import ci1 from '@/assets/images/content/ci1.jpg'
 import { useRoute } from 'vue-router';
 import Carousel from 'primevue/carousel';
 import { useI18n } from 'vue-i18n'
 import AssetFile from '@/views/content/asset/common/assetFile.vue';
 import ImgView from '@/views/content/asset/img/ImgView.vue'
+
 const { t } = useI18n();
 const lang = ref(localStorage.getItem("languageType"));
 
@@ -44,7 +42,6 @@ const fnGetPdfMnul = () => {
     let params = { eqpmntId: eqpmntId }
     store.API_LIST('mnul/file', params).then((data) => {
         fileMnls.value = data.data.data
-        console.log(fileMnls.value)
     }).catch(({ message }) => {
         console.error(message)
     })
@@ -82,7 +79,6 @@ onMounted(() => {
                     lang === 'lng_type_2' ? props.eqpmntInfo.bzentyNm2 :
                         props.eqpmntInfo.bzentyNm3
                 }}
-
             </div>
             <!--
             담당부서는 사용 안될거같다.
@@ -113,12 +109,6 @@ onMounted(() => {
                     <td>
                         <AssetFile :fileList="fileMnls" />
                     </td>
-                    <!-- <td v-for="(item, i) in fileMnls" :key="i">
-                        <div style="display: flex; align-items: center;">
-                            {{ item.orgnlFileNm }}
-                            <img src="@/assets/images/common/ico_file_pdf.png" alt="">
-                        </div>
-                    </td> -->
                 </tr>
                 <tr>
                     <th scope="row">{{ t('10754') }}</th>
@@ -133,6 +123,12 @@ onMounted(() => {
             </tbody>
         </table>
     </div>
+
+    <template v-for="(item, i) in fileMnls" :key="i">
+        <FileViewer :file-nm="item.fileNm" :pdf-file-id="item.filePath" />
+    </template>
+
+
     <div class="card mt_10">
         <Carousel :value="imgList" :numVisible="4" :numScroll="4">
             <template #item="slotProps">
