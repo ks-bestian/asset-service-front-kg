@@ -4,6 +4,7 @@ import { useStore } from '@/store';
 import Dialog from 'primevue/dialog'
 import Fieldset from 'primevue/fieldset';
 import FaqDtlTab from "@/views/content/asset/faq/FaqDtlTab.vue"
+
 const store = useStore()
 const faqList = ref({})
 
@@ -42,7 +43,16 @@ onMounted(() => {
             <div class="popup_inner">
                 <div class="popup_body">
                     <div class="popup_cont">
+
+                        <div>
+                            <Fieldset legend=" 연락정보" :toggleable="true">
+                                <div class="text_lg m_2"><span class="info_text">{{ '담당자' }}</span>{{ '홍길동' }}</div>
+                                <div class="text_lg m_2"><span class="info_text">{{ '이메일' }}</span>{{ '' }}</div>
+                                <div class="text_lg m_2"><span class="info_text">{{ '전화번호' }}</span>{{ '' }}</div>
+                            </Fieldset>
+                        </div>
                         <FaqDtlTab :faqList="faqList" />
+
                     </div>
 
                     <div class="popup_footer">

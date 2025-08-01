@@ -14,6 +14,7 @@ const emits = defineEmits(['onFileClick'])
 const list = ref([])
 const typeImg = ref(false)
 const selectedFile = ref({})
+const type = ref('')
 /** File download */
 const fnDownloadFile = (fileId, fileNm) => {
     store.API_FILE_DOWN(fileId, fileNm);
@@ -58,11 +59,13 @@ const getFileIconImgSrc = (file) => {
 }
 
 const fnClickFile = (file) => {
+    dialog.value = true;
+    selectedFile.value = file;
+
     if (file.orgnlFileNm.endsWith('.pdf')) {
-        dialog.value = true;
-        selectedFile.value = file;
+        type.value = 'file';
     } else {
-        
+        type.value = 'img'
     }
 }
 
@@ -80,7 +83,7 @@ onMounted(() => {
     <ul class="file_list" v-for="(file, index) in list" :key="index">
         <li class="p_1">
             <span @click="fnClickFile(file)" style="cursor: pointer;">{{ file.fileNm }}</span>
-            <a href="javascript:void(0)" class="v_btn" @click="fnClickFile(file)"><img :src="getFileIconImgSrc(file)"
+            <a href="javascript:void(0)" class="v_btn"><img :src="getFileIconImgSrc(file)"
                     alt=""></a>
             <i class="pi pi-image" v-if="typeImg"></i>
             <i class="pi pi-download ml_2" style="cursor: pointer;"
@@ -89,7 +92,7 @@ onMounted(() => {
         </li>
     </ul>
 
-    <FileModal v-if="dialog" :dialog="dialog" :file-obj="selectedFile" @close="dialog = false" />
+    <FileModal v-if="dialog" :dialog="dialog" :file-obj="selectedFile" @close="dialog = false" :type="type" />
 </template>
 
 <style scoped></style>

@@ -270,9 +270,10 @@ export const useStore = defineStore('main', {
                 console.error(e)
             }
         },
-        async getFileView(fileId) {
+        async getFileView(fileId, type) {
+            const api = type === 'file' ? 'mnul/asset/file/view' : 'asset/img/view'
             try {
-                const response = await axios.get('mnul/asset/file/view', {
+                const response = await axios.get(api, {
                     responseType: 'blob',
                       params: {
                       pdfFileNm: fileId,  

@@ -5,12 +5,13 @@ import { useStore } from "@/store";
 const props = defineProps({
   fileId: String,
   fileNm: String,
-  pdfFileId: String
+  pdfFileId: String, 
+  type: String
 });
 const store = useStore();
 
 onMounted(() => {
-  store.getFileView(props.pdfFileId);
+  store.getFileView(props.pdfFileId, props.type);
 })
 </script>
 
@@ -20,7 +21,8 @@ onMounted(() => {
       {{  props.fileNm }}
     </div> -->
     <div class="document_preview_area">
-        <iframe class="iframe" :src="store.fileViewUrl" ></iframe>
+        <iframe class="iframe" :src="store.fileViewUrl" v-if="props.type === 'file'"></iframe>
+        <img v-else :src="store.fileViewUrl"></img>
     </div>
   <!-- </div> -->
 </template>
