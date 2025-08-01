@@ -21,6 +21,7 @@ export const useStore = defineStore('main', {
         ccofList: [],
         bzentyList: [],
         profileImgUrl: null,
+        fileViewUrl: null,
         menuList: [],
         quickMenuList: [],
     }),
@@ -63,6 +64,7 @@ export const useStore = defineStore('main', {
             this.ccofList = [];
             this.bzentyList = [];
             this.profileImgUrl = null;
+            this.fileViewUrl = null;
             this.menuList = [];
             this.quickMenuList = [];
         },
@@ -268,6 +270,26 @@ export const useStore = defineStore('main', {
                 console.error(e)
             }
         },
+        async getFileView(fileId, type) {
+            const api = type === 'file' ? 'mnul/asset/file/view' : 'asset/img/view'
+            try {
+                const response = await axios.get(api, {
+                    responseType: 'blob',
+                      params: {
+                      pdfFileNm: fileId,  
+                      },
+                });
+                if (response.data != null && response.data.size > 0) {
+                    this.fileViewUrl = URL.createObjectURL(response.data);
+                }
+                else {
+                    this.fileViewUrl = null;
+                }
+            } catch (e) {
+                console.error(e)
+            }
+        },
+
         getQuickMenuList() {
             let params = { lang: localStorage.getItem('languageType') }
             this.API_LIST('/admin/quickMenu', params).then((data) => {
@@ -493,11 +515,11 @@ export const useStore = defineStore('main', {
                     throw error;
                 });
         },
-        API_FILE_DOWN(fileId, fileNm, type) {
+        API_FILE_DOWN(fileId, fileNm) {
 
             this.showProgressSpinner();
 
-            const API_PATH = (type === 'img') ? `/com/img/down` : `/com/mnl/down`;
+            const API_PATH = `mnul/asset/file/down`;
             return axios.get(API_PATH, { responseType: 'blob', params: {fileId} })
                 .then(response => {
 
@@ -518,14 +540,12 @@ export const useStore = defineStore('main', {
                 });
         },
         API_PDF_VIEWER(fileId) {
-
-            //const fileUrl = "http://43.203.192.251:8081/com/file/down?fileId="+fileId;
-            //const pdfLink = "http://kgtest.bestiansoft.it:8882/ezpdfwebviewer/unidocswv/ezpdf1/bsPdfViewer.jsp?fileUrl="+fileUrl;
+            // const fileUrl = "http://43.203.192.251:8081/com/file/down?fileId="+fileId;
+            // const pdfLink = "http://kgtest.bestiansoft.it:8882/ezpdfwebviewer/unidocswv/ezpdf1/bsPdfViewer.jsp?fileUrl="+fileUrl;
             const fileUrl = import.meta.env.VITE_FILE_DOWN_URL+"="+fileId;
             const pdfLink = import.meta.env.VITE_PDF_VIEWER_URL+"="+fileUrl;
 
             window.open(pdfLink, "_blank");
-           
         },
         // LoginView로 로직이동
         // async API_AGE_LIST() {
@@ -605,7 +625,7 @@ export const useStore = defineStore('main', {
     },
     persist: {
         storage: sessionStorage,
-        pick: ['jwtToken', 'loginInfo', 'comCodes', 'ageObj', 'ageList', 'ccofList', 'bzentyList', 'profileImgUrl', 'menuList', 'quickMenuList']
+        pick: ['jwtToken', 'loginInfo', 'comCodes', 'ageObj', 'ageList', 'ccofList', 'bzentyList', 'profileImgUrl', 'fileViewUrl', 'menuList', 'quickMenuList']
     },
 })
 export const usePageStore = defineStore('page', {

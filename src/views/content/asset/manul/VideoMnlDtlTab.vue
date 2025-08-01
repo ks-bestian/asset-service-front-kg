@@ -43,10 +43,30 @@ const currentVideo = computed(() => {
     return `http://localhost:8081/mnul/video/${selVideo.value.mnlId}`
 })
 
+const videoPlayer = ref(null); // <video> 태그에 접근하기 위한 ref
+const videoDuration = ref(0); 
+
+const handleLoadedMetadata = () => {
+    if (videoPlayer.value) {
+        videoDuration.value = videoPlayer.value.duration;
+    }
+};
+
+const formattedDuration = computed(() => {
+    if (videoDuration.value && videoDuration.value > 0) {
+        const minutes = Math.floor(videoDuration.value / 60);
+        const seconds = Math.floor(videoDuration.value % 60);
+        return `${minutes}분 ${seconds}초`;
+    }
+    return '로딩 중...';
+});
+
+const fnDownloadFile = (fileId, fileNm) => {
+    store.API_FILE_DOWN(fileId, fileNm);
+}
 
 onMounted(() => {
     fnGetVideoList();
-
 })
 </script>
 
@@ -59,17 +79,18 @@ onMounted(() => {
                     <h4 class="v_tit m_2">{{ eqpmntInfo.eqpmntNm }}</h4>
                     <span class="e_info m_2 text_lg">{{ eqpmntInfo.eqpmntCd + ' | ' + ((lang === 'lng_type_1') ?
                         eqpmntInfo.eqpmntSeNm1 : (lang === 'lng_type_2') ? eqpmntInfo.eqpmntSeNm2 :
-                        eqpmntInfo.eqpmntSeNm3) }}</span>
+                            eqpmntInfo.eqpmntSeNm3) }}</span>
                 </div>
             </div>
 
             <div>
-                <video controls width="100%" height="700px"
-                    :src="currentVideo"
-                    style="border-radius: 1rem;"></video>
+                <video controls width="100%" height="700px" :src="currentVideo" style="border-radius: 1rem;"
+                    @loadedmetadata="handleLoadedMetadata" ref="videoPlayer"></video>
 
-                <div class="mt_4 ml_1 text_xl">
-                <div>{{ selVideo.fileNm }}</div>
+                <div class="mt_4 ml_1 text_xl" style="display: flex; align-items: center;">
+                    <div>{{ selVideo.fileNm }}</div>
+                    <span class="m_1 text_lg" v-if="videoDuration">{{ `[${formattedDuration}]` }}</span>
+
                     <!-- <AssetFile :fileList="selVideo" v-if="clickVideo"/> -->
                 </div>
             </div>
@@ -78,14 +99,14 @@ onMounted(() => {
         <div class="col_3 v_box">
             <!-- <div class="text_xl text_bold mb_3">{{ eqpmntInfo.eqpmntCd + ' | ' + eqpmntInfo.eqpmntSeNm + ' 메뉴얼'}}</div> -->
             <template v-for="(item, i) in list" :key="i">
-                <div class="m1_5" style="display: flex; align-items: center;" >
+                <div class="m1_5" style="display: flex; align-items: center;">
                     <div style="cursor: pointer;" @click="fnGetVideo(item.mnlId)">
                         <i class="pi pi-play-circle mr_1 " style="font-size: 1.8rem;"></i>
-                    <button type="button" class="m_1 text_xl" :class="{text_bold: item.isClick}" style="text-align: left;">{{ item.fileNm }}</button>
-                    <span class="m_1 text_lg">{{ item.fileSz }}</span>
+                        <button type="button" class="m_1 text_xl" :class="{ text_bold: item.isClick }"
+                            style="text-align: left;">{{ item.fileNm }}</button>
+                        <span class="m_1 text_lg" v-if="videoDuration">{{ `[${formattedDuration}]` }}</span>
                     </div>
-                    
-                    <i class="pi pi-download" style="margin-left: auto;"></i>
+                    <i class="pi pi-download" style="margin-left: auto; cursor: pointer;"  @click="fnDownloadFile(item.filePath, item.orgnlFileNm)"></i>
                 </div>
                 <Divider />
             </template>

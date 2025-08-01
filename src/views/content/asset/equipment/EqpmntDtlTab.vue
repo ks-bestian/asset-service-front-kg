@@ -2,14 +2,12 @@
 import { ref, watch, onMounted, defineProps } from 'vue'
 import Divider from 'primevue/divider';
 import { useStore } from '@/store';
-import caimg from '@/assets/images/content/카메라상세.jpg'
-import caimg1 from '@/assets/images/content/카메라상세1.jpg'
-import ci1 from '@/assets/images/content/ci1.jpg'
 import { useRoute } from 'vue-router';
 import Carousel from 'primevue/carousel';
 import { useI18n } from 'vue-i18n'
 import AssetFile from '@/views/content/asset/common/assetFile.vue';
 import ImgView from '@/views/content/asset/img/ImgView.vue'
+
 const { t } = useI18n();
 const lang = ref(localStorage.getItem("languageType"));
 
@@ -18,13 +16,13 @@ const store = useStore();
 const props = defineProps(['eqpmntInfo'])
 const eqpmntId = route.params.eqpmntId
 const list = ref([]);
-
+const fileMnls = ref([])
 
 const imgList = ref([
 ]);
 
 const fnGetImgList = () => {
-    let params = {eqpmntId: eqpmntId}
+    let params = { eqpmntId: eqpmntId }
     store.API_LIST('equip/img/list', params).then((data) => {
         list.value = data.data.data
     })
@@ -40,10 +38,20 @@ const fnDetail = () => {
     })
 }
 
+const fnGetPdfMnul = () => {
+    let params = { eqpmntId: eqpmntId }
+    store.API_LIST('mnul/file', params).then((data) => {
+        fileMnls.value = data.data.data
+    }).catch(({ message }) => {
+        console.error(message)
+    })
+}
+
 
 onMounted(() => {
-    // fnGetImgList();
+    fnGetImgList();
     fnDetail();
+    fnGetPdfMnul();
 })
 
 </script>
@@ -52,7 +60,7 @@ onMounted(() => {
 
     <div class="board_info mt_6">
         <!-- <img :src="`http://localhost:8081/equip/thumbnail/${eqpmntId}`" alt="" style="width: 50rem; height: 35rem;"> -->
-        <ImgView :imgVo="props.eqpmntInfo" :imgSe="'thumbnail'" :size="'large'"/>
+        <ImgView :imgVo="props.eqpmntInfo" :imgSe="'thumbnail'" :size="'large'" />
 
         <Divider layout="vertical" />
 
@@ -60,18 +68,17 @@ onMounted(() => {
             <div class="text_bold mb_3 ml_2 text_xl">{{ props.eqpmntInfo.eqpmntNm }}</div>
             <div> <span class="info_text">{{ t('10725') }}</span>{{ props.eqpmntInfo.eqpmntCd }}</div><!--제품코드-->
             <div><span class="info_text">{{ t('10727') }}</span><!--제품구분-->
-                {{ 
-                    lang === 'lng_type_1' ? props.eqpmntInfo.eqpmntSeNm1  :
-                    lang === 'lng_type_2' ? props.eqpmntInfo.eqpmntSeNm2 :
-                                            props.eqpmntInfo.eqpmntSeNm3 
+                {{
+                    lang === 'lng_type_1' ? props.eqpmntInfo.eqpmntSeNm1 :
+                        lang === 'lng_type_2' ? props.eqpmntInfo.eqpmntSeNm2 :
+                            props.eqpmntInfo.eqpmntSeNm3
                 }}
             </div>
             <div> <span class="info_text">{{ t('10752') }}</span><!--업체명-->
-                {{  lang === 'lng_type_1' ? props.eqpmntInfo.bzentyNm1 :
+                {{ lang === 'lng_type_1' ? props.eqpmntInfo.bzentyNm1 :
                     lang === 'lng_type_2' ? props.eqpmntInfo.bzentyNm2 :
-                                            props.eqpmntInfo.bzentyNm3 
-                }}                
-            
+                        props.eqpmntInfo.bzentyNm3
+                }}
             </div>
             <!--
             담당부서는 사용 안될거같다.
@@ -100,11 +107,7 @@ onMounted(() => {
                 <tr>
                     <th scope="row">{{ t('10755') }}</th>
                     <td>
-                        <div style="display: flex; align-items: center;">
-                            {{ '캐논 카메라 매뉴얼.pdf' }}
-                            <img src="@/assets/images/common/ico_file_pdf.png" alt="">
-                        </div>
-
+                        <AssetFile :fileList="fileMnls" />
                     </td>
                 </tr>
                 <tr>
@@ -114,17 +117,23 @@ onMounted(() => {
                             <div class="p_1">{{ item.fileNm }}</div>
                         </div> -->
 
-                        <AssetFile :fileList="list"/>
+                        <AssetFile :fileList="list" />
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
+
+    <template v-for="(item, i) in fileMnls" :key="i">
+        <FileViewer :file-nm="item.fileNm" :pdf-file-id="item.filePath" />
+    </template>
+
+
     <div class="card mt_10">
         <Carousel :value="imgList" :numVisible="4" :numScroll="4">
             <template #item="slotProps">
-                <div class="mr_4 ml_4" >
-                    <ImgView :imgVo="slotProps.data" :imgSe="'detail'" :size="'medium'"/>
+                <div class="mr_4 ml_4">
+                    <ImgView :imgVo="slotProps.data" :imgSe="'detail'" :size="'medium'" />
                 </div>
             </template>
         </Carousel>

@@ -7,7 +7,7 @@ const props = defineProps(['fileNm','pdfFileId']);
 </script>
 
 <template> 
-    <div class="main_info">
+    <div class="main_info">{{ props.pdfFileId + '??' }}
         <form-document-comp 
             :fileNm="props.fileNm" 
             :pdfFileId="props.pdfFileId" 
