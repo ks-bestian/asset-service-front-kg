@@ -20,6 +20,16 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path, // 경로 그대로 유지
       },
+      '/tus': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+        rewrite: (path) => path, // 경로 그대로 유지
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq, req, res) => {
+            console.log(`[Proxy] ${req.method} ${req.url} -> ${proxyReq.getHeader('host')}${proxyReq.path}`);
+          });
+        }
+      },
     },
   },
   resolve: {

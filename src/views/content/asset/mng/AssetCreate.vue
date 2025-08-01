@@ -9,6 +9,7 @@ import TitleComp from "@/components/TitleComp.vue";
 import { useStore, useFormStore } from '@/store';
 import { useI18n } from 'vue-i18n'
 import { formSchemas } from '@/schemas/AssetSchemas'
+import { uploadTusFiles } from '@/utils/tus'
 
 const store = useStore();
 const formStore = useFormStore();
@@ -27,6 +28,23 @@ const installList = ref([])
 const faqList = ref([])
 const eqpmntId = ref(route.params.eqpmntId);
 
+
+const inputRefs = ref([])
+
+const handleUpload = async () => {
+  try {
+    const urls = await uploadTusFiles(inputRefs.value)
+    console.log('All uploaded URLs:', urls)
+
+    // 여기서 metadata 전송
+    fnSave();
+  } catch (err) {
+    console.error('파일 업로드 중 오류 발생:', err)
+  }
+}
+
+
+
 function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         const r = (Math.random() * 16) | 0,
@@ -43,11 +61,15 @@ const fnSave = async () => {
     let params = {}
     const formData = new FormData();
 
+    const videoFiles = [];
+
     formStore.fieldArr.forEach((item) => {
         const obj = {};
         let isInstall = false;
         let isManual = false;
         let isFaq = false;
+
+        
 
 
         Object.entries(item).forEach(([key, value]) => {
@@ -58,6 +80,7 @@ const fnSave = async () => {
                         const ranId = generateUUID();
                         if (key === 'videoFile') {
                             formData.append(ranId, value.value[i])
+                            videoFiles.push(value.value[i]);
                         }
 
                         obj['fileId'] = ranId;
@@ -93,6 +116,8 @@ const fnSave = async () => {
         if (isManual) mnulVo.push(obj);
         if (isFaq) faqVo.push(obj);
     })
+
+    const urls = await uploadTusFiles(videoFiles);
 
     const sendData = {
         ...params,
@@ -198,6 +223,7 @@ onMounted(() => {
         </div>
         <div class="btn_group_fixed">
             <button type="submit" class="v_btn btn_primary btn_md" @click="fnSave">{{ t('10743') }}</button><!-- 저장 -->
+            <button type="submit" class="v_btn btn_primary btn_md" @click="handleUpload">{{ '대용량' }}</button><!-- 대용량 -->
             <button type="button" class="v_btn btn_outline_secondary btn_md" v-if="type === 'update'"
                 @click="fnDelete">{{ t('10745') }}</button><!-- 삭제 -->
             <button type="button" class="v_btn btn_outline_primary btn_md"
