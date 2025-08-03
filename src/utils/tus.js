@@ -8,16 +8,11 @@ const store = useStore();
  * @param {string} endpoint - tus 업로드 엔드포인트
  * @returns {Promise<string[]>} 업로드된 파일의 URL 배열
  */
-export async function uploadTusFiles(files, endpoint = import.meta.env.VITE_API_BASE_URL+"/tus/upload", authToken) {
-  const uploadedUrls = []
-
+export async function uploadTusFiles(files, endpoint = import.meta.env.VITE_API_BASE_URL+"/") {
   const token = store.jwtToken;
 
-  for (const file of files) {
-
-    if (!file) continue
-
-    await new Promise((resolve, reject) => {
+  const uploadPromises = files.map(file => {
+    return new Promise((resolve, reject) => {
       const upload = new tus.Upload(file, {
         endpoint,
         metadata: {
@@ -27,19 +22,12 @@ export async function uploadTusFiles(files, endpoint = import.meta.env.VITE_API_
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        onSuccess: () => {
-          uploadedUrls.push(upload.url)
-          resolve()
-        },
-        onError: (err) => {
-          console.error(`Upload failed for ${file.name}`, err)
-          reject(err)
-        },
+        onSuccess: () => resolve(upload.url),
+        onError: reject,
       })
-
       upload.start()
     })
-  }
+  });
 
-  return uploadedUrls
+  return Promise.all(uploadPromises); // ["url1", "url2", ...]
 }

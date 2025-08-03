@@ -31,18 +31,6 @@ const eqpmntId = ref(route.params.eqpmntId);
 
 const inputRefs = ref([])
 
-const handleUpload = async () => {
-  try {
-    const urls = await uploadTusFiles(inputRefs.value)
-    console.log('All uploaded URLs:', urls)
-
-    // 여기서 metadata 전송
-    fnSave();
-  } catch (err) {
-    console.error('파일 업로드 중 오류 발생:', err)
-  }
-}
-
 
 
 function generateUUID() {
@@ -53,114 +41,151 @@ function generateUUID() {
     });
 }
 
+// 영상 파일은 TUS로 업로드 후 URL만 저장
 
-const fnSave = async () => {
-    let mnulVo = []
-    let installVo = []
-    let faqVo = []
-    let params = {}
-    const formData = new FormData();
+// 나머지 파일 및 데이터는 FormData로 저장
 
-    const videoFiles = [];
+// TUS 업로드 -> URL을 mnulVoList에 매핑 -> FormData 생성 -> API 전송 순서
+const buildVoLists = () => {
+  const mnulVo = []
+  const installVo = []
+  const faqVo = []
+  const params = {}
+  const tusVideoFiles = []
+  const formData = new FormData();
 
-    formStore.fieldArr.forEach((item) => {
-        const obj = {};
-        let isInstall = false;
-        let isManual = false;
-        let isFaq = false;
+  formStore.fieldArr.forEach((item) => {
+    const obj = {};
+    let isInstall = false, isManual = false, isFaq = false;
 
-        
+    Object.entries(item).forEach(([key, value]) => {
+      const val = value?.value;
 
+      if (mnulField.value.includes(key)) {
+        if (key === 'videoFile' && val) {
+          const files = Array.isArray(val) ? val : (val instanceof FileList ? Array.from(val) : [val]);
 
-        Object.entries(item).forEach(([key, value]) => {
+          files.forEach(file => {
+            if (file instanceof File || file instanceof Blob) {
+              tusVideoFiles.push({ file, targetObj: obj });
+              obj.orgnlFileNm = file.name.replace(/\.[^/.]+$/, '');
+              obj.fileSz = file.size;
 
-            if (mnulField.value.includes(key)) {
-                if (value.value) {
-                    for (var i = 0; i < value.value.length; i++) {
-                        const ranId = generateUUID();
-                        if (key === 'videoFile') {
-                            formData.append(ranId, value.value[i])
-                            videoFiles.push(value.value[i]);
-                        }
-
-                        obj['fileId'] = ranId;
-                        obj[key] = value.value;
-                    }
-                }
-                isManual = true;
-
-            } else if (instlField.value.includes(key)) {
-                if (value.value) {
-                    for (var i = 0; i < value.value.length; i++) {
-                        const ranId = generateUUID();
-                        if (key === 'instlFile') {
-                            formData.append(ranId, value.value[i])
-                        }
-
-                        obj['fileId'] = ranId
-                        obj[key] = value.value;
-                    }
-                }
-
-
-                isInstall = true;
-            } else if (faqField.value.includes(key)) {
-                obj[key] = value.value;
-                isFaq = true;
+              const extension = file.name.split('.').pop()?.toLowerCase() || '';
+              obj.fileExtn = extension;
             } else {
-                params[key] = value.value;
+              console.warn('⚠️ 무시된 videoFile 객체 (File 아님):', file);
             }
-        })
-
-        if (isInstall) installVo.push(obj);
-        if (isManual) mnulVo.push(obj);
-        if (isFaq) faqVo.push(obj);
-    })
-
-    const urls = await uploadTusFiles(videoFiles);
-
-    const sendData = {
-        ...params,
-        mnulVoList: mnulVo,
-        installVoList: installVo,
-        faqVoList: faqVo
-    }
-
-    console.log(mnulVo)
-
-    for (const key in sendData) {
-        const value = sendData[key]
-
-        if (key === 'files' || key === 'dtlImg' || key === 'thumbnail') {
-            if (value) {
-                for (var i = 0; i < value.length; i++) {
-                    formData.append(key, value[i])
-                }
-            }
-        } else if (typeof value === 'object' && value !== null) {
-            formData.append(key, JSON.stringify(value))
+          });
         } else {
-            formData.append(key, value)
+          obj[key] = val;
         }
+
+        isManual = true;
+
+      } else if (instlField.value.includes(key)) {
+        if (key === 'instlFile' && val?.length > 0) {
+          val.forEach(file => {
+            const fileId = generateUUID();
+            formData.append(fileId, file);
+            obj['fileId'] = fileId;
+            obj[key] = file.name;
+          });
+        } else {
+          obj[key] = val;
+        }
+        isInstall = true;
+
+      } else if (faqField.value.includes(key)) {
+        obj[key] = val;
+        isFaq = true;
+      } else {
+        params[key] = val;
+      }
+    });
+
+    if (isManual) {
+      mnulVo.push(obj); // ✅ 먼저 넣어야 참조 유지됨
+
     }
+    if (isInstall) installVo.push(obj);
+    if (isFaq) faqVo.push(obj);
+  });
 
-
-    formStore.fnSubmit().then((result) => {
-        if (result) {
-            if (type.value === 'create') {
-                store.API_SAVE_FILE('/equip', formData).then((data) => {
-                    router.push({ name: 'asset.mng' });
-                    formStore.fieldArr = [];
-                }).catch(({ message }) => {
-                    console.log(message)
-                })
-            } else if (type.value === 'update') {
-                router.push({ name: 'asset.mng.dtl', params: { eqpmntId: eqpmntId.value } })
-            }
-        }
-    })
+  return { mnulVo, installVo, faqVo, params, tusVideoFiles, formData };
 }
 
+
+
+
+
+const uploadTusFilesToTargets = async (tusVideoFiles) => {
+  const uploadResults = await Promise.all(
+    tusVideoFiles.map(({ file }) => uploadTusFiles([file]))
+  );
+
+  // ✅ 결과를 직접 새 객체로 리턴
+  return tusVideoFiles.map(({ targetObj }, i) => {
+    const url = uploadResults[i][0];
+    return {
+      ...targetObj,
+      videoFileUrl: [url], // or 여러 개면 uploadResults[i]
+    };
+  });
+};
+
+const buildFormData = (sendData, formData) => {
+  for (const key in sendData) {
+    const value = sendData[key];
+    if (key === 'files' || key === 'dtlImg' || key === 'thumbnail') {
+      if (value) {
+        for (let i = 0; i < value.length; i++) {
+          formData.append(key, value[i]);
+        }
+      }
+    } else if (typeof value === 'object' && value !== null) {
+      formData.append(key, JSON.stringify(value));
+    } else {
+      formData.append(key, value);
+    }
+  }
+  return formData;
+}
+
+const submitForm = async (formData) => {
+  const isValid = await formStore.fnSubmit();
+  if (!isValid) return;
+
+  if (type.value === 'create') {
+    store.API_SAVE_FILE('/equip', formData).then(() => {
+      router.push({ name: 'asset.mng' });
+      formStore.fieldArr = [];
+    }).catch(({ message }) => {
+      console.error(message);
+    });
+  } else {
+    router.push({ name: 'asset.mng.dtl', params: { eqpmntId: eqpmntId.value } });
+  }
+}
+
+const fnSave = async () => {
+  const { mnulVo, installVo, faqVo, params, tusVideoFiles, formData } = buildVoLists();
+  const updatedMnulVo = await uploadTusFilesToTargets(tusVideoFiles);
+
+  const sendData = {
+    ...params,
+    mnulVoList: updatedMnulVo,
+    installVoList: installVo,
+    faqVoList: faqVo
+  };
+
+  const fullFormData = buildFormData(sendData, formData);
+  // ✅ 최종 전송되는 FormData 확인
+  console.log('📦 Final FormData keys:', [...fullFormData.keys()]);
+  console.log('📦 mnulVoList JSON:', fullFormData.get('mnulVoList'));
+
+  await submitForm(fullFormData);
+};
 
 
 
@@ -223,7 +248,6 @@ onMounted(() => {
         </div>
         <div class="btn_group_fixed">
             <button type="submit" class="v_btn btn_primary btn_md" @click="fnSave">{{ t('10743') }}</button><!-- 저장 -->
-            <button type="submit" class="v_btn btn_primary btn_md" @click="handleUpload">{{ '대용량' }}</button><!-- 대용량 -->
             <button type="button" class="v_btn btn_outline_secondary btn_md" v-if="type === 'update'"
                 @click="fnDelete">{{ t('10745') }}</button><!-- 삭제 -->
             <button type="button" class="v_btn btn_outline_primary btn_md"
