@@ -66,27 +66,18 @@ onMounted(() => {
                         <template v-if="field.type === 'select'">
                             <!--todo select list api_list -->
                             {{ getCodeName(field.items, fieldStore[field.name].value) }}
-                            
                         </template>
-
                         <template v-else-if="field.type === 'date'">
                             {{ fieldStore[field.name].value }}
                         </template>
-
                         <template v-else-if="field.type === 'radio'">
                             {{ getRadioLabel(fieldStore[field.name].value) }}
                         </template>
-
-
                         <template v-else-if="field.type === 'textarea'">
                             {{ fieldStore[field.name].value }}
                         </template>
-
-
                         <template v-else>
-                            
                             {{ fieldStore[field.name].value }}
-
                         </template>
                         <span v-if="errors[field.name]" class="text_red">{{ errors?.[field.name] }}</span>
                     </td>

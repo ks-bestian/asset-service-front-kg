@@ -16,7 +16,7 @@ const list = ref([])
 const selVideo = ref([])
 
 const fnGetVideoList = () => {
-    let parmas = { eqpmntId: props.eqpmntInfo.eqpmntId }
+    let parmas = { eqpmntId: props.eqpmntInfo.eqpmntId, modalYn: false }
 
     store.API_LIST('mnul/video/list', parmas).then((data) => {
         list.value = data.data.data
@@ -58,7 +58,7 @@ const formattedDuration = computed(() => {
         const seconds = Math.floor(videoDuration.value % 60);
         return `${minutes}분 ${seconds}초`;
     }
-    return '로딩 중...';
+    return 'Loading...';
 });
 
 const fnDownloadFile = (fileId, fileNm) => {

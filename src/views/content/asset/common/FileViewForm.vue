@@ -3,7 +3,6 @@ import { defineProps, onMounted } from "vue";
 import { useStore } from "@/store";
 
 const props = defineProps({
-  fileId: String,
   fileNm: String,
   pdfFileId: String, 
   type: String

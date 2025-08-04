@@ -59,7 +59,6 @@ onMounted(() => {
 <template>
 
     <div class="board_info mt_6">
-        <!-- <img :src="`http://localhost:8081/equip/thumbnail/${eqpmntId}`" alt="" style="width: 50rem; height: 35rem;"> -->
         <ImgView :imgVo="props.eqpmntInfo" :imgSe="'thumbnail'" :size="'large'" />
 
         <Divider layout="vertical" />
@@ -134,6 +133,12 @@ onMounted(() => {
             <template #item="slotProps">
                 <div class="mr_4 ml_4">
                     <ImgView :imgVo="slotProps.data" :imgSe="'detail'" :size="'medium'" />
+                </div>
+            </template>
+            <template #empty>
+                <div class="no_data">
+                    <i class="v_ico ico_error"></i>
+                    <span class="text_msg">{{ t('10785') }}</span><!--상세이미지가 없습니다.-->
                 </div>
             </template>
         </Carousel>

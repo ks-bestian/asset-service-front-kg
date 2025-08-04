@@ -62,7 +62,7 @@ onMounted(() => {
 <template>
     <div class="board_info" v-show="show">
         <div class="right">
-            <button type="button" class="v_btn btn_primary btn_sm" @click="fnAddFaq">{{ 'FAQ 추가' }}</button>
+            <button type="button" class="v_btn btn_primary btn_sm" @click="fnAddFaq">{{ 'FAQ' + t('10195') }}</button>
         </div>
     </div>
 

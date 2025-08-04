@@ -4,19 +4,24 @@ import { useStore } from '@/store';
 import Dialog from 'primevue/dialog'
 import Fieldset from 'primevue/fieldset';
 import FaqDtlTab from "@/views/content/asset/faq/FaqDtlTab.vue"
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n();
 const store = useStore()
 const faqList = ref({})
+const bzenty = ref({})
+const lang = ref(localStorage.getItem("languageType"));
 
 const props = defineProps({
     dialog: Boolean,
-    eqpmntId: String
+    eqpmntId: String,
+    bzentyId: String
 })
 
 const fnDetail = () => {
-    let params = { eqpmntId: props.eqpmntId }
+    let params = { eqpmntId: props.eqpmntId, bzentyId:  props.bzentyId}
     store.API_LIST("faq", params).then((data) => {
-        faqList.value = data.data.data;
+        faqList.value = data.data.data.faqVoList;
+        bzenty.value = data.data.data.bzentyVo;
     }).catch(({ message }) => {
         console.error(message)
     })
@@ -43,12 +48,12 @@ onMounted(() => {
             <div class="popup_inner">
                 <div class="popup_body">
                     <div class="popup_cont">
-
                         <div>
-                            <Fieldset legend=" 연락정보" :toggleable="true">
-                                <div class="text_lg m_2"><span class="info_text">{{ '담당자' }}</span>{{ '홍길동' }}</div>
-                                <div class="text_lg m_2"><span class="info_text">{{ '이메일' }}</span>{{ '' }}</div>
-                                <div class="text_lg m_2"><span class="info_text">{{ '전화번호' }}</span>{{ '' }}</div>
+                            <Fieldset :legend="t('10784')" :toggleable="true">
+                                <div class="text_lg m_2"><span class="info_text">{{ t('10752') }}</span>{{ lang === 'lng_type_1' ? bzenty.bzentyNm1 : (lang === 'lng_type_2' ? bzenty.bzentyNm2 : bzenty.bzentyNm3) }}</div>
+                                <div class="text_lg m_2"><span class="info_text">{{ t('10759') }}</span>{{ bzenty.picNm }}</div>
+                                <div class="text_lg m_2"><span class="info_text">{{ t('10359') }}</span>{{ bzenty.eml }}</div>
+                                <div class="text_lg m_2"><span class="info_text">{{ t('10358') }}</span>{{ bzenty.telno }}</div>
                             </Fieldset>
                         </div>
                         <FaqDtlTab :faqList="faqList" />
@@ -60,9 +65,7 @@ onMounted(() => {
                             <button type="button" class="v_btn btn_primary btn_md" @click="emit('close')">{{ '저장'
                                 }}</button>
                                 -->
-                            <button type="button" class="v_btn btn_outline_primary btn_md" @click="emit('close')">{{
-                                '닫기'
-                                }}</button>
+                            <button type="button" class="v_btn btn_outline_primary btn_md" @click="emit('close')">{{ t('10153') }}</button>
                         </div>
                     </div>
                 </div>

@@ -83,15 +83,12 @@ onMounted(() => {
     <ul class="file_list" v-for="(file, index) in list" :key="index">
         <li class="p_1">
             <span @click="fnClickFile(file)" style="cursor: pointer;">{{ file.fileNm }}</span>
-            <a href="javascript:void(0)" class="v_btn"><img :src="getFileIconImgSrc(file)"
-                    alt=""></a>
+            <a href="javascript:void(0)" class="v_btn"><img :src="getFileIconImgSrc(file)" alt=""></a>
             <i class="pi pi-image" v-if="typeImg"></i>
             <i class="pi pi-download ml_2" style="cursor: pointer;"
                 @click="fnDownloadFile(file.filePath, file.orgnlFileNm)"></i>
-            <!-- <a href="javascript:void(0)" class="v_btn" v-if="file.pdfFileId"><img src="@/assets/images/common/ico_file_pdf.png" alt=""></a> -->
         </li>
     </ul>
-
     <FileModal v-if="dialog" :dialog="dialog" :file-obj="selectedFile" @close="dialog = false" :type="type" />
 </template>
 

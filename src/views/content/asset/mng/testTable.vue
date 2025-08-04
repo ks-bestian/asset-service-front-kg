@@ -88,7 +88,7 @@ onMounted(() => {
                                         <div class="input_group">
                                             <input type="file" class="form_file" id="videoManual" multiple
                                                 @change="e => fieldStore[field.name].value = e.target.files"
-                                                v-bind="fieldStore[field.name].attrs">
+                                                v-bind="fieldStore[field.name].attrs" :accept="(field.attachType === 'image') ? 'image/*' : (field.attachType === 'video') ? '.mp4' : '*/*'">
                                             <input type="text" class="form_control file_name">
                                             <span class="input_addon">
                                                 <label for="videoManual"

@@ -23,12 +23,7 @@ const emit = defineEmits(['close'])
                 <h2 class="popup_tit text_center">{{ props.fileObj.orgnlFileNm }} </h2>
             </div>
         </template>
-        <FileViewer :file-nm="props.fileObj.fileNm" :pdf-file-id="props.fileObj.filePath" style="height: 83vh; flex-grow: 1;" :type="props.type"/>
-        <!-- <div class="popup_footer">
-            <div class="btn_group">
-                <button type="button" class="v_btn btn_outline_primary btn_md" @click="emit('close')">{{ '닫기' }}</button>
-            </div>
-        </div> -->
+        <FileViewer :file-nm="props.fileObj.orgnlFileNm" :pdf-file-id="props.fileObj.filePath" style="height: 83vh; flex-grow: 1;" :type="props.type"/>
     </Dialog>
 </template>
 

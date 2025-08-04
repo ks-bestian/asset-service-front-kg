@@ -34,30 +34,37 @@ const filteredFaqList = computed(() => {
         <template #header>
             <div class="board_info ml_8">
                 <div class="left">
-                    <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ filteredFaqList.length }}</span>
+                    <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ filteredFaqList.length
+                    }}</span>
                     </div>
                 </div>
                 <div class="right">
-                            <div class="input_item">
-                                <label class="form_label">{{ '문의구분' }}</label>
-                                <select class="form_control ml_2"  v-model="faqFilter">
-                                    <option  value="">{{ '문의구분' }}</option>
-                                    <option  v-for="(item, i) in store.getComCodes('1040')" :key="i" :value="item.codeId">{{ item.codeNm }}</option>
-                                </select>
-                            </div>
+                    <div class="input_item">
+                        <label class="form_label">{{ t('10778') }}</label>
+                        <select class="form_control ml_2" v-model="faqFilter">
+                            <option value="">{{ t('10778') }}</option>
+                            <option v-for="(item, i) in store.getComCodes('1040')" :key="i" :value="item.codeId">{{
+                                item.codeNm }}</option>
+                        </select>
+                    </div>
                 </div>
 
             </div>
         </template>
         <template #list="slotProps">
 
-            <template  v-for="(item, index) in slotProps.items" :key="index" class="mt_3">
-                <FaqPanel :id="item.faqId" :index="(index + 1)" :type="'detail'" :detailDatas="item"/>
+            <template v-for="(item, index) in slotProps.items" :key="index" class="mt_3">
+                <FaqPanel :id="item.faqId" :index="(index + 1)" :type="'detail'" :detailDatas="item" />
 
             </template>
 
         </template>
-
+        <template #empty>
+            <div class="no_data">
+                <i class="v_ico ico_error"></i>
+                <span class="text_msg">{{ t('10075') }}</span><!--There is no data.-->
+            </div>
+        </template>
     </DataView>
 </template>
 
