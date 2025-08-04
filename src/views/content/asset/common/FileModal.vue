@@ -14,16 +14,31 @@ const props = defineProps({
 const visible = ref(props.dialog)
 const emit = defineEmits(['close'])
 
+function joinPath(...segments) {
+  return segments
+    .map(s => s.replace(/^\/+|\/+$/g, '')) // 앞뒤 슬래시 제거
+    .filter(Boolean)
+    .join('/');
+}
+
+/** File download */
+const fnFilePath = (file) => {
+    return joinPath(file.filePath, `${file.fileNm}.${file.fileExtn}`);
+}
+
+const fnFileNm = (file) => {
+    return file.orgnlFileNm + '.' + file.fileExtn;
+}
 </script>
 
 <template>
     <Dialog v-model:visible="visible" modal :style="{ width: '60vw', height: '100vh' }" @hide="emit('close')">
         <template #header>
             <div class="popup_header" style="width: 100%; border-top-left-radius: 12px;">
-                <h2 class="popup_tit text_center">{{ props.fileObj.orgnlFileNm }} </h2>
+                <h2 class="popup_tit text_center">{{ props.fileObj.mnlNm }} </h2>
             </div>
         </template>
-        <FileViewer :file-nm="props.fileObj.fileNm" :pdf-file-id="props.fileObj.filePath" style="height: 83vh; flex-grow: 1;" :type="props.type"/>
+        <FileViewer :file-nm="fnFileNm(props.fileObj)" :pdf-file-id="fnFilePath(props.fileObj)" style="height: 83vh; flex-grow: 1;" :type="props.type"/>
         <!-- <div class="popup_footer">
             <div class="btn_group">
                 <button type="button" class="v_btn btn_outline_primary btn_md" @click="emit('close')">{{ '닫기' }}</button>

@@ -20,6 +20,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path, // 경로 그대로 유지
       },
+      '/mnul/video': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+        rewrite: (path) => path, // 경로 그대로 유지
+      },
       '/tus': {
         target: 'http://localhost:8081',
         changeOrigin: true,
