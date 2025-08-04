@@ -123,11 +123,6 @@ onMounted(() => {
         </table>
     </div>
 
-    <template v-for="(item, i) in fileMnls" :key="i">
-        <FileViewer :file-nm="item.fileNm" :pdf-file-id="item.filePath" />
-    </template>
-
-
     <div class="card mt_10">
         <Carousel :value="imgList" :numVisible="4" :numScroll="4">
             <template #item="slotProps">

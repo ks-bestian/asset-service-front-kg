@@ -4,7 +4,6 @@ import Divider from 'primevue/divider';
 import AssetFile from '@/views/content/asset/common/assetFile.vue';
 import { useStore } from '@/store';
 import { useI18n } from 'vue-i18n'
-import VideoView from './VideoView.vue';
 const { t } = useI18n();
 const store = useStore()
 const product = ref([])
@@ -15,14 +14,13 @@ const props = defineProps({
 const lang = ref(localStorage.getItem("languageType"));
 const list = ref([])
 const selVideo = ref([])
-const firstMnlId = ref('')
 
 const fnGetVideoList = () => {
     let parmas = { eqpmntId: props.eqpmntInfo.eqpmntId, modalYn: false }
 
     store.API_LIST('mnul/video/list', parmas).then((data) => {
         list.value = data.data.data
-        firstMnlId.value = data.data.data[0].mnlId
+        selVideo.value = data.data.data[0]
         list.value = list.value.map(item => {
             return {
                 ...item,
@@ -82,7 +80,7 @@ onMounted(() => {
     <div class="content_row">
         <div class="col_9 v_box">
 
-            <!-- <div class="tit_header mb_4">
+            <div class="tit_header mb_4">
                 <div class="left">
                     <h4 class="v_tit m_2">{{ eqpmntInfo.eqpmntNm }}</h4>
                     <span class="e_info m_2 text_lg">{{ eqpmntInfo.eqpmntCd + ' | ' + ((lang === 'lng_type_1') ?
@@ -90,20 +88,25 @@ onMounted(() => {
                             eqpmntInfo.eqpmntSeNm3) }}</span>
                 </div>
             </div>
+
             <div>
                 <video controls width="100%" height="700px" :src="currentVideo" style="border-radius: 1rem;"
                     @loadedmetadata="handleLoadedMetadata" ref="videoPlayer"></video>
+
                 <div class="mt_4 ml_1 text_xl" style="display: flex; align-items: center;">
                     <div>{{ selVideo.fileNm }}</div>
                     <span class="m_1 text_lg" v-if="videoDuration">{{ `(${formattedDuration})` }}</span>
-                </div>
-            </div> -->
 
-            <VideoView :eqpmntInfo="props.eqpmntInfo" :mnlId="firstMnlId"/>
+                    <!-- <AssetFile :fileList="selVideo" v-if="clickVideo"/> -->
+                </div>
+            </div>
+
+
             
         </div>
 
         <div class="col_3 v_box">
+            <!-- <div class="text_xl text_bold mb_3">{{ eqpmntInfo.eqpmntCd + ' | ' + eqpmntInfo.eqpmntSeNm + ' 메뉴얼'}}</div> -->
             <template v-for="(item, i) in list" :key="i">
                 <div class="m1_5" style="display: flex; align-items: center;">
                     <div style="cursor: pointer;" @click="fnGetVideo(item.mnlId)">

@@ -21,7 +21,7 @@ const fnSave = () => {
 </script>
 
 <template>
-    <DataView :value="props.instlList" :layout="layout" paginator :rows="8">
+    <DataView :value="props.instlList" :layout="layout" paginator :rows="8" :rowsPerPageOptions="[4, 8, 20, 50]">
         <template #header>
             <div class="board_info ml_8">
                 <div class="left">
@@ -50,7 +50,6 @@ const fnSave = () => {
                         <div class="header_item">
                             <div v-if="mdfyYn" class="text_xl text_bold m_2"><input type="text"
                                     class="form_control full" v-model="item.instlPlc"></div>
-
                             <div v-else class="text_xl text_bold m_2">
                                 {{ `[${lang === 'lng_type_1' ? item.instlPlcNm1 :
                                     lang === 'lng_type_2' ? item.instlPlcNm2 :

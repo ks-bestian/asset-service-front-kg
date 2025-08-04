@@ -12,13 +12,12 @@ import QnaSample from '@/views/content/asset/mng/QnaModal.vue'
 import SelectButton from 'primevue/selectbutton';
 import TitleComp from "@/components/TitleComp.vue";
 import ImgView from '@/views/content/asset/img/ImgView.vue'
-const lang = ref(localStorage.getItem("languageType"));
+import DataView from 'primevue/dataview';
 
+const lang = ref(localStorage.getItem("languageType"));
 const layout = ref('list');
 const options = ref(['list', 'grid']);
-
 const { t } = useI18n()
-
 const router = useRouter();
 const store = useStore();
 const formStore = useFormStore();
@@ -48,7 +47,6 @@ const fnSearch = () => {
     }
     store.API_LIST('equip', params).then((data) => {
         list.value = data.data.data
-
     }).catch(({ message }) => {
         console.error(message)
     })
@@ -60,6 +58,7 @@ const fnGoDetail = (e) => {
 
 const fnReset = () => {
     searchEq.value = ''
+    searchBz.value = ''
     fnSearch();
 }
 
@@ -73,11 +72,22 @@ const fnDownPdf = (eqpmntId) => {
         eqpmntId: eqpmntId
     }
     store.API_LIST('mnul/file', params).then((data) => {
-            store.API_FILE_DOWN(data.data.data[0].filePath, data.data.data[0].orgnlFileNm);
+        store.API_FILE_DOWN(data.data.data[0].filePath, data.data.data[0].orgnlFileNm);
     }).catch(({ message }) => {
         console.error(message)
     })
 }
+
+const fnExcelDownload = () => {
+    // Header designation to include
+
+    const selectedHeaders = ["eqpmntCd", "eqpmntNm", "expln", (lang.value === 'lng_type_1') ? 'eqpmntSeNm1' : (lang.value === 'lng_type_2') ? 'eqpmntSeNm2' : 'eqpmntSeNm3', (lang.value === 'lng_type_1') ? 'bzentyNm1' : (lang.value === 'lng_type_2') ? 'bzentyNm2' : 'bzentyNm3'];
+    const wsCols = [t('10725'), t('10751'), t('10728'), t('10727') , t('10752')];
+
+    const title = t('10787')
+
+    store.fnExcelDownload(list.value, selectedHeaders, wsCols, title);
+};
 
 
 onMounted(() => {
@@ -95,13 +105,11 @@ onMounted(() => {
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
 
-                    <li :class="{ on: tab == '' }" @click="tab = ''; fnTabChange()"><a href="javascript:void(0)">{{
-                        t('10066') }}</a></li>
+                    <li :class="{ on: tab == '' }" @click="tab = ''; fnTabChange()"><a href="javascript:void(0)">{{ t('10066') }}</a></li>
 
                     <template v-for="(item, i) in eqpmntSeList" :key="i">
                         <li :class="{ on: tab == item.codeId }" @click="tab = item.codeId; fnTabChange()"><a
                                 href="javascript:void(0)">{{ item.codeNm }}</a></li>
-
                     </template>
                 </ul>
             </nav>
@@ -114,16 +122,10 @@ onMounted(() => {
                             <label class="form_label">{{ t("10752") }}</label>
                             <select class="form_control" v-model="searchBz">
                                 <option value="">{{ t("10752") }}</option>
-                                <option v-for="(item, i) in store.getBzentys()" :key="i" :value="item.codeId">{{
-                                    item.codeNm }}
+                                <option v-for="(item, i) in store.getBzentys()" :key="i" :value="item.codeId">{{ item.codeNm }}
                                 </option>
                             </select>
                         </div>
-                        <!--                        <div class="input_item">
-                            <label class="form_label">{{ t("10752") }}</label>
-                            <input type="text" class="form_control" v-model="searchBz" @keydown.enter="fnSearch">
-                        </div>
-                        -->
 
                         <div class="input_item">
                             <label class="form_label">{{ t("10751") }}</label>
@@ -142,129 +144,139 @@ onMounted(() => {
 
 
             <div class="board_info mt_6">
-                <div class="left">
-                    <div class="total_num">{{ "Total" }} <span class="text_primary">{{ list.length }}</span></div>
-                </div>
                 <div class="right">
                     <div class="btn_wrap">
-                        <!-- <button type="button" class="v_btn btn_outline_secondary btn_sm" @click="fnExcelDownload"><i
-                                class="v_ico ico_download_secondary"></i><span>{{ '엑셀 다운로드' }}</span></button> -->
+                          <button type="button" class="v_btn btn_outline_secondary btn_sm" @click="fnExcelDownload">
+                            <i class="v_ico ico_download_secondary"></i><span>{{ t('10055') }}</span></button> 
+
                         <button type="button" class="v_btn btn_outline_primary btn_sm mb_3"
-                            @click="$router.push({ name: 'asset.mng.form', params: { type: 'create', eqpmntId: 'new' } })">{{
-                                t("10746") }}</button>
-                        <!-- <button type="button" class="v_btn btn_outline_secondary btn_sm" @click="fnDelete">{{ "선택 삭제" }}</button> -->
-
+                            @click="$router.push({ name: 'asset.mng.form', params: { type: 'create', eqpmntId: 'new' } })">{{ t("10746") }}</button>
                     </div>
                 </div>
             </div>
 
-            <!-- list -->
-            <div class="board_info">
-                <div class="flex justify-end right">
-                    <SelectButton v-model="layout" :options="options" :allowEmpty="false">
-                        <template #option="{ option }">
-                            <i :class="[option === 'list' ? 'pi pi-bars' : 'pi pi-table']"></i>
-                        </template>
-                    </SelectButton>
-                </div>
-            </div>
-
-            <div class="v_table table_list" v-if="layout === 'list'">
-                <DataTable :value="list" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
-                    @row-click="fnGoDetail" tableStyle="min-width: 50rem;">
-                    <Column field="img" :header="t('10729')" class="text_center">
-                        <template #body="{ data }">
-                            <!-- <img :src="`http://localhost:8081/equip/thumbnail/${data.eqpmntId}`" alt=""
-                                style="width: 28rem; height: 15rem;">  -->
-                            <ImgView :imgVo="data" :imgSe="'thumbnail'" :size="'small'" />
-                        </template>
-                    </Column>
-                    <Column field="eqpmntCd" :header="t('10725')" class="text_center" style="width: 8%;"></Column>
-                    <Column field="eqpmntNm" :header="t('10751')" class="text_center"></Column>
-                    <Column field="expln" :header="t('10728')" style="width: 33%;"></Column>
-                    <Column
-                        :field="lang === 'lng_type_1' ? 'eqpmntSeNm1' : (lang === 'lng_type_2' ? 'eqpmntSeNm2' : 'eqpmntSeNm3')"
-                        :header="t('10727')" class="text_center" style="width: 6%;"></Column>
-                    <Column
-                        :field="lang === 'lng_type_1' ? 'bzentyNm1' : (lang === 'lng_type_2' ? 'bzentyNm2' : 'bzentyNm3')"
-                        :header="t('10752')" class="text_center" style="width: 7%;"></Column>
-                    <Column field="mnl" :header="t('10755')" class="text_center" style="width: 5%;">
-                        <template #body="{ data }">
-
-                            <img v-if="data.fileExist" src="@/assets/images/common/ico_file_pdf.png" alt=""
-                                style="width: 25px;" @click.stop="fnDownPdf(data.eqpmntId)">
-                            <template v-else>{{ '-' }}</template>
-                        </template>
-                    </Column>
-                    <Column field="video" :header="t('10733')" class="text_center" style="width: 10%;">
-                        <template #body="{ data }">
-                            <Button severity="danger" @click="fnVideoModal(data.videoMnlId)"><i class="pi pi-play-circle"></i><span
-                                    style="font-size: 1.2rem;">Play</span></Button>
-                        </template>
-                    </Column>
-                    <Column field="qna" :header="t('10760')" class="text_center" style="width: 7%;">
-                        <template #body="{ data }">
-                            <Button severity="info" rounded
-                                @click="eqpmntId = data.eqpmntId; dialogQna = true; bzentyId = data.bzentyId"><i
-                                    class="pi pi-question-circle"></i>
-                                <span style="font-size: 1.2rem;">FAQ</span>
-                            </Button>
-                        </template>
-                    </Column>
-                       <template #empty>
-                        <div class="no_data">
-                          <i class="v_ico ico_error"></i>
-                          <span class="text_msg">{{ t('10075') }}</span><!--There is no data.-->
+            <DataView :value="list" :layout="layout" :paginator="layout === 'grid'" :rows="8"
+                :rowsPerPageOptions="[4, 8, 20, 50]">
+                <template #header>
+                    <div class="board_info ml_8">
+                        <div class="left">
+                            <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ list.length }}</span></div>
                         </div>
-                      </template>
-                </DataTable>
-            </div>
 
-            <!-- grid -->
-            <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px;"
-                v-if="layout === 'grid'">
-                <div v-for="(item, j) in list" :key="j" class="col_class v_box mt_3"
-                    @click="$router.push({ name: 'asset.mng.dtl', params: { eqpmntId: item.eqpmntId } })">
-                    <ImgView :imgVo="item" :imgSe="'thumbnail'" :size="'medium'" />
-
-                    <span style="display: flex; justify-content: center;">
-                        {{ `${item.eqpmntCd} | ${lang === 'lng_type_1' ? item.eqpmntSeNm1 :
-                            lang === 'lng_type_2' ? item.eqpmntSeNm2 :
-                                item.eqpmntSeNm3}` }}
-                    </span>
-
-                    <div style="display: flex;justify-content: flex-end;">
-                        <Button severity="info" rounded
-                            @click.stop="dialogQna = true; eqpmntId = item.eqpmntId; bzentyId = item.bzentyId"><i
-                                class="pi pi-question-circle"></i>
-                            <span style="font-size: 1.2rem;">FAQ</span>
-                        </Button>
+                        <div class="flex justify-end">
+                            <SelectButton v-model="layout" :options="options" :allowEmpty="false">
+                                <template #option="{ option }">
+                                    <i :class="[option === 'list' ? 'pi pi-bars' : 'pi pi-table']"></i>
+                                </template>
+                            </SelectButton>
+                        </div>
                     </div>
+                </template>
 
-                    <div class="text_xl text_bold m_2">{{ item.eqpmntNm }}</div>
-                    <div class="text_lg m_2"><span class="info_text">{{ t('10752') }}</span>
-                        {{ lang === 'lng_type_1' ? item.bzentyNm1 :
-                            lang === 'lng_type_2' ? item.bzentyNm2 :
-                                item.bzentyNm3 }}
-                    </div>
-                    <div class="text_lg m_2" style="display: flex; align-items: center;">
-                        <span class="info_text">{{ t('10755') }}</span>
-                        <img v-if="item.fileExist" src="@/assets/images/common/ico_file_pdf.png" alt=""
-                            style="width: 25px;" @click.stop="fnDownPdf(item.eqpmntId)">
-                        <template v-else>{{ '-' }}</template>
-                    </div>
+                <template #list="slotProps">
+                    <DataTable :value="slotProps.items" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
+                        @row-click="fnGoDetail" tableStyle="min-width: 50rem;">
+                        <Column field="img" :header="t('10729')" class="text_center">
+                            <template #body="{ data }">
+                                <ImgView :imgVo="data" :imgSe="'thumbnail'" :size="'small'" />
+                            </template>
+                        </Column>
+                        <Column field="eqpmntCd" :header="t('10725')" class="text_center" style="width: 8%;"></Column>
+                        <Column field="eqpmntNm" :header="t('10751')" class="text_center"></Column>
+                        <Column field="expln" :header="t('10728')" style="width: 33%;"></Column>
+                        <Column
+                            :field="lang === 'lng_type_1' ? 'eqpmntSeNm1' : (lang === 'lng_type_2' ? 'eqpmntSeNm2' : 'eqpmntSeNm3')"
+                            :header="t('10727')" class="text_center" style="width: 6%;"></Column>
+                        <Column
+                            :field="lang === 'lng_type_1' ? 'bzentyNm1' : (lang === 'lng_type_2' ? 'bzentyNm2' : 'bzentyNm3')"
+                            :header="t('10752')" class="text_center" style="width: 7%;"></Column>
+                        <Column field="mnl" :header="t('10755')" class="text_center" style="width: 5%;">
+                            <template #body="{ data }">
+                                <img v-if="data.fileExist" src="@/assets/images/common/ico_file_pdf.png" alt=""
+                                    style="width: 25px;" @click.stop="fnDownPdf(data.eqpmntId)">
+                                <template v-else>{{ '-' }}</template>
+                            </template>
+                        </Column>
+                        <Column field="video" :header="t('10733')" class="text_center" style="width: 10%;">
+                            <template #body="{ data }">
+                                <Button severity="danger" @click="fnVideoModal(data.videoMnlId)"><i
+                                        class="pi pi-play-circle"></i><span
+                                        style="font-size: 1.2rem;">Play</span></Button>
+                            </template>
+                        </Column>
+                        <Column field="qna" :header="t('10760')" class="text_center" style="width: 7%;">
+                            <template #body="{ data }">
+                                <Button severity="info" rounded
+                                    @click="eqpmntId = data.eqpmntId; dialogQna = true; bzentyId = data.bzentyId"><i
+                                        class="pi pi-question-circle"></i>
+                                    <span style="font-size: 1.2rem;">FAQ</span>
+                                </Button>
+                            </template>
+                        </Column>
+                        <template #empty>
+                            <div class="no_data">
+                                <i class="v_ico ico_error"></i>
+                                <span class="text_msg">{{ t('10075') }}</span>
+                            </div>
+                        </template>
+                    </DataTable>
+                </template>
 
-                    <div class="text_lg m_2"><span class="info_text">{{ t('10733') }}</span>
-                        <Button severity="danger" @click.stop="fnVideoModal(item.videoMnlId)"><i class="pi pi-play-circle"></i>
-                            <span style="font-size: 1.2rem;">Play</span>
-                        </Button>
+                <template #grid="slotProps">
+                    <div style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px; " class="mb_3">
+
+                        <div v-for="(item, j) in slotProps.items" :key="j" class="col_class v_box mt_3"
+                            @click="$router.push({ name: 'asset.mng.dtl', params: { eqpmntId: item.eqpmntId } })">
+                            <ImgView :imgVo="item" :imgSe="'thumbnail'" :size="'medium'" />
+
+                            <span style="display: flex; justify-content: center;">
+                                {{ `${item.eqpmntCd} | ${lang === 'lng_type_1' ? item.eqpmntSeNm1 :
+                                    lang === 'lng_type_2' ? item.eqpmntSeNm2 :
+                                        item.eqpmntSeNm3}` }}
+                            </span>
+
+                            <div style="display: flex;justify-content: flex-end;">
+                                <Button severity="info" rounded
+                                    @click.stop="dialogQna = true; eqpmntId = item.eqpmntId; bzentyId = item.bzentyId"><i
+                                        class="pi pi-question-circle"></i>
+                                    <span style="font-size: 1.2rem;">FAQ</span>
+                                </Button>
+                            </div>
+
+                            <div class="text_xl text_bold m_2">{{ item.eqpmntNm }}</div>
+                            <div class="text_lg m_2"><span class="info_text">{{ t('10752') }}</span>
+                                {{ lang === 'lng_type_1' ? item.bzentyNm1 :
+                                    lang === 'lng_type_2' ? item.bzentyNm2 :
+                                        item.bzentyNm3 }}
+                            </div>
+                            <div class="text_lg m_2" style="display: flex; align-items: center;">
+                                <span class="info_text">{{ t('10755') }}</span>
+                                <img v-if="item.fileExist" src="@/assets/images/common/ico_file_pdf.png" alt=""
+                                    style="width: 25px;" @click.stop="fnDownPdf(item.eqpmntId)">
+                                <template v-else>{{ '-' }}</template>
+                            </div>
+
+                            <div class="text_lg m_2"><span class="info_text">{{ t('10733') }}</span>
+                                <Button severity="danger" @click.stop="fnVideoModal(item.videoMnlId)"><i
+                                        class="pi pi-play-circle"></i>
+                                    <span style="font-size: 1.2rem;">Play</span>
+                                </Button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
+                </template>
+
+                <template #empty>
+                    <div class="no_data">
+                        <i class="v_ico ico_error"></i>
+                        <span class="text_msg">{{ t('10075') }}</span><!--There is no data.-->
+                    </div>
+                </template>
+            </DataView>
         </div>
         <!-- // 본문 영역 -->
     </div>
-    <VideoModal v-if="dialog" @close="dialog = false" :dialog="dialog" :videoMnlId="videoMnlId"/>
+    <VideoModal v-if="dialog" @close="dialog = false" :dialog="dialog" :videoMnlId="videoMnlId" />
     <QnaSample v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" :eqpmntId="eqpmntId"
         :bzentyId="bzentyId" />
 </template>
@@ -292,6 +304,10 @@ onMounted(() => {
     font-weight: 800;
     margin-right: 20px;
     display: inline-block;
-    min-width: 5rem;
+    min-width: 7rem;
+}
+
+:deep(.p-datatable-paginator-bottom) {
+    border-style: none !important;
 }
 </style>

@@ -2,6 +2,7 @@
 import { useStore } from "@/store";
 import { onMounted, watch, ref, defineEmits } from "vue";
 import FileModal from "./FileModal.vue";
+import { useI18n } from "vue-i18n";
 
 /** Variable declaration */
 const store = useStore();
@@ -9,7 +10,7 @@ const dialog = ref(false);
 const props = defineProps({
     fileList: Array,
 })
-
+const { t } = useI18n();
 const emits = defineEmits(['onFileClick'])
 const list = ref([])
 const typeImg = ref(false)
@@ -80,9 +81,11 @@ onMounted(() => {
 </script>
 
 <template>
-    <ul class="file_list" v-for="(file, index) in list" :key="index">
+    <templage v-if="list.length === 0">{{ t('10075') }}</templage>
+
+    <ul v-else class="file_list" v-for="(file, index) in list" :key="index">
         <li class="p_1">
-            <span @click="fnClickFile(file)" style="cursor: pointer;">{{ file.fileNm }}</span>
+            <span @click="fnClickFile(file)" style="cursor: pointer;">{{ file.fileNm  }}</span>
             <a href="javascript:void(0)" class="v_btn"><img :src="getFileIconImgSrc(file)" alt=""></a>
             <i class="pi pi-image" v-if="typeImg"></i>
             <i class="pi pi-download ml_2" style="cursor: pointer;"
