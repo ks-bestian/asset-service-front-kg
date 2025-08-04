@@ -85,13 +85,14 @@ const buildVoLists = () => {
         isManual = true;
 
       } else if (instlField.value.includes(key)) {
-        if (key === 'instlFile' && val?.length > 0) {
-          val.forEach(file => {
-            const fileId = generateUUID();
-            formData.append(fileId, file);
-            obj['fileId'] = fileId;
-            obj[key] = file.name;
-          });
+        if (key === 'instlFile' && val && typeof val === 'object' && typeof val.length === 'number') {
+            const files = Array.from(val); // FileList 또는 유사배열
+            files.forEach(file => {
+                const fileId = generateUUID();
+                formData.append(fileId, file);
+                obj['fileId'] = fileId;
+                obj[key] = file.name;
+            });
         } else {
           obj[key] = val;
         }
