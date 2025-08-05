@@ -12,7 +12,7 @@ const props = defineProps({
     detailDatas: Object,
 })
 
-
+const fileId = ref(generateUUID());
 const fieldStore = reactive({})
 const files = reactive({});
 function generateUUID() {
@@ -85,14 +85,13 @@ onMounted(() => {
                             <div class="file_attatch">
                                 <div class="form_col type4">
                                     <div class="input_item">
-                                        <div class="input_group">
-                                            <input type="file" class="form_file" id="videoManual" multiple
+                                        <div class="input_group"> 
+                                            <input type="file" class="form_file" :id="`videoManual${field.name}${fileId}`" multiple
                                                 @change="e => fieldStore[field.name].value = e.target.files"
                                                 v-bind="fieldStore[field.name].attrs" :accept="(field.attachType === 'image') ? 'image/*' : (field.attachType === 'video') ? '.mp4' : '*/*'">
                                             <input type="text" class="form_control file_name">
                                             <span class="input_addon">
-                                                <label for="videoManual"
-                                                    class="v_btn btn_outline_secondary btn_sm">file</label>
+                                                <label :for="`videoManual${field.name}${fileId}`" class="v_btn btn_outline_secondary btn_sm" >file</label>
                                             </span>
                                         </div>
                                     </div>

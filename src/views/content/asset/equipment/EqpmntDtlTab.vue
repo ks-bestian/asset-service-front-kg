@@ -124,10 +124,14 @@ onMounted(() => {
     </div>
 
     <div class="card mt_10">
-        <Carousel :value="imgList" :numVisible="4" :numScroll="4">
+        <template v-if="imgList.length <= 4" v-for="(item, i) in imgList" :key="i">
+            <img class="v_box col_class" :src="`/equip/img/${item.imgId}`"></img>
+        </template>
+
+        <Carousel v-else :value="imgList" :numVisible="4" :numScroll="4" >
             <template #item="slotProps">
                 <div class="mr_4 ml_4">
-                    <ImgView :imgVo="slotProps.data" :imgSe="'detail'" :size="'medium'" />
+                    <ImgView :imgVo="slotProps.data" :imgSe="'detail'" :size="'medium'"/>
                 </div>
             </template>
             <template #empty>
@@ -142,6 +146,13 @@ onMounted(() => {
 
 
 <style scoped>
+.col_class {
+    flex: 0 0 calc(25% - (3 * 16px / 4));
+    max-width: calc(25% - (3 * 16px / 4));
+    -webkit-box-flex: 0 !important;
+    -ms-flex: 0 0 calc(25% - (3 * 16px / 4)) !important;
+}
+
 .text_info {
     display: flex;
     flex-direction: column;
@@ -178,4 +189,5 @@ onMounted(() => {
     border: 1px solid #e5e5e5;
     padding: 1px 15px 1px 0;
 }
+
 </style>

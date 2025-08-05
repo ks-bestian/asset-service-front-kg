@@ -29,7 +29,7 @@ const bzentyId = ref('')
 const eqpmntId = ref('');
 const videoMnlId = ref('')
 const eqpmntSeList = store.getComCodes('1037');
-
+const eqpmntInfo = ref({})
 //검색 조건 보류
 const searchBz = ref('')
 const searchEq = ref('')
@@ -62,9 +62,10 @@ const fnReset = () => {
     fnSearch();
 }
 
-const fnVideoModal = (id) => {
+const fnVideoModal = (data) => {
     dialog.value = true;
-    videoMnlId.value = id
+    videoMnlId.value = data.videoMnlId
+    eqpmntInfo.value = data
 }
 
 const fnDownPdf = (eqpmntId) => {
@@ -155,7 +156,7 @@ onMounted(() => {
                 </div>
             </div>
 
-            <DataView :value="list" :layout="layout" :paginator="layout === 'grid'" :rows="8"
+            <DataView :value="list" :layout="layout" :paginator="layout === 'grid'" :rows="8" hoverableRow
                 :rowsPerPageOptions="[4, 8, 20, 50]">
                 <template #header>
                     <div class="board_info ml_8">
@@ -174,7 +175,7 @@ onMounted(() => {
                 </template>
 
                 <template #list="slotProps">
-                    <DataTable :value="slotProps.items" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
+                    <DataTable :value="slotProps.items" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"  
                         @row-click="fnGoDetail" tableStyle="min-width: 50rem;">
                         <Column field="img" :header="t('10729')" class="text_center">
                             <template #body="{ data }">
@@ -199,7 +200,7 @@ onMounted(() => {
                         </Column>
                         <Column field="video" :header="t('10733')" class="text_center" style="width: 10%;">
                             <template #body="{ data }">
-                                <Button severity="danger" @click="fnVideoModal(data.videoMnlId)"><i
+                                <Button severity="danger" @click="fnVideoModal(data)"><i
                                         class="pi pi-play-circle"></i><span
                                         style="font-size: 1.2rem;">Play</span></Button>
                             </template>
@@ -257,7 +258,7 @@ onMounted(() => {
                             </div>
 
                             <div class="text_lg m_2"><span class="info_text">{{ t('10733') }}</span>
-                                <Button severity="danger" @click.stop="fnVideoModal(item.videoMnlId)"><i
+                                <Button severity="danger" @click.stop="fnVideoModal(data)"><i
                                         class="pi pi-play-circle"></i>
                                     <span style="font-size: 1.2rem;">Play</span>
                                 </Button>
@@ -276,7 +277,7 @@ onMounted(() => {
         </div>
         <!-- // 본문 영역 -->
     </div>
-    <VideoModal v-if="dialog" @close="dialog = false" :dialog="dialog" :videoMnlId="videoMnlId" />
+    <VideoModal v-if="dialog" @close="dialog = false" :dialog="dialog" :videoMnlId="videoMnlId" :eqpmntInfo="eqpmntInfo"/>
     <QnaSample v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" :eqpmntId="eqpmntId"
         :bzentyId="bzentyId" />
 </template>
@@ -309,5 +310,15 @@ onMounted(() => {
 
 :deep(.p-datatable-paginator-bottom) {
     border-style: none !important;
+}
+
+:deep(.p-row-even):hover{
+    cursor: pointer;
+    background-color: #F5FBFE;
+}
+
+:deep(.p-row-odd):hover{
+    cursor: pointer;
+    background-color: #F5FBFE;
 }
 </style>

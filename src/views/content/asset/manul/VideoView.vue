@@ -28,9 +28,9 @@ const handleLoadedMetadata = () => {
 
 const formattedDuration = computed(() => {
     if (videoDuration.value && videoDuration.value > 0) {
-        const hours = Math.floor(videoDuration.value / 3600); // 시 계산
-        const minutes = Math.floor((videoDuration.value % 3600) / 60); // 분 계산
-        const seconds = Math.floor(videoDuration.value % 60); // 초 계산
+        const hours = Math.floor(videoDuration.value / 3600);  
+        const minutes = Math.floor((videoDuration.value % 3600) / 60);  
+        const seconds = Math.floor(videoDuration.value % 60); 
 
         const paddedHours = String(hours).padStart(2, '0');
         const paddedMinutes = String(minutes).padStart(2, '0');
@@ -64,11 +64,12 @@ const fnGetVideoMnl = () => {
 
 
 onMounted(() => {
+    fnGetVideoMnl();
 })
 </script>
 
 
-<template>
+<template> 
     <div class="tit_header mb_4"> 
         <div class="left">
             <h4 class="v_tit m_2">{{ props.eqpmntInfo.eqpmntNm }}</h4>
@@ -83,7 +84,7 @@ onMounted(() => {
             @loadedmetadata="handleLoadedMetadata" ref="videoPlayer"></video>
 
         <div class="mt_4 ml_1 text_xl" style="display: flex; align-items: center;">
-            <div>{{ obj.fileNm }}</div>
+            <div>{{ obj?.fileNm }}</div>
             <span class="m_1 text_lg" v-if="videoDuration">{{ `(${formattedDuration})` }}</span>
         </div>
     </div>
