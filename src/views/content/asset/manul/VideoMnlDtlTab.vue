@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted, defineProps, computed } from 'vue'
 import Divider from 'primevue/divider';
-import AssetFile from '@/views/content/asset/common/assetFile.vue';
+import AssetFile from '@/views/content/asset/common/AssetFile.vue';
 import { useStore } from '@/store';
 import { useI18n } from 'vue-i18n'
 import VideoView from './VideoView.vue';
@@ -17,12 +17,15 @@ const list = ref([])
 const selVideo = ref([])
 const firstMnlId = ref('')
 
+/*
 const fnGetVideoList = () => {
     let parmas = { eqpmntId: props.eqpmntInfo.eqpmntId, modalYn: false }
 
     store.API_LIST('mnul/video/list', parmas).then((data) => {
         list.value = data.data.data
         firstMnlId.value = data.data.data[0].mnlId
+        selVideo.value = data.data.data[0]
+        await loadVideoWithAuth(selVideo.value.mnlId);
         list.value = list.value.map(item => {
             return {
                 ...item,
@@ -33,20 +36,58 @@ const fnGetVideoList = () => {
         console.log(message)
     })
 }
+*/
+const fnGetVideoList = async () => {
+    let parmas = { eqpmntId: props.eqpmntInfo.eqpmntId }
 
-const fnGetVideo = (id) => {
+    try {
+        const data = await store.API_LIST('mnul/video/list', parmas);
+        list.value = data.data.data;
+        selVideo.value = data.data.data[0];
+        await loadVideoWithAuth(selVideo.value.mnlId);
+
+        list.value = list.value.map(item => ({
+            ...item,
+            isClick: false
+        }));
+    } catch ({ message }) {
+        console.log(message);
+    }
+}
+const fnGetVideo = async (id) => {
     // const obj = list.value.find((item) => item.mnlId === id);
     // selVideo.value = obj?  [obj] : []
     selVideo.value = list.value.find(item => item.mnlId === id)
     selVideo.value.isClick = true;
+    await loadVideoWithAuth(id); // ✅ 여기도 추가
 }
 
-const currentVideo = computed(() => {
-    return `http://localhost:8081/mnul/video/${selVideo.value.mnlId}`
-})
+const videoSrc = ref(null);
+
+const loadVideoWithAuth = async (mnlId) => {
+    const token = store.jwtToken;
+    const url = `/mnul/video/${mnlId}`
+
+    const res = await fetch(url, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+
+    if (!res.ok) {
+        console.error("❌ 영상 로딩 실패:", res.status);
+        return;
+    } else {
+        alert('영상 로딩 성공')
+    }
+
+    const blob = await res.blob();
+    videoSrc.value = URL.createObjectURL(blob);
+};
 
 const videoPlayer = ref(null); // <video> 태그에 접근하기 위한 ref
-const videoDuration = ref(0); 
+const videoDuration = ref(0);
 
 const handleLoadedMetadata = () => {
     if (videoPlayer.value) {
@@ -69,8 +110,19 @@ const formattedDuration = computed(() => {
     return 'Loading...';
 });
 
-const fnDownloadFile = (fileId, fileNm) => {
-    store.API_FILE_DOWN(fileId, fileNm);
+function joinPath(...segments) {
+    return segments
+        .map(s => s.replace(/^\/+|\/+$/g, '')) // 앞뒤 슬래시 제거
+        .filter(Boolean)
+        .join('/');
+}
+/** File download */
+const fnDownloadFile = (file) => {
+
+    let fileNm = file.orgnlFileNm + '.' + file.fileExtn;
+    const filePath = joinPath(file.filePath, `${file.fileNm}.${file.fileExtn}`);
+
+    store.API_FILE_DOWN(filePath, fileNm);
 }
 
 onMounted(() => {
@@ -91,16 +143,16 @@ onMounted(() => {
                 </div>
             </div>
             <div>
-                <video controls width="100%" height="700px" :src="currentVideo" style="border-radius: 1rem;"
+                <video controls width="100%" height="700px" :src="videoSrc" style="border-radius: 1rem;"
                     @loadedmetadata="handleLoadedMetadata" ref="videoPlayer"></video>
                 <div class="mt_4 ml_1 text_xl" style="display: flex; align-items: center;">
-                    <div>{{ selVideo.fileNm }}</div>
-                    <span class="m_1 text_lg" v-if="videoDuration">{{ `(${formattedDuration})` }}</span>
+
+                    <div>{{ selVideo.mnlNm }}</div>
+                    <span class="m_1 text_lg" v-if="videoDuration">{{ `[${formattedDuration}]` }}</span>
+
                 </div>
             </div> -->
-
-            <VideoView :eqpmntInfo="props.eqpmntInfo" :mnlId="firstMnlId"/>
-            
+            <VideoView :eqpmntInfo="props.eqpmntInfo" :mnlId="firstMnlId" />
         </div>
 
         <div class="col_3 v_box">
@@ -109,10 +161,11 @@ onMounted(() => {
                     <div style="cursor: pointer;" @click="fnGetVideo(item.mnlId)">
                         <i class="pi pi-play-circle mr_1 " style="font-size: 1.8rem;"></i>
                         <button type="button" class="m_1 text_xl" :class="{ text_bold: item.isClick }"
-                            style="text-align: left;">{{ item.fileNm }}</button>
-                        <span class="m_1 text_lg" v-if="videoDuration">{{ `(${formattedDuration})` }}</span>
+                            style="text-align: left;">{{ item.mnlNm }}</button>
+                        <span class="m_1 text_lg" v-if="videoDuration">{{ `[${formattedDuration}]` }}</span>
                     </div>
-                    <i class="pi pi-download" style="margin-left: auto; cursor: pointer;"  @click="fnDownloadFile(item.filePath, item.orgnlFileNm)"></i>
+                    <i class="pi pi-download" style="margin-left: auto; cursor: pointer;"
+                        @click="fnDownloadFile(item)"></i>
                 </div>
                 <Divider />
             </template>
@@ -121,5 +174,4 @@ onMounted(() => {
 </template>
 
 
-<style scoped>
-</style>
+<style scoped></style>

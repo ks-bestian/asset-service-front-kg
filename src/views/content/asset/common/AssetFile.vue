@@ -16,14 +16,26 @@ const list = ref([])
 const typeImg = ref(false)
 const selectedFile = ref({})
 const type = ref('')
+
+
+function joinPath(...segments) {
+  return segments
+    .map(s => s.replace(/^\/+|\/+$/g, '')) // 앞뒤 슬래시 제거
+    .filter(Boolean)
+    .join('/');
+}
+
 /** File download */
-const fnDownloadFile = (fileId, fileNm) => {
-    store.API_FILE_DOWN(fileId, fileNm);
+const fnDownloadFile = (file) => {
+
+    let fileNm = file.orgnlFileNm + '.'+file.fileExtn;
+    const filePath = joinPath(file.filePath, `${file.fileNm}.${file.fileExtn}`);
+
+    store.API_FILE_DOWN(filePath, fileNm);
 }
 
 
-const getFileType = (fileName) => {
-    const ext = fileName.split('.').pop().toLowerCase();
+const getFileType = (ext) => {
     if (['pdf', 'ppt', 'pptx', 'doc', 'docx', 'xls', 'xlsx', 'zip', 'hwp', 'jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(ext)) {
         return ext;
     }
@@ -32,7 +44,7 @@ const getFileType = (fileName) => {
 
 const getFileIconImgSrc = (file) => {
 
-    const fileType = getFileType(file.orgnlFileNm);
+    const fileType = getFileType(file.fileExtn);
 
     if (fileType === 'pdf') {
         return new URL('@/assets/images/common/ico_file_pdf_sm.png', import.meta.url).href;
@@ -63,7 +75,7 @@ const fnClickFile = (file) => {
     dialog.value = true;
     selectedFile.value = file;
 
-    if (file.orgnlFileNm.endsWith('.pdf')) {
+    if (file.fileExtn.includes('pdf')) {
         type.value = 'file';
     } else {
         type.value = 'img'
@@ -85,11 +97,12 @@ onMounted(() => {
 
     <ul v-else class="file_list" v-for="(file, index) in list" :key="index">
         <li class="p_1">
-            <span @click="fnClickFile(file)" style="cursor: pointer;">{{ file.fileNm  }}</span>
+
+            <span @click="fnClickFile(file)" style="cursor: pointer;">{{ file.orgnlFileNm }}</span>
             <a href="javascript:void(0)" class="v_btn"><img :src="getFileIconImgSrc(file)" alt=""></a>
             <i class="pi pi-image" v-if="typeImg"></i>
             <i class="pi pi-download ml_2" style="cursor: pointer;"
-                @click="fnDownloadFile(file.filePath, file.orgnlFileNm)"></i>
+                @click="fnDownloadFile(file)"></i>
         </li>
     </ul>
     <FileModal v-if="dialog" :dialog="dialog" :file-obj="selectedFile" @close="dialog = false" :type="type" />

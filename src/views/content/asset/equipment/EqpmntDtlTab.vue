@@ -5,7 +5,7 @@ import { useStore } from '@/store';
 import { useRoute } from 'vue-router';
 import Carousel from 'primevue/carousel';
 import { useI18n } from 'vue-i18n'
-import AssetFile from '@/views/content/asset/common/assetFile.vue';
+import AssetFile from '@/views/content/asset/common/AssetFile.vue';
 import ImgView from '@/views/content/asset/img/ImgView.vue'
 
 const { t } = useI18n();
