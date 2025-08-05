@@ -90,7 +90,8 @@ export const useStore = defineStore('main', {
         //         });
         //     });
         // },
-        getBzentys() {
+        getBzentys(init) {
+            console.log(init)
             const list = this.bzentyList;
             const lang = localStorage.getItem('languageType');
 

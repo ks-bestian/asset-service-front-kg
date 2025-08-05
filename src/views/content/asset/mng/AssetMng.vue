@@ -83,7 +83,7 @@ const fnExcelDownload = () => {
     // Header designation to include
 
     const selectedHeaders = ["eqpmntCd", "eqpmntNm", "expln", (lang.value === 'lng_type_1') ? 'eqpmntSeNm1' : (lang.value === 'lng_type_2') ? 'eqpmntSeNm2' : 'eqpmntSeNm3', (lang.value === 'lng_type_1') ? 'bzentyNm1' : (lang.value === 'lng_type_2') ? 'bzentyNm2' : 'bzentyNm3'];
-    const wsCols = [t('10725'), t('10751'), t('10728'), t('10727') , t('10752')];
+    const wsCols = [t('10725'), t('10751'), t('10728'), t('10727'), t('10752')];
 
     const title = t('10787')
 
@@ -106,7 +106,8 @@ onMounted(() => {
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
 
-                    <li :class="{ on: tab == '' }" @click="tab = ''; fnTabChange()"><a href="javascript:void(0)">{{ t('10066') }}</a></li>
+                    <li :class="{ on: tab == '' }" @click="tab = ''; fnTabChange()"><a href="javascript:void(0)">{{
+                            t('10066') }}</a></li>
 
                     <template v-for="(item, i) in eqpmntSeList" :key="i">
                         <li :class="{ on: tab == item.codeId }" @click="tab = item.codeId; fnTabChange()"><a
@@ -123,7 +124,8 @@ onMounted(() => {
                             <label class="form_label">{{ t("10752") }}</label>
                             <select class="form_control" v-model="searchBz">
                                 <option value="">{{ t("10752") }}</option>
-                                <option v-for="(item, i) in store.getBzentys()" :key="i" :value="item.codeId">{{ item.codeNm }}
+                                <option v-for="(item, i) in store.getBzentys()" :key="i" :value="item.codeId">{{
+                                    item.codeNm }}
                                 </option>
                             </select>
                         </div>
@@ -147,11 +149,12 @@ onMounted(() => {
             <div class="board_info mt_6">
                 <div class="right">
                     <div class="btn_wrap">
-                          <button type="button" class="v_btn btn_outline_secondary btn_sm" @click="fnExcelDownload">
-                            <i class="v_ico ico_download_secondary"></i><span>{{ t('10055') }}</span></button> 
+                        <button type="button" class="v_btn btn_outline_secondary btn_sm" @click="fnExcelDownload">
+                            <i class="v_ico ico_download_secondary"></i><span>{{ t('10055') }}</span></button>
 
                         <button type="button" class="v_btn btn_outline_primary btn_sm mb_3"
-                            @click="$router.push({ name: 'asset.mng.form', params: { type: 'create', eqpmntId: 'new' } })">{{ t("10746") }}</button>
+                            @click="$router.push({ name: 'asset.mng.form', params: { type: 'create', eqpmntId: 'new' } })">{{
+                            t("10746") }}</button>
                     </div>
                 </div>
             </div>
@@ -161,7 +164,8 @@ onMounted(() => {
                 <template #header>
                     <div class="board_info ml_8">
                         <div class="left">
-                            <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ list.length }}</span></div>
+                            <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ list.length
+                                    }}</span></div>
                         </div>
 
                         <div class="flex justify-end">
@@ -175,7 +179,7 @@ onMounted(() => {
                 </template>
 
                 <template #list="slotProps">
-                    <DataTable :value="slotProps.items" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"  
+                    <DataTable :value="slotProps.items" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
                         @row-click="fnGoDetail" tableStyle="min-width: 50rem;">
                         <Column field="img" :header="t('10729')" class="text_center">
                             <template #body="{ data }">
@@ -193,12 +197,15 @@ onMounted(() => {
                             :header="t('10752')" class="text_center" style="width: 7%;"></Column>
                         <Column field="mnl" :header="t('10755')" class="text_center" style="width: 5%;">
                             <template #body="{ data }">
-                                <img v-if="data.fileExist" src="@/assets/images/common/ico_file_pdf.png" alt=""
-                                    style="width: 25px;" @click.stop="fnDownPdf(data.eqpmntId)">
+                                <i class="pi pi-file" v-if="data.fileExist"
+                                    src="@/assets/images/common/ico_file_pdf.png" alt="" style="font-size: 2rem;"
+                                    @click.stop="fnDownPdf(data.eqpmntId)"></i>
+                                <!-- <img v-if="data.fileExist" src="@/assets/images/common/ico_file_pdf.png" alt=""
+                                    style="width: 25px;" @click.stop="fnDownPdf(data.eqpmntId)"> -->
                                 <template v-else>{{ '-' }}</template>
                             </template>
                         </Column>
-                        <Column field="video" :header="t('10733')" class="text_center" style="width: 10%;">
+                        <Column field="video" :header="t('10733')" class="text_center" style="width: 5.5%;">
                             <template #body="{ data }">
                                 <Button severity="danger" @click="fnVideoModal(data)"><i
                                         class="pi pi-play-circle"></i><span
@@ -244,21 +251,20 @@ onMounted(() => {
                                 </Button>
                             </div>
 
-                            <div class="text_xl text_bold m_2">{{ item.eqpmntNm }}</div>
-                            <div class="text_lg m_2"><span class="info_text">{{ t('10752') }}</span>
-                                {{ lang === 'lng_type_1' ? item.bzentyNm1 :
-                                    lang === 'lng_type_2' ? item.bzentyNm2 :
-                                        item.bzentyNm3 }}
+                            <div class="text_xl text_bold m_2 mb_4">{{ item.eqpmntNm }}</div>
+                            <div class="text_lg m_2">
+                                <span class="info_text">{{ t('10752') }}</span>
+                                {{ lang === 'lng_type_1' ? item.bzentyNm1 : lang === 'lng_type_2' ? item.bzentyNm2 : item.bzentyNm3 }}
                             </div>
+
                             <div class="text_lg m_2" style="display: flex; align-items: center;">
                                 <span class="info_text">{{ t('10755') }}</span>
-                                <img v-if="item.fileExist" src="@/assets/images/common/ico_file_pdf.png" alt=""
-                                    style="width: 25px;" @click.stop="fnDownPdf(item.eqpmntId)">
+                                <i class="pi pi-file" v-if="item.fileExist" src="@/assets/images/common/ico_file_pdf.png" alt="" style="font-size: 2rem;" @click.stop="fnDownPdf(item.eqpmntId)"></i>
                                 <template v-else>{{ '-' }}</template>
                             </div>
 
                             <div class="text_lg m_2"><span class="info_text">{{ t('10733') }}</span>
-                                <Button severity="danger" @click.stop="fnVideoModal(data)"><i
+                                <Button severity="danger" @click.stop="fnVideoModal(item)"><i
                                         class="pi pi-play-circle"></i>
                                     <span style="font-size: 1.2rem;">Play</span>
                                 </Button>
@@ -277,7 +283,8 @@ onMounted(() => {
         </div>
         <!-- // 본문 영역 -->
     </div>
-    <VideoModal v-if="dialog" @close="dialog = false" :dialog="dialog" :videoMnlId="videoMnlId" :eqpmntInfo="eqpmntInfo"/>
+    <VideoModal v-if="dialog" @close="dialog = false" :dialog="dialog" :videoMnlId="videoMnlId"
+        :eqpmntInfo="eqpmntInfo" />
     <QnaSample v-if="dialogQna" @close="dialogQna = false" :dialog="dialogQna" :eqpmntId="eqpmntId"
         :bzentyId="bzentyId" />
 </template>
@@ -312,12 +319,12 @@ onMounted(() => {
     border-style: none !important;
 }
 
-:deep(.p-row-even):hover{
+:deep(.p-row-even):hover {
     cursor: pointer;
     background-color: #F5FBFE;
 }
 
-:deep(.p-row-odd):hover{
+:deep(.p-row-odd):hover {
     cursor: pointer;
     background-color: #F5FBFE;
 }

@@ -17,26 +17,6 @@ const list = ref([])
 const selVideo = ref([])
 const firstMnlId = ref('')
 
-/*
-const fnGetVideoList = () => {
-    let parmas = { eqpmntId: props.eqpmntInfo.eqpmntId, modalYn: false }
-
-    store.API_LIST('mnul/video/list', parmas).then((data) => {
-        list.value = data.data.data
-        firstMnlId.value = data.data.data[0].mnlId
-        selVideo.value = data.data.data[0]
-        await loadVideoWithAuth(selVideo.value.mnlId);
-        list.value = list.value.map(item => {
-            return {
-                ...item,
-                isClick: false
-            }
-        })
-    }).catch(({ message }) => {
-        console.log(message)
-    })
-}
-*/
 const fnGetVideoList = async () => {
     let parmas = { eqpmntId: props.eqpmntInfo.eqpmntId }
 
@@ -44,6 +24,7 @@ const fnGetVideoList = async () => {
         const data = await store.API_LIST('mnul/video/list', parmas);
         list.value = data.data.data;
         selVideo.value = data.data.data[0];
+        firstMnlId.value = data.data.data[0].mnlId
         await loadVideoWithAuth(selVideo.value.mnlId);
 
         list.value = list.value.map(item => ({
@@ -55,8 +36,6 @@ const fnGetVideoList = async () => {
     }
 }
 const fnGetVideo = async (id) => {
-    // const obj = list.value.find((item) => item.mnlId === id);
-    // selVideo.value = obj?  [obj] : []
     selVideo.value = list.value.find(item => item.mnlId === id)
     selVideo.value.isClick = true;
     await loadVideoWithAuth(id); // ✅ 여기도 추가
@@ -134,7 +113,7 @@ onMounted(() => {
     <div class="content_row">
         <div class="col_9 v_box">
 
-            <!-- <div class="tit_header mb_4">
+             <div class="tit_header mb_4">
                 <div class="left">
                     <h4 class="v_tit m_2">{{ eqpmntInfo.eqpmntNm }}</h4>
                     <span class="e_info m_2 text_lg">{{ eqpmntInfo.eqpmntCd + ' | ' + ((lang === 'lng_type_1') ?
@@ -146,13 +125,11 @@ onMounted(() => {
                 <video controls width="100%" height="700px" :src="videoSrc" style="border-radius: 1rem;"
                     @loadedmetadata="handleLoadedMetadata" ref="videoPlayer"></video>
                 <div class="mt_4 ml_1 text_xl" style="display: flex; align-items: center;">
-
                     <div>{{ selVideo.mnlNm }}</div>
                     <span class="m_1 text_lg" v-if="videoDuration">{{ `[${formattedDuration}]` }}</span>
-
                 </div>
-            </div> -->
-            <VideoView :eqpmntInfo="props.eqpmntInfo" :mnlId="firstMnlId" />
+            </div> 
+            <!-- <VideoView :eqpmntInfo="props.eqpmntInfo" :mnlId="firstMnlId" /> -->
         </div>
 
         <div class="col_3 v_box">
@@ -162,7 +139,7 @@ onMounted(() => {
                         <i class="pi pi-play-circle mr_1 " style="font-size: 1.8rem;"></i>
                         <button type="button" class="m_1 text_xl" :class="{ text_bold: item.isClick }"
                             style="text-align: left;">{{ item.mnlNm }}</button>
-                        <span class="m_1 text_lg" v-if="videoDuration">{{ `[${formattedDuration}]` }}</span>
+                        <!-- <span class="m_1 text_lg" v-if="videoDuration">{{ `[${formattedDuration}]` }}</span> -->
                     </div>
                     <i class="pi pi-download" style="margin-left: auto; cursor: pointer;"
                         @click="fnDownloadFile(item)"></i>

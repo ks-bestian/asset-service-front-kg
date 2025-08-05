@@ -12,7 +12,7 @@ export const formSchemas = {
         { name: "eqpmntCd", label: i18n.global.t('10725'), type: 'text', required: true },  //장비코드
       ],
       [
-        { name: "bzentyId", label: i18n.global.t('10752'), type: 'select', items: store.getBzentys(), default: '', required: true }, //공급업체
+        { name: "bzentyId", label: i18n.global.t('10752'), type: 'select', items: store.getBzentys('1'), default: '', required: true }, //공급업체
         { name: "eqpmntSe", label: i18n.global.t('10727'), type: 'select', items: store.getComCodes('1037'), default: '', required: true }, //장비구분
       ],
       [
@@ -67,7 +67,6 @@ export const formSchemas = {
         { name: 'mnlLng', label: i18n.global.t('10238'), type: 'select', items: store.getComCodes('1039'), default: 'mnlLng01', width: '15%', required: true }, //언어
         { name: 'mnlNm', label: i18n.global.t('10735'), type: 'text', required: true }, //메뉴얼명
         { name: 'videoFile', label: i18n.global.t('10733'), type: 'file', required: true, upload: 'tus', attachType: 'video'}, //영상 메뉴얼
-
       ],
     ]
   },
