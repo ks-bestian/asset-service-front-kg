@@ -37,8 +37,6 @@ const initialValues = getInitialValuesFromFields(props.fields);
 const { values, errors, defineField, validate, resetForm } = useYupForm(schema, initialValues);
 
 onMounted(() => {
-
-
     props.fields.forEach(item => {
         item.forEach(col => {
             const [value, attrs] = defineField(col.name)
@@ -47,7 +45,6 @@ onMounted(() => {
     })
 
     if (props.type === 'update') {
-
         resetForm({ values: { ...props.detailDatas } })
     } 
 

@@ -68,12 +68,22 @@ const fnVideoModal = (data) => {
     eqpmntInfo.value = data
 }
 
+function joinPath(...segments) {
+  return segments
+    .map(s => s.replace(/^\/+|\/+$/g, '')) // 앞뒤 슬래시 제거
+    .filter(Boolean)
+    .join('/');
+}
+
 const fnDownPdf = (eqpmntId) => {
     let params = {
         eqpmntId: eqpmntId
     }
     store.API_LIST('mnul/file', params).then((data) => {
-        store.API_FILE_DOWN(data.data.data[0].filePath, data.data.data[0].orgnlFileNm);
+        const file = data.data.data[0]
+        const fileNm = file.orgnlFileNm + '.' + file.fileExtn;
+        const filePath = joinPath(file.filePath, `${file.fileNm}.${file.fileExtn}`)
+        store.API_FILE_DOWN(filePath, fileNm);
     }).catch(({ message }) => {
         console.error(message)
     })

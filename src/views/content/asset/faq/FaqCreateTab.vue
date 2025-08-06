@@ -20,7 +20,6 @@ const fnAddFaq = () => {
     faqList.value.push({
         faqId: String(Date.now() + Math.random())
     });
-
 }
 
 const fnDelFaq = (id) => {
@@ -48,14 +47,11 @@ watch(() => props.detailDatas, (newval) => {
 
 
 onMounted(() => {
-    
     if(props.type === 'create') {
-
         faqList.value.push({
             faqId: '1'
         })
     }
-        
 })
 </script>
 

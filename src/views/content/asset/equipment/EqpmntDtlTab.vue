@@ -128,7 +128,7 @@ onMounted(() => {
             class="mb_3">
 
             <template v-for="(item, i) in imgList" :key="i">
-                <img class="v_box col_class" :src="`/equip/img/${item.imgId}`"></img>
+                <img class="v_box col_class" :src="`/equip/img/${item.imgId}`" @error="e => e.target.src = `/images/content/img_noimage.png`"></img>
             </template>
 
         </div>
@@ -156,6 +156,7 @@ onMounted(() => {
     max-width: calc(25% - (3 * 16px / 4));
     -webkit-box-flex: 0 !important;
     -ms-flex: 0 0 calc(25% - (3 * 16px / 4)) !important;
+    height: 35rem;
 }
 
 .text_info {

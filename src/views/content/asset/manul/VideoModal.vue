@@ -24,7 +24,7 @@ onMounted(() => {
     <Dialog v-model:visible="visible" modal :style="{ width: '62vw', minHeight: '25vh' }" @hide="emit('close')">
         <template #header>
             <div class="popup_header" style="width: 100%; border-top-left-radius: 12px;">
-                <h2 class="popup_tit">{{ '비디오 메뉴얼' }}</h2>
+                <h2 class="popup_tit">{{ 'Video Manual' }}</h2>
             </div>
         </template>
 

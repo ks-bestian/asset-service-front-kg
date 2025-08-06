@@ -62,6 +62,8 @@ const fnLogin = () => {
         if (response.data.token != null) {
             fnLoginInitPath();
         }
+
+        fnBzentyList()
     }).catch(error => {
         store.hideProgressSpinner();
         if (error.response?.data?.msg == 'LOGIN_FAIL') {
@@ -71,6 +73,17 @@ const fnLogin = () => {
             alert("ID же сырсөз туура эмес.");
         }
     });
+}
+
+const fnBzentyList = () => {
+    let param = {
+    }
+    store.API_LIST('/asset/bzenty', param).then((data) => {
+        store.bzentyList = data.data.data;
+
+    }).catch(({ message }) => {
+        console.log(message)
+    })
 }
 
 /* Early screen by department */
