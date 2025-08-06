@@ -516,6 +516,30 @@ export const useStore = defineStore('main', {
                     throw error;
                 });
         },
+        API_UPDATE_FILE(API_PATH, FORM_DATA) {
+
+            this.showProgressSpinner();
+
+            return axios.put(API_PATH, FORM_DATA
+                , { headers: { 'Content-Type': 'multipart/form-data' } })
+                .then(data => {
+                    this.hideProgressSpinner();
+                    const success = parseInt(data.status / 100) == 2 || parseInt(data.status / 100) == 3 ? true : false;
+                    
+                    if (success) {
+                        this.toast.add({ severity: 'success', summary: 'Success', detail: '정상적으로 저장되었습니다.', life: 3000 });
+                        return data;
+                    } else {
+                        this.toast.add({ severity: 'error', summary: 'Error', detail: data.status, life: 3000 });
+                        throw data;
+                    }
+
+                }).catch(error => {
+                    this.hideProgressSpinner();
+                    // this.toast.add({ severity: 'error', summary: 'Error', detail: error.message, life: 3000 });
+                    throw error;
+                });
+        },
         API_FILE_DOWN(fileId, fileNm) {
 
             this.showProgressSpinner();

@@ -3,6 +3,7 @@ import ThumbnailUpload from "@/views/content/asset/equipment/ThumbnailUpload.vue
 import { useFormStore } from "@/store";
 import { ref, onMounted, reactive, defineProps, computed, watch, toRaw } from 'vue';
 import { createYupValidate, useYupForm } from '@/utils/YupValidate';
+import FileUploadPanel from "@/views/content/asset/common/FileUploadPanel.vue";
 // import useYupForm from '@/utils/UseYupForm';
 
 const formStore = useFormStore();
@@ -10,9 +11,15 @@ const props = defineProps({
     fields: Array,
     type: String,
     detailDatas: Object,
+    setFileUploadRef: Function
 })
 
-const fileId = ref(generateUUID());
+
+const fileUploadRefs = ref({});
+const setFileUploadRef = (name) => (el) => {
+  if (el) fileUploadRefs.value[name] = el;
+};
+
 const fieldStore = reactive({})
 const files = reactive({});
 const schema = createYupValidate(props.fields);
@@ -81,6 +88,12 @@ onMounted(() => {
                         </template>
 
                         <template v-else-if="field.type === 'file'">
+                            <FileUploadPanel
+                            :ref="setFileUploadRef(field.name)"
+                            :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                            :setSelfRef="props.setFileUploadRef"
+                            />
+                            <!--
                             <div class="file_attatch">
                                 <div class="form_col type4">
                                     <div class="input_item">
@@ -96,6 +109,7 @@ onMounted(() => {
                                     </div>
                                 </div>
                             </div>
+                            -->
                         </template>
 
                         <template v-else-if="field.type === 'radio'">

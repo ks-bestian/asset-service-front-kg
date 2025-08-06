@@ -12,7 +12,7 @@ import { formSchemas } from '@/schemas/AssetSchemas'
 import { uploadTusFiles } from '@/utils/tus'
 import { useRequireConfirm } from '@/utils/require'
 import i18n from '@/i18n'
-
+import { shouldKeepExistingFile } from '@/utils/fileHandler';
 
 const requireConfirm = useRequireConfirm();
 const store = useStore();
@@ -33,7 +33,7 @@ const faqList = ref([])
 const eqpmntId = ref(route.params.eqpmntId);
 
 const inputRefs = ref([])
-
+const fileUploadRefs = ref({});
 function generateUUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = (Math.random() * 16) | 0,
@@ -47,6 +47,16 @@ function generateUUID() {
 // 나머지 파일 및 데이터는 FormData로 저장
 
 // TUS 업로드 -> URL을 mnulVoList에 매핑 -> FormData 생성 -> API 전송 순서
+
+//----------------------
+/*
+| 케이스                 | 설명                  | 처리 방식                      |
+| ------------------- | ------------------- | -------------------------- |
+| ① 기존 영상 그대로 유지      | 사용자가 새 파일을 선택하지 않음  | `videoFileUrl` 기존 값 유지     |
+| ② 기존 영상 → 새 영상으로 교체 | 사용자가 새 파일을 선택함      | 새 TUS 업로드 후 기존 URL **덮어씀** |
+| ③ 신규 등록 (create)    | 원래 영상이 없음, 새 영상 업로드 | TUS 업로드 후 새 URL 저장         |
+*/
+// ✅ Case ② or ③: 새 파일이 존재 → 업로드 대상
 const buildVoLists = () => {
   const mnulVo = []
   const installVo = []
@@ -68,12 +78,11 @@ const buildVoLists = () => {
 
           files.forEach(file => {
             if (file instanceof File || file instanceof Blob) {
+
               tusVideoFiles.push({ file, targetObj: obj });
               obj.orgnlFileNm = file.name.replace(/\.[^/.]+$/, '');
               obj.fileSz = file.size;
-
-              const extension = file.name.split('.').pop()?.toLowerCase() || '';
-              obj.fileExtn = extension;
+              obj.fileExtn = file.name.split('.').pop()?.toLowerCase() || '';
             } else {
               console.warn('⚠️ 무시된 videoFile 객체 (File 아님):', file);
             }
@@ -105,12 +114,10 @@ const buildVoLists = () => {
         params[key] = val;
       }
     });
+    if (isManual) mnulVo.push(obj);
 
-    if (isManual) {
-      mnulVo.push(obj); // ✅ 먼저 넣어야 참조 유지됨
-
-    }
     if (isInstall) installVo.push(obj);
+
     if (isFaq) faqVo.push(obj);
   });
 
@@ -123,7 +130,7 @@ const uploadTusFilesToTargets = async (tusVideoFiles) => {
     tusVideoFiles.map(({ file }) => uploadTusFiles([file]))
   );
 
-  // ✅ 결과를 직접 새 객체로 리턴
+  // 결과를 직접 새 객체로 리턴
   return tusVideoFiles.map(({ targetObj }, i) => {
     const url = uploadResults[i][0];
     return {
@@ -132,6 +139,20 @@ const uploadTusFilesToTargets = async (tusVideoFiles) => {
     };
   });
 };
+/*
+const buildFormData = (sendData, formData) => {
+  for (const key in sendData) {
+    const value = sendData[key];
+    if (typeof value === 'object' && value !== null) {
+      formData.append(key, JSON.stringify(value));
+    } else {
+      formData.append(key, value);
+    }
+  }
+  return formData;
+};
+*/
+
 
 const buildFormData = (sendData, formData) => {
   for (const key in sendData) {
@@ -151,12 +172,20 @@ const buildFormData = (sendData, formData) => {
   return formData;
 }
 
+
 const submitForm = async (formData) => {
   const isValid = await formStore.fnSubmit();
   if (!isValid) return;
 
 
   if (type.value === 'create') {
+    store.API_SAVE_FILE('/equip', formData).then(() => {
+      router.push({ name: 'asset.mng' });
+      formStore.fieldArr = [];
+    }).catch(({ message }) => {
+      console.error(message);
+    });
+  } else if (type.value === 'update') {
     store.API_SAVE_FILE('/equip', formData).then(() => {
       router.push({ name: 'asset.mng' });
       formStore.fieldArr = [];
@@ -179,6 +208,7 @@ const fnClickSave = (event) => {
 
 const fnSave = async () => {
   const { mnulVo, installVo, faqVo, params, tusVideoFiles, formData } = buildVoLists();
+
   const updatedMnulVo = await uploadTusFilesToTargets(tusVideoFiles);
 
   const sendData = {
@@ -187,6 +217,33 @@ const fnSave = async () => {
     installVoList: installVo,
     faqVoList: faqVo
   };
+
+    // ✅ 모든 file type 필드에 대해 FileUploadPanel 요약 정보 수집
+  Object.entries(fileUploadRefs.value).forEach(([fieldName, uploaderComp]) => {
+    if (!uploaderComp || typeof uploaderComp.getUploadSummary !== 'function') return;
+
+    const { newFiles, existingFiles, deletedFiles } = uploaderComp.getUploadSummary();
+
+
+    // ✅ 새로 업로드된 파일을 FormData에 추가
+    newFiles.forEach(file => {
+      const uuid = generateUUID(); // 파일 식별 ID
+      formData.append(uuid, file); // file은 File 객체
+      // 서버에서 fileId와 함께 mapping 하기 위함
+      //sendData[fieldName] = file.name;
+      sendData[`${fieldName}Id`] = uuid;
+    });
+
+    // ✅ 유지할 기존 파일 정보 → 서버에 전달해서 삭제 안 하도록 처리
+    if (existingFiles.length > 0) {
+      sendData[`${fieldName}Keep`] = existingFiles; // 포맷은 상황에 맞게
+    }
+
+    // ✅ 삭제된 파일 정보 → 서버에서 삭제 처리
+    if (deletedFiles.length > 0) {
+      sendData[`${fieldName}Delete`] = deletedFiles;
+    }
+  });
 
   const fullFormData = buildFormData(sendData, formData);
   // ✅ 최종 전송되는 FormData 확인
