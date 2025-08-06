@@ -123,29 +123,30 @@ onMounted(() => {
         </table>
     </div>
 
-    <div class="card mt_10">
-        <div v-if="imgList.length <= 4" style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px; "
-            class="mb_3">
+    <div class="card mt_10"> 
+        <template v-if="imgList.length === 0">
+            <div class="no_data">
+                <i class="v_ico ico_error"></i>
+                <span class="text_msg">{{ t('10785') }}</span><!--상세이미지가 없습니다.-->
+            </div>
+        </template>
 
-            <template v-for="(item, i) in imgList" :key="i">
-                <img class="v_box col_class" :src="`/equip/img/${item.imgId}`" @error="e => e.target.src = `/images/content/img_noimage.png`"></img>
+        <div v-else-if="imgList.length > 0 && imgList.length <= 4" style="display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 16px;" class="mb_3">
+            <template v-for="(item, i) in imgList" :key="i"> 
+                <img class="v_box col_class" :src="`/equip/img/${item.imgId}`"
+                    @error="e => e.target.src = `/images/content/img_noimage.png`"></img>
             </template>
-
         </div>
 
-        <Carousel v-else :value="imgList" :numVisible="4" :numScroll="4">
+        <Carousel v-else :value="imgList" :numVisible="4" :numScroll="4"> 
             <template #item="slotProps">
                 <div class="mr_4 ml_4">
                     <ImgView :imgVo="slotProps.data" :imgSe="'detail'" :size="'medium'" />
                 </div>
             </template>
-            <template #empty>
-                <div class="no_data">
-                    <i class="v_ico ico_error"></i>
-                    <span class="text_msg">{{ t('10785') }}</span><!--상세이미지가 없습니다.-->
-                </div>
-            </template>
         </Carousel>
+
+
     </div>
 </template>
 

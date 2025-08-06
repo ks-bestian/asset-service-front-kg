@@ -35,7 +35,7 @@ const fnFileNm = (file) => {
     <Dialog v-model:visible="visible" modal :style="{ width: '60vw', height: '100vh' }" @hide="emit('close')">
         <template #header>
             <div class="popup_header" style="width: 100%; border-top-left-radius: 12px;">
-                <h2 class="popup_tit text_center">{{ props.fileObj.mnlNm }} </h2>
+                <h2 class="popup_tit text_center">{{  t('10754') }} </h2>
             </div>
         </template>
 

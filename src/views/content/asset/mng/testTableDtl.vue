@@ -48,8 +48,8 @@ onMounted(() => {
 
     resetForm({ values: { ...props.detailDatas } })
 
-    formStore.fieldStore = fieldStore;
-    formStore.fnRegister(formkey.value, validate, fieldStore)
+    // formStore.fieldStore = fieldStore;
+    // formStore.fnRegister(formkey.value, validate, fieldStore)
 
     
 })
