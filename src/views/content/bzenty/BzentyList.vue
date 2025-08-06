@@ -88,21 +88,16 @@ onMounted(() => {
                 <div class="right">
                     <div class="btn_wrap">
                         <button type="button" class="v_btn btn_outline_primary btn_sm" @click="fnRouteCreate">{{ t("10746") }}</button>
-                        <!--
-                        <button type="button" class="v_btn btn_outline_secondary btn_sm">{{ "선택 삭제" }}</button>
-                        -->
-                        <!--
-                        <button type="button" class="v_btn btn_outline_secondary btn_sm">
-                            <i class="v_ico ico_download_secondary"></i><span>{{ "엑셀 다운로드" }}</span></button>
-                            -->
+                        <!-- <button type="button" class="v_btn btn_outline_secondary btn_sm">{{ "선택 삭제" }}</button> -->
+                        <!-- <button type="button" class="v_btn btn_outline_secondary btn_sm">
+                            <i class="v_ico ico_download_secondary"></i><span>{{ "엑셀 다운로드" }}</span></button> -->
                     </div>
                 </div>
             </div>
 
-
             <div class="v_table table_list">
                 <DataTable :value="list" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]"
-                    tableStyle="min-width: 50rem;" @row-dblclick="fnGoDetail" >
+                    tableStyle="min-width: 50rem;" @row-dblclick="fnGoDetail">
                     <Column :field="lang === 'lng_type_1' ? 'bzentyNm1' : (lang === 'lng_type_2' ? 'bzentyNm2' : 'bzentyNm3')" :header="t('10752')" class="text_center" sortable></Column>
                     <Column field="telno" :header="t('10358')" class="text_center" style="width: 9%;" sortable></Column>
                     <Column field="eml" :header="t('10359')" class="text_center" sortable></Column>
@@ -119,7 +114,7 @@ onMounted(() => {
     </div>
 </template>
 
-<style>
+<style scoped>
 .no_data {
     display: flex;
     /* 플렉스 박스 사용 */
@@ -127,5 +122,9 @@ onMounted(() => {
     /* 가로 가운데 정렬 */
     align-items: center;
     flex-direction: column;
+}
+
+:deep(.p-datatable-paginator-bottom) {
+    border-style: none !important;
 }
 </style>

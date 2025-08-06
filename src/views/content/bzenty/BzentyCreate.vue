@@ -16,34 +16,25 @@ const bzenty = ref({});
 
 
 const fnSave = async () => {
-
     formStore.apiPath = "/asset/bzenty";
 
     let params = {}
 
     formStore.fieldArr.forEach((item) => {
-
         Object.entries(item).forEach(([key, value]) => {
-
             params[key] = value.value;
         })
-
     })
-
-    const sendData = {
-        ...params
-    }
 
     if (type.value === 'create') {
         formStore.apiMethod = "API_SAVE"
     } else if (type.value === 'update') {
         formStore.apiMethod = "API_UPDATE"
-        sendData.bzentyId = bzentyId.value
     }
 
     formStore.fnSubmit().then((result) => {
         if (result) {
-            formStore.fnSave(sendData).then(r => {
+            formStore.fnSave().then(r => {
                 if(type.value === 'update') {
                 router.push({ name: 'asset.bzenty.detail', params: {bzentyId: bzentyId.value} })
                 } else {
@@ -60,7 +51,6 @@ const fnDetail = () => {
     }
     store.API_LIST('/asset/bzenty/detail', params).then((data) => {
         bzenty.value = data.data.data;
-        console.log('bzenty.value',bzenty.value)
     }).catch(({ message }) => {
         console.log(message)
     })

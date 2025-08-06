@@ -19,7 +19,6 @@ const fnDetail = () => {
     }
     store.API_LIST('/asset/bzenty/detail', params).then((data) => {
         bzenty.value = data.data.data;
-        console.log('bzenty.value',bzenty.value)
     }).catch(({ message }) => {
         console.log(message)
     })

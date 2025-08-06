@@ -69,10 +69,10 @@ const fnVideoModal = (data) => {
 }
 
 function joinPath(...segments) {
-  return segments
-    .map(s => s.replace(/^\/+|\/+$/g, '')) // 앞뒤 슬래시 제거
-    .filter(Boolean)
-    .join('/');
+    return segments
+        .map(s => s.replace(/^\/+|\/+$/g, '')) // 앞뒤 슬래시 제거
+        .filter(Boolean)
+        .join('/');
 }
 
 const fnDownPdf = (eqpmntId) => {
@@ -117,7 +117,7 @@ onMounted(() => {
                 <ul class="tab_list">
 
                     <li :class="{ on: tab == '' }" @click="tab = ''; fnTabChange()"><a href="javascript:void(0)">{{
-                            t('10066') }}</a></li>
+                        t('10066') }}</a></li>
 
                     <template v-for="(item, i) in eqpmntSeList" :key="i">
                         <li :class="{ on: tab == item.codeId }" @click="tab = item.codeId; fnTabChange()"><a
@@ -164,18 +164,18 @@ onMounted(() => {
 
                         <button type="button" class="v_btn btn_outline_primary btn_sm mb_3"
                             @click="$router.push({ name: 'asset.mng.form', params: { type: 'create', eqpmntId: 'new' } })">{{
-                            t("10746") }}</button>
+                                t("10746") }}</button>
                     </div>
                 </div>
             </div>
 
-            <DataView :value="list" :layout="layout" :paginator="layout === 'grid'" :rows="8" hoverableRow
-                :rowsPerPageOptions="[4, 8, 20, 50]">
+            <DataView :value="list" :layout="layout" :paginator="layout === 'grid' && list.length > 0" :rows="8"
+                hoverableRow :rowsPerPageOptions="[4, 8, 20, 50]">
                 <template #header>
                     <div class="board_info ml_8">
                         <div class="left">
                             <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ list.length
-                                    }}</span></div>
+                            }}</span></div>
                         </div>
 
                         <div class="flex justify-end">
@@ -196,20 +196,20 @@ onMounted(() => {
                                 <ImgView :imgVo="data" :imgSe="'thumbnail'" :size="'small'" />
                             </template>
                         </Column>
-                        <Column field="eqpmntCd" :header="t('10725')" class="text_center" style="width: 8%;"></Column>
-                        <Column field="eqpmntNm" :header="t('10751')" class="text_center"></Column>
+                        <Column field="eqpmntCd" :header="t('10725')" class="text_center" style="width: 8%;" sortable>
+                        </Column>
+                        <Column field="eqpmntNm" :header="t('10751')" class="text_center" sortable></Column>
                         <Column field="expln" :header="t('10728')" style="width: 33%;"></Column>
                         <Column
                             :field="lang === 'lng_type_1' ? 'eqpmntSeNm1' : (lang === 'lng_type_2' ? 'eqpmntSeNm2' : 'eqpmntSeNm3')"
-                            :header="t('10727')" class="text_center" style="width: 6%;"></Column>
+                            :header="t('10727')" class="text_center" style="width: 6%;" sortable></Column>
                         <Column
                             :field="lang === 'lng_type_1' ? 'bzentyNm1' : (lang === 'lng_type_2' ? 'bzentyNm2' : 'bzentyNm3')"
-                            :header="t('10752')" class="text_center" style="width: 7%;"></Column>
+                            :header="t('10752')" class="text_center" style="width: 7%;" sortable></Column>
                         <Column field="mnl" :header="t('10755')" class="text_center" style="width: 5%;">
                             <template #body="{ data }">
-                                <i class="pi pi-file" v-if="data.fileExist"
-                                    src="@/assets/images/common/ico_file_pdf.png" alt="" style="font-size: 2rem;"
-                                    @click.stop="fnDownPdf(data.eqpmntId)"></i>
+                                <i class="pi pi-file" v-if="data.fileNm" src="@/assets/images/common/ico_file_pdf.png"
+                                    alt="" style="font-size: 2rem;" @click.stop="fnDownPdf(data.eqpmntId)"></i>
                                 <!-- <img v-if="data.fileExist" src="@/assets/images/common/ico_file_pdf.png" alt=""
                                     style="width: 25px;" @click.stop="fnDownPdf(data.eqpmntId)"> -->
                                 <template v-else>{{ '-' }}</template>
@@ -264,12 +264,23 @@ onMounted(() => {
                             <div class="text_xl text_bold m_2 mb_4">{{ item.eqpmntNm }}</div>
                             <div class="text_lg m_2">
                                 <span class="info_text">{{ t('10752') }}</span>
-                                {{ lang === 'lng_type_1' ? item.bzentyNm1 : lang === 'lng_type_2' ? item.bzentyNm2 : item.bzentyNm3 }}
+                                {{ lang === 'lng_type_1' ? item.bzentyNm1 : lang === 'lng_type_2' ? item.bzentyNm2 :
+                                    item.bzentyNm3 }}
                             </div>
 
                             <div class="text_lg m_2" style="display: flex; align-items: center;">
                                 <span class="info_text">{{ t('10755') }}</span>
-                                <i class="pi pi-file" v-if="item.fileExist" src="@/assets/images/common/ico_file_pdf.png" alt="" style="font-size: 2rem;" @click.stop="fnDownPdf(item.eqpmntId)"></i>
+                                <div v-if="item.fileNm" style="display: flex; align-tiems: center;"
+                                    @click.stop="fnDownPdf(item.eqpmntId)">
+                                    <!-- {{ item.fileNm }}
+                                    <i class="pi pi-file ml_2" src="@/assets/images/common/ico_file_pdf.png" alt=""
+                                        style="font-size: 2rem;"></i> -->
+
+                                    <Button severity="secondary" size="large">
+                                        <i class="pi pi-file"></i>
+                                        <span style="font-size: 1.3rem;">{{ item.fileNm }}</span>
+                                    </Button>
+                                </div>
                                 <template v-else>{{ '-' }}</template>
                             </div>
 

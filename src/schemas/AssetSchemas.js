@@ -103,6 +103,9 @@ export const formSchemas = {
       ],
       [
         { name: 'useYn', label: i18n.global.t('10367'), type: 'radio' } //사용여부
+      ],
+      [
+        { name: 'bzentyId', label: i18n.global.t('10726'), hidden: true } //업체아이디
       ]
     ]
   },
