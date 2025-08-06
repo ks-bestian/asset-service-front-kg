@@ -55,6 +55,14 @@ onMounted(() => {
         })
     }
 })
+
+const formRef = ref(null);
+
+defineExpose({
+  getUploadSummaryMap: () => {
+    return formRef.value?.getAllFileUploadRefs?.();
+  },
+});
 </script>
 
 <template>
@@ -64,7 +72,7 @@ onMounted(() => {
         </div>
     </div>
     <template v-for="(item, i) in installList" :key="item.instlId">
-        <InstlPanel :id="item.instlId" @del-install="fnDelInstall" :index="(i + 1)" v-show="show" :type="type"
+        <InstlPanel :ref="formRef" :id="item.instlId" @del-install="fnDelInstall" :index="(i + 1)" v-show="show" :type="type"
             :detailDatas="item"  />
     </template>
 </template>

@@ -37,6 +37,11 @@ const fnDelFile = (fileNm) => {
     detailImgs.value = detailImgs.value.filter(file => file.name != fileNm);
 }
 
+const testformRef = ref(null);
+
+defineExpose({
+  getFileUploadRefs: () => testformRef.value?.getFileUploadRefs?.() || {},
+});
 </script>
 
 <template>
@@ -53,7 +58,7 @@ const fnDelFile = (fileNm) => {
 
         <div class="content_section mt_3">
             <div class="v_table"> 
-                <Testform :fields="fields" :type="props.type" :detailDatas="props.detailDatas"/>
+                <Testform :ref="testformRef" :fields="fields" :type="props.type" :detailDatas="props.detailDatas"/>
             </div>
         </div>
     </Panel>

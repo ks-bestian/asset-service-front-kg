@@ -48,8 +48,8 @@ export const msg = {
     missing(fieldName = 'default') {
       //return replaceParams(i18n.global.t('000000(메세지)'), { fieldName: i18n.global.t('000000(라벨)') });
       //return `${fieldName}은(는) 필수 입력입니다.`
-      console.log(i18n.global.t('10697'));
-      console.log(fieldName);
+      //console.log(i18n.global.t('10697'));
+      //console.log(fieldName);
       //return replaceParams(i18n.global.t('4'), { fieldName: fieldName });
       return i18n.global.t('10697',{ fieldName: fieldName });
     },

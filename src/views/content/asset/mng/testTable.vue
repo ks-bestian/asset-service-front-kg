@@ -10,8 +10,7 @@ const formStore = useFormStore();
 const props = defineProps({
     fields: Array,
     type: String,
-    detailDatas: Object,
-    setFileUploadRef: Function
+    detailDatas: Object
 })
 
 
@@ -60,6 +59,10 @@ onMounted(() => {
     formStore.fieldStore = fieldStore;
     formStore.fnRegister(formkey.value, validate, fieldStore)
 })
+
+defineExpose({
+  fileUploadRefs,
+});
 </script>
 
 <template>
@@ -91,7 +94,6 @@ onMounted(() => {
                             <FileUploadPanel
                             :ref="setFileUploadRef(field.name)"
                             :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
-                            :setSelfRef="props.setFileUploadRef"
                             />
                             <!--
                             <div class="file_attatch">

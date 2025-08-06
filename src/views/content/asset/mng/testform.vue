@@ -1,5 +1,5 @@
 <script setup>
-import {  defineProps, computed } from 'vue';
+import {  defineProps, computed, ref } from 'vue';
 import testTable from './testTable.vue';
 import testTableDtl from './testTableDtl.vue';
 
@@ -10,7 +10,7 @@ const props = defineProps({
   codeList: Array,
 })
 
-//const fileUploadRefs = ref({});
+
 
 // 자식에게 전달할 setter
 
@@ -26,7 +26,13 @@ const colWidths = computed(() => {
   return firstFullRow.map(field => field.width || 'auto');
 });
 
-//const isReady = computed(() => colWidths.value.length > 0);
+const tableRefs = ref({});
+
+defineExpose({
+  getAllFileUploadRefs: () => {
+    return tableRefs.value?.fileUploadRefs || {};
+  },
+});
 
 </script>
 
@@ -41,7 +47,11 @@ const colWidths = computed(() => {
         </template>
       </colgroup>
       <tbody>
-            <testTable :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas"  v-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'update') || type === 'create'" />
+            <testTable 
+              v-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'update') || type === 'create'" 
+              :fields="props.fields" :type="props.type" 
+              :detailDatas="props.detailDatas"  
+              :ref="el => { tableRefs.value = el }"/>
             <testTableDtl :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-else-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'detail')"/>
       </tbody>
     </table>

@@ -11,8 +11,10 @@
 </style>
 <template>
     <div class="card">
+        <!--
         <Toast />
-        <FileUpload ref="fileUploader" :auto="false" :multiple="true" :customUpload="true" :files="defaultFiles" :maxFileSize="1000000000" @remove="onRemove" >
+        -->
+        <FileUpload :ref="fileUploader" :auto="false" :multiple="true" :customUpload="true" :files="defaultFiles" :maxFileSize="1000000000" @remove="onRemove" >
           <template #file="{ file }">
             <div class="custom-file-item flex align-items-center gap-3">
               <i class="pi pi-file-pdf text-2xl text-primary" v-if="file.name.endsWith('.pdf')"></i>
@@ -37,8 +39,8 @@
 <script setup>
 import FileUpload from 'primevue/fileupload';
 import { ref, defineExpose, defineProps, onMounted } from 'vue'
-import { useToast } from "primevue/usetoast";
-const toast = useToast();
+//import { useToast } from "primevue/usetoast";
+//const toast = useToast();
 const props = defineProps({
   uploadedFilesFromDB: {
     type: Array,
@@ -93,11 +95,11 @@ const onRemove = (event) => {
     deletedFileList.value.push(removedFile.fileNm); 
   }
 };
-
+/*
 const onAdvancedUpload = () => {
     toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
 };
-
+*/
 const getUploadSummary = () => {
   const uploadFiles = fileUploader.value?.files || [];
 

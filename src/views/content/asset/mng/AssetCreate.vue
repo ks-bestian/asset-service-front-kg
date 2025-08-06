@@ -206,6 +206,11 @@ const fnClickSave = (event) => {
   );
 };
 
+const eqpmntTabRef = ref(null);
+const videoMnlTabRef = ref(null);
+const instlTabRef = ref(null);
+const faqTabRef = ref(null);
+
 const fnSave = async () => {
   const { mnulVo, installVo, faqVo, params, tusVideoFiles, formData } = buildVoLists();
 
@@ -218,8 +223,27 @@ const fnSave = async () => {
     faqVoList: faqVo
   };
 
+
+  const tabRefs = [
+    eqpmntTabRef.value,
+    videoMnlTabRef.value,
+    instlTabRef.value,
+    faqTabRef.value
+  ];
+
+  // 각 탭의 fileUploadRefs를 모두 모아서 하나로 합치기
+  const mergedUploadSummaryMap = {};
+
+  tabRefs.forEach(ref => {
+    const summaryMap = ref?.getUploadSummaryMap?.();
+    if (summaryMap?.value) {
+      Object.entries(summaryMap.value).forEach(([fieldName, uploaderComp]) => {
+        mergedUploadSummaryMap[fieldName] = uploaderComp;
+      });
+    }
+  });
     // ✅ 모든 file type 필드에 대해 FileUploadPanel 요약 정보 수집
-  Object.entries(fileUploadRefs.value).forEach(([fieldName, uploaderComp]) => {
+  Object.entries(mergedUploadSummaryMap).forEach(([fieldName, uploaderComp]) => {
     if (!uploaderComp || typeof uploaderComp.getUploadSummary !== 'function') return;
 
     const { newFiles, existingFiles, deletedFiles } = uploaderComp.getUploadSummary();
@@ -316,10 +340,10 @@ onMounted(() => {
           </li>
         </ul>
       </nav>
-      <EqpmntCreateTab :show="tab === 'productInf'" :detailDatas="equipDetailVo" :type="type" />
-      <VideoMnlCreateTab :show="tab === 'manual'" :detailDatas="mnulList" :type="type" />
-      <InstlCreateTab :show="tab === 'installInf'" :detailDatas="installList" :type="type" />
-      <FaqCreateTab :show="tab === 'faq'" :detailDatas="faqList" :type="type" />
+      <EqpmntCreateTab :ref="eqpmntTabRef" :show="tab === 'productInf'" :detailDatas="equipDetailVo" :type="type" />
+      <VideoMnlCreateTab :ref="videoMnlTabRef" :show="tab === 'manual'" :detailDatas="mnulList" :type="type" />
+      <InstlCreateTab :ref="instlTabRef" :show="tab === 'installInf'" :detailDatas="installList" :type="type" />
+      <FaqCreateTab :ref="faqTabRef" :show="tab === 'faq'" :detailDatas="faqList" :type="type" />
     </div>
     <div class="btn_group_fixed">
       <button type="submit" class="v_btn btn_primary btn_md" @click="fnClickSave">{{ t('10743') }}</button><!-- 저장 -->

@@ -49,6 +49,21 @@ onMounted(() => {
     }
 })
 
+const panelRefs = ref([]);
+
+defineExpose({
+  getAllFileUploadRefs: () => {
+    const result = {};
+    panelRefs.value.forEach((panelRef, idx) => {
+      const refs = panelRef?.getFileUploadRefs?.() || {};
+      Object.entries(refs).forEach(([key, val]) => {
+        result[`manual${idx}_${key}`] = val;
+      });
+    });
+    return result;
+  },
+});
+
 </script>
 
 <template>
@@ -58,7 +73,15 @@ onMounted(() => {
         </div>
     </div>
     <template v-for="(item, i) in manualList" :key="item.mnlId">
-        <VideoPanel :id="item.mnlId" @del-manual="fnDelManual" :index="(i + 1)" v-show="show" :type="props.type"
+        <VideoPanel 
+              :ref="el => {
+                if (!Array.isArray(panelRefs.value)) {
+                panelRefs.value = [];
+                }
+                panelRefs.value[i] = el;
+            }"
+            :index="(i + 1)"
+            :id="item.mnlId" @del-manual="fnDelManual" v-show="show" :type="props.type"
             :detailDatas="item" />
     </template>
 </template>
