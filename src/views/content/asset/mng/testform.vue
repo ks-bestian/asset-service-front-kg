@@ -7,8 +7,13 @@ const props = defineProps({
   fields: Array,
   type: String,
   detailDatas: Object,
-  codeList: Array
+  codeList: Array,
 })
+
+//const fileUploadRefs = ref({});
+
+// 자식에게 전달할 setter
+
 
 // ✅ 최대 열 수 계산 (한 줄에 가장 많은 필드 개수)
 const maxColumnCount = computed(() => {
@@ -36,7 +41,7 @@ const colWidths = computed(() => {
         </template>
       </colgroup>
       <tbody>
-            <testTable :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'update') || type === 'create'" />
+            <testTable :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas"  v-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'update') || type === 'create'" />
             <testTableDtl :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-else-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'detail')"/>
       </tbody>
     </table>

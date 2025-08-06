@@ -26,7 +26,7 @@ export const formSchemas = {
         { name: "dtlImg", label: i18n.global.t('10754'), type: 'file', attachType: 'image'}, //상세이미지
       ],
       [
-        { name: "thumbnail", label: i18n.global.t('10753'), type: 'file', required: true, attachType: 'image' }, //썸네일이미지
+        { name: "thumbnail", label: i18n.global.t('10753'), type: 'file', attachType: 'image' }, //썸네일이미지
       ],
       [
         { name: "eqpmntId", label: 'eqpmntId', type: 'text', hidden: true }, //장비아이디
@@ -66,7 +66,7 @@ export const formSchemas = {
       [
         { name: 'mnlLng', label: i18n.global.t('10238'), type: 'select', items: store.getComCodes('1039'), default: 'mnlLng01', width: '15%', required: true }, //언어
         { name: 'mnlNm', label: i18n.global.t('10735'), type: 'text', required: true }, //메뉴얼명
-        { name: 'videoFile', label: i18n.global.t('10733'), type: 'file', required: true, upload: 'tus', attachType: 'video'}, //영상 메뉴얼
+        { name: 'videoFile', label: i18n.global.t('10733'), type: 'file',  upload: 'tus', attachType: 'video'}, //영상 메뉴얼
 
       ],
     ]

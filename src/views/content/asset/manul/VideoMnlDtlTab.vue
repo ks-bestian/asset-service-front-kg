@@ -74,8 +74,6 @@ const loadVideoWithAuth = async (mnlId) => {
   if (!res.ok) {
     console.error("❌ 영상 로딩 실패:", res.status);
     return;
-  }else{
-    alert('영상 로딩 성공')
   }
 
   const blob = await res.blob();
