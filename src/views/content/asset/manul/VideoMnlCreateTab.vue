@@ -42,6 +42,7 @@ watch(() => props.detailDatas, (newval) => {
 
 
 onMounted(() => {
+    console.log('✅ VideoMnlCreateTab mounted');
     if (props.type === 'create') {
         manualList.value.push({
             mnlId: '1'
@@ -52,12 +53,14 @@ onMounted(() => {
 const panelRefs = ref([]);
 
 defineExpose({
-  getAllFileUploadRefs: () => {
+  getUploadSummaryMap: () => {
+    console.log('📌 panelRefs.value', panelRefs.value);
     const result = {};
     panelRefs.value.forEach((panelRef, idx) => {
       const refs = panelRef?.getFileUploadRefs?.() || {};
       Object.entries(refs).forEach(([key, val]) => {
-        result[`manual${idx}_${key}`] = val;
+        // ✅ 명확한 key 형식 사용: voType-index-field
+        result[`mnulVo-${idx}-${key}`] = val;
       });
     });
     return result;

@@ -73,12 +73,17 @@ const buildVoLists = () => {
       const val = value?.value;
 
       if (mnulField.value.includes(key)) {
-        if (key === 'videoFile' && val) {
-          const files = Array.isArray(val) ? val : (val instanceof FileList ? Array.from(val) : [val]);
+        if (key === 'videoFile') {
+          console.log('key :: ',key)
+          
+          //const files = Array.isArray(val) ? val : (val instanceof FileList ? Array.from(val) : [val]);
+          console.log('오예~~~~~~1')
 
+          const videoFile = formStore.videoFile?.[0]?.fileUploader;
+          const files = videoFile?.files || [];
           files.forEach(file => {
             if (file instanceof File || file instanceof Blob) {
-
+              console.log('오예~~~~~~')
               tusVideoFiles.push({ file, targetObj: obj });
               obj.orgnlFileNm = file.name.replace(/\.[^/.]+$/, '');
               obj.fileSz = file.size;
@@ -87,6 +92,7 @@ const buildVoLists = () => {
               console.warn('⚠️ 무시된 videoFile 객체 (File 아님):', file);
             }
           });
+          
         } else {
           obj[key] = val;
         }
@@ -94,13 +100,20 @@ const buildVoLists = () => {
         isManual = true;
 
       } else if (instlField.value.includes(key)) {
-        if (key === 'instlFile' && val && typeof val === 'object' && typeof val.length === 'number') {
-            const files = Array.from(val); // FileList 또는 유사배열
+        if (key === 'instlFile') {
+
+            const instlFile = formStore.instlFile?.[0]?.fileUploader;
+            const files = instlFile?.files || [];
+            //const files = Array.from(val); // FileList 또는 유사배열
+            console.log('files ~~~~~~:: ',files);
             files.forEach(file => {
+               obj['file'] = file;
+              /*
                 const fileId = generateUUID();
                 formData.append(fileId, file);
                 obj['fileId'] = fileId;
                 obj[key] = file.name;
+                */
             });
         } else {
           obj[key] = val;
@@ -139,28 +152,21 @@ const uploadTusFilesToTargets = async (tusVideoFiles) => {
     };
   });
 };
-/*
-const buildFormData = (sendData, formData) => {
-  for (const key in sendData) {
-    const value = sendData[key];
-    if (typeof value === 'object' && value !== null) {
-      formData.append(key, JSON.stringify(value));
-    } else {
-      formData.append(key, value);
-    }
-  }
-  return formData;
-};
-*/
+
 
 
 const buildFormData = (sendData, formData) => {
   for (const key in sendData) {
     const value = sendData[key];
     if (key === 'files' || key === 'dtlImg' || key === 'thumbnail') {
-      if (value) {
-        for (let i = 0; i < value.length; i++) {
-          formData.append(key, value[i]);
+      console.log('key',key);
+      const fileList = formStore[key]?.[0]?.fileUploader;
+
+      const files = fileList?.files || [];
+      console.log('files... :: ',files);
+      if (files) {
+        for (let i = 0; i < files.length; i++) {
+          formData.append(key, files[i]);
         }
       }
     } else if (typeof value === 'object' && value !== null) {
@@ -212,8 +218,8 @@ const instlTabRef = ref(null);
 const faqTabRef = ref(null);
 
 const fnSave = async () => {
-  const { mnulVo, installVo, faqVo, params, tusVideoFiles, formData } = buildVoLists();
 
+  const { mnulVo, installVo, faqVo, params, tusVideoFiles, formData } = buildVoLists();
   const updatedMnulVo = await uploadTusFilesToTargets(tusVideoFiles);
 
   const sendData = {
@@ -223,56 +229,14 @@ const fnSave = async () => {
     faqVoList: faqVo
   };
 
-
-  const tabRefs = [
-    eqpmntTabRef.value,
-    videoMnlTabRef.value,
-    instlTabRef.value,
-    faqTabRef.value
-  ];
-
-  // 각 탭의 fileUploadRefs를 모두 모아서 하나로 합치기
-  const mergedUploadSummaryMap = {};
-
-  tabRefs.forEach(ref => {
-    const summaryMap = ref?.getUploadSummaryMap?.();
-    if (summaryMap?.value) {
-      Object.entries(summaryMap.value).forEach(([fieldName, uploaderComp]) => {
-        mergedUploadSummaryMap[fieldName] = uploaderComp;
-      });
-    }
-  });
-    // ✅ 모든 file type 필드에 대해 FileUploadPanel 요약 정보 수집
-  Object.entries(mergedUploadSummaryMap).forEach(([fieldName, uploaderComp]) => {
-    if (!uploaderComp || typeof uploaderComp.getUploadSummary !== 'function') return;
-
-    const { newFiles, existingFiles, deletedFiles } = uploaderComp.getUploadSummary();
-
-
-    // ✅ 새로 업로드된 파일을 FormData에 추가
-    newFiles.forEach(file => {
-      const uuid = generateUUID(); // 파일 식별 ID
-      formData.append(uuid, file); // file은 File 객체
-      // 서버에서 fileId와 함께 mapping 하기 위함
-      //sendData[fieldName] = file.name;
-      sendData[`${fieldName}Id`] = uuid;
-    });
-
-    // ✅ 유지할 기존 파일 정보 → 서버에 전달해서 삭제 안 하도록 처리
-    if (existingFiles.length > 0) {
-      sendData[`${fieldName}Keep`] = existingFiles; // 포맷은 상황에 맞게
-    }
-
-    // ✅ 삭제된 파일 정보 → 서버에서 삭제 처리
-    if (deletedFiles.length > 0) {
-      sendData[`${fieldName}Delete`] = deletedFiles;
-    }
-  });
-
   const fullFormData = buildFormData(sendData, formData);
   // ✅ 최종 전송되는 FormData 확인
   console.log('📦 Final FormData keys:', [...fullFormData.keys()]);
+    console.log('📦 installVoList JSON:', fullFormData.get('installVoList'));
   console.log('📦 mnulVoList JSON:', fullFormData.get('mnulVoList'));
+  console.log('📦 thumbnail:', fullFormData.get('thumbnail'));
+  console.log('📦 dtlImg:', fullFormData.get('dtlImg'));
+  console.log('📦 files:', fullFormData.get('files'));
   await submitForm(fullFormData);
 };
 

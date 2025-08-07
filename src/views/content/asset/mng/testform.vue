@@ -26,12 +26,11 @@ const colWidths = computed(() => {
   return firstFullRow.map(field => field.width || 'auto');
 });
 
-const tableRefs = ref({});
-
+const tableRefs = ref(null);
 defineExpose({
-  getAllFileUploadRefs: () => {
-    return tableRefs.value?.fileUploadRefs || {};
-  },
+  getFileUploadRefs: () => {
+    console.log('📌 tableRefs.value', tableRefs.value);
+    return tableRefs.value?.getFileUploadRefs?.() || {}},
 });
 
 </script>
@@ -51,7 +50,7 @@ defineExpose({
               v-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'update') || type === 'create'" 
               :fields="props.fields" :type="props.type" 
               :detailDatas="props.detailDatas"  
-              :ref="el => { tableRefs.value = el }"/>
+              :ref="tableRefs"/>
             <testTableDtl :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-else-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'detail')"/>
       </tbody>
     </table>

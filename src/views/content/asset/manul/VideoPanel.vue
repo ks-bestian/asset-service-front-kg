@@ -23,7 +23,9 @@ const fnDelManual = () => {
 const testformRef = ref(null);
 
 defineExpose({
-  getFileUploadRefs: () => testformRef.value?.getFileUploadRefs?.() || {},
+  getFileUploadRefs: () => {
+    console.log('📌 testformRef.value', testformRef.value);
+    return testformRef.value?.getFileUploadRefs?.() || {}}
 });
 </script>
 
