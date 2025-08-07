@@ -205,7 +205,7 @@ onMounted(() => {
       <h1 id="v_logo">
         <a href="javascript:void(0)" @click="fnLoginInitPath()">
           <img src="@/assets/images/common/logo.png" alt="">
-          <span class="text">Мыйзам документтерин <br> башкаруу системасы</span>
+          <span class="text">{{ t('10788') }}</span>
         </a>
       </h1>
       <div class="search_form">
@@ -246,9 +246,7 @@ onMounted(() => {
           <button type="button" class="v_btn" :class="{ active: lang === 'lng_type_3' }" @click="fnChangeLanguage('lng_type_3')">Ko</button>
         </div>
         <div class="util_item util_ctrl">
-          <!--
-          <button type="button" class="v_btn active"><i class="v_ico ico_alarm" @click="$router.push('/myPage/msg')"></i></button>
-          -->
+          <!--<button type="button" class="v_btn active"><i class="v_ico ico_alarm" @click="$router.push('/myPage/msg')"></i></button>-->
           <button type="button" class="v_btn" @click="fnLogout()"><i class="v_ico ico_logout"></i></button>
         </div>
       </div>

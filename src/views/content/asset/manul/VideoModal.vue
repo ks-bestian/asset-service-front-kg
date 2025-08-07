@@ -14,7 +14,7 @@ const props = defineProps({
 
 const emit = defineEmits(['close'])
 const visible = ref(props.dialog)
-
+const store = useStore();
 
 const videoSrc = ref(null);
 
@@ -60,21 +60,14 @@ onMounted(() => {
     <Dialog v-model:visible="visible" modal :style="{ width: '62vw', minHeight: '25vh' }" @hide="emit('close')">
         <template #header>
             <div class="popup_header" style="width: 100%; border-top-left-radius: 12px;">
-
                 <h2 class="popup_tit">{{ obj.mnlNm }}</h2>
-
             </div>
         </template>
 
         <div class="flex item-center gap-4 mb-4">
             <div class="popup_body">
-
-
             <VideoView :eqpmntInfo="props.eqpmntInfo" :mnlId="props.videoMnlId"/>
-
-<!--
-                <video controls width="100%" :src="videoSrc" style="border-radius: 1rem;"></video>
--->
+                <!-- <video controls width="100%" :src="videoSrc" style="border-radius: 1rem;"></video> -->
                 <div class="popup_footer">
                     <div class="btn_group">
                         <button type="button" class="v_btn btn_outline_primary btn_md"

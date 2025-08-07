@@ -22,33 +22,24 @@ const filteredFaqList = computed(() => {
     if (!faqFilter.value) return props.faqList
     return props.faqList.filter(item => item.faqSe === faqFilter.value)
 })
-
-
-
 </script>
 
-
-
 <template>
-    <DataView :value="filteredFaqList" :layout="layout" paginator :rows="5">
+    <DataView :value="filteredFaqList" :layout="layout" :paginator="filteredFaqList.length > 0" :rows="5">
         <template #header>
             <div class="board_info ml_8">
                 <div class="left">
-                    <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ filteredFaqList.length
-                    }}</span>
-                    </div>
+                    <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ filteredFaqList.length }}</span></div>
                 </div>
                 <div class="right">
                     <div class="input_item">
                         <label class="form_label">{{ t('10778') }}</label>
                         <select class="form_control ml_2" v-model="faqFilter">
                             <option value="">{{ t('10778') }}</option>
-                            <option v-for="(item, i) in store.getComCodes('1040')" :key="i" :value="item.codeId">{{
-                                item.codeNm }}</option>
+                            <option v-for="(item, i) in store.getComCodes('1040')" :key="i" :value="item.codeId">{{ item.codeNm }}</option>
                         </select>
                     </div>
                 </div>
-
             </div>
         </template>
         <template #list="slotProps">

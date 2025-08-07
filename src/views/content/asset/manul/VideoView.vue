@@ -2,6 +2,7 @@
 import { ref, onMounted, defineProps, computed, watch } from 'vue'
 import { useStore } from '@/store';
 import { useI18n } from 'vue-i18n'
+
 const store = useStore()
 const props = defineProps({
     mnlId: String,

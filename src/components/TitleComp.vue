@@ -71,7 +71,7 @@ onMounted(() => {
     <div class="content_util">
         <div class="title_wrap">
             <h2 class="content_tit">{{ title }}</h2>
-            <button type="button" class="v_btn btn_favorite" :class="{on: isFavorite}" @click="toggleQuickMenu"><i class="v_ico ico_bookmark"></i></button>
+            <!-- <button type="button" class="v_btn btn_favorite" :class="{on: isFavorite}" @click="toggleQuickMenu"><i class="v_ico ico_bookmark"></i></button> -->
         </div>
         <nav class="v_breadcrumb">
             <ul class="path">

@@ -21,20 +21,21 @@ const fnSave = () => {
 </script>
 
 <template>
-    <DataView :value="props.instlList" :layout="layout" paginator :rows="8" :rowsPerPageOptions="[4, 8, 20, 50]">
+    <DataView :value="props.instlList" :layout="layout" :paginator="props.instlList.length > 0" :rows="8" :rowsPerPageOptions="[4, 8, 20, 50]">
         <template #header>
             <div class="board_info ml_8">
                 <div class="left">
-                    <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ props.instlList.length}}</span></div>
+                    <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{
+                            props.instlList.length}}</span></div>
                 </div>
-                 
+
                 <!--<div class="flex justify-end">
                     <SelectButton v-model="layout" :options="options" :allowEmpty="false">
                         <template #option="{ option }">
                             <i :class="[option === 'list' ? 'pi pi-bars' : 'pi pi-table']"></i>
                         </template>
-                    </SelectButton>
-                </div> -->
+</SelectButton>
+</div> -->
             </div>
         </template>
 
@@ -72,7 +73,7 @@ const fnSave = () => {
 
                         <div v-if="mdfyYn">
                             <button type="button" class="v_btn btn_primary btn_md" @click="fnSave">{{ t('10743')
-                            }}</button>
+                                }}</button>
                         </div>
                         <!-- <div v-else class="installer text_lg m_2">{{ `${item.rgstId} [${item.instlYmd}]` }}</div> -->
                     </div>
@@ -109,6 +110,13 @@ const fnSave = () => {
                         <div>{{ item.rmrk }}</div>
                     </div>
                 </div>
+            </div>
+        </template>
+
+        <template #empty>
+            <div class="no_data">
+                <i class="v_ico ico_error"></i>
+                <span class="text_msg">{{ t('10075') }}</span><!--There is no data.-->
             </div>
         </template>
     </DataView>
