@@ -47,11 +47,11 @@ defineExpose({
       </colgroup>
       <tbody>
             <testTable 
-              v-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'update') || type === 'create'" 
+              v-if="(Object.keys(props.detailDatas || {}).length > 0 && props.type === 'update') || props.type === 'create'" 
               :fields="props.fields" :type="props.type" 
               :detailDatas="props.detailDatas"  
               :ref="tableRefs"/>
-            <testTableDtl :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-else-if="(Object.keys(props.detailDatas || {}).length > 0 && type === 'detail')"/>
+            <testTableDtl :fields="props.fields" :type="props.type" :detailDatas="props.detailDatas" v-else-if="(Object.keys(props.detailDatas || {}).length > 0 && props.type === 'detail')"/>
       </tbody>
     </table>
   </div>

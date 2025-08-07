@@ -16,7 +16,7 @@ const props = defineProps({
 const fileUploadPanelRef1 = ref(null);
 const fileUploadPanelRef2 = ref(null);
 const fileUploadPanelRef3 = ref(null);
-//const fileUploadPanelRef4 = ref(null);
+const fileUploadPanelRef5 = ref(null);
 const fileUploadPanelRef = ref(null);
 const fileUploadRefs = ref({});
 const setFileUploadRef = (name) => (el) => {
@@ -74,7 +74,7 @@ onMounted(() => {
         formStore.videoFile = fileUploadPanelRef;
     }
     if (props.fields.some(row => row.some(col => col.name === 'instlFile'))) {
-        formStore.instlFile = fileUploadPanelRef;
+        formStore.instlFile = fileUploadPanelRef5;
     }
 
     if (props.type === 'update') {
@@ -121,35 +121,35 @@ defineExpose({
                             <template v-if="field.name==='files'">
                                 <FileUploadPanel
                                 ref="fileUploadPanelRef1"
-                                :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                                :uploadedFilesFromDB="fieldStore[field.name].value"
                                 />
 
                             </template>
                             <template v-if="field.name==='dtlImg'">
                                 <FileUploadPanel
                                 ref="fileUploadPanelRef2"
-                                :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                                :uploadedFilesFromDB="fieldStore[field.name].value"
                                 />
 
                             </template>
                             <template v-if="field.name==='thumbnail'">
                                 <FileUploadPanel
                                 ref="fileUploadPanelRef3"
-                                :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                                :uploadedFilesFromDB="fieldStore[field.name].value"
                                 />
 
                             </template>                   
                             <template v-if="field.name==='videoFile'">
                                 <FileUploadPanel
                                 ref="fileUploadPanelRef"
-                                :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                                :uploadedFilesFromDB="fieldStore[field.name].value"
                                 />
 
                             </template>    
                             <template v-if="field.name==='instlFile'">
                                 <FileUploadPanel
                                 ref="fileUploadPanelRef5"
-                                :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                                :uploadedFilesFromDB="fieldStore[field.name].value"
                                 />
 
                             </template>                                                                    

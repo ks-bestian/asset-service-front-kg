@@ -70,7 +70,35 @@ function getMimeType(extn) {
 const defaultFiles = ref([]);
 
 onMounted(() => {
+  let normalizedFiles = [];
+
   if (Array.isArray(props.uploadedFilesFromDB)) {
+    normalizedFiles = props.uploadedFilesFromDB;
+  } else if (props.uploadedFilesFromDB && typeof props.uploadedFilesFromDB === 'object') {
+    normalizedFiles = [props.uploadedFilesFromDB];
+  }
+
+  if (normalizedFiles.length > 0) {
+    console.log('normalizedFiles :: ', normalizedFiles);
+
+    const mappedFiles = normalizedFiles.map(file => ({
+      name: file.orgnlFileNm,
+      size: file.fileSz,
+      type: getMimeType(file.fileExtn),
+      fileNm: file.fileNm,
+      status: 'uploaded'
+    }));
+
+    defaultFiles.value = mappedFiles;
+
+    if (fileUploader.value && Array.isArray(fileUploader.value.files)) {
+      fileUploader.value.files.splice(0, fileUploader.value.files.length, ...mappedFiles);
+    }
+  }
+
+  /*
+  if (Array.isArray(props.uploadedFilesFromDB)) {
+    console.log('props.uploadedFilesFromDB :: ',props.uploadedFilesFromDB)
     defaultFiles.value = props.uploadedFilesFromDB.map(file => ({
       name: file.orgnlFileNm,
       size: file.fileSz,
@@ -85,6 +113,7 @@ onMounted(() => {
       getUploadSummary
     });
   }
+    */
 });
 
 const onRemove = (event) => {

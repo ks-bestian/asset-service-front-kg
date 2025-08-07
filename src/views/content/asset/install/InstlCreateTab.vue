@@ -36,11 +36,7 @@ const fnDelInstall = (id) => {
         console.error(message)
     })
 };
-/*
-watch(() => props.detailDatas, (newval) => {
-    installList.value = [...newval]
-})
-*/
+
 watch(() => props.detailDatas, (newval) => {
     if (newval && newval.length) {
         installList.value = [...newval];
@@ -72,7 +68,7 @@ defineExpose({
         </div>
     </div>
     <template v-for="(item, i) in installList" :key="item.instlId">
-        <InstlPanel :ref="formRef" :id="item.instlId" @del-install="fnDelInstall" :index="(i + 1)" v-show="show" :type="type"
+        <InstlPanel :id="item.instlId" @del-install="fnDelInstall" :index="(i + 1)" v-show="show" :type="type"
             :detailDatas="item"  />
     </template>
 </template>

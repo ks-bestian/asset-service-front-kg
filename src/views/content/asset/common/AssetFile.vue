@@ -93,7 +93,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <templage v-if="list.length === 0">{{ t('10075') }}</templage>
+    <template v-if="list.length === 0">{{ t('10075') }}</template>
 
     <ul v-else class="file_list" v-for="(file, index) in list" :key="index">
         <li class="p_1">

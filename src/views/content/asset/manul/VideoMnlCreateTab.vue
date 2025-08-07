@@ -13,6 +13,7 @@ const props = defineProps({
 const formStore = useFormStore();
 const store = useStore()
 const manualList = ref([])
+const type = ref(props.type)
 
 const fnAddManual = () => {
     manualList.value.push({ mnlId: String(Date.now() + Math.random()) })
@@ -35,14 +36,17 @@ const fnDelManual = (id) => {
 }
 
 watch(() => props.detailDatas, (newval) => {
+    
+    console.log('detailDatas',props.detailDatas);
     if (newval && newval.length) {
         manualList.value = [...newval].sort((a, b) => a.seq - b.seq)
+        console.log('manualList',manualList.value);
     }
 }, { immediate: true, deep: true });
 
 
 onMounted(() => {
-    console.log('✅ VideoMnlCreateTab mounted');
+    
     if (props.type === 'create') {
         manualList.value.push({
             mnlId: '1'
@@ -54,12 +58,10 @@ const panelRefs = ref([]);
 
 defineExpose({
   getUploadSummaryMap: () => {
-    console.log('📌 panelRefs.value', panelRefs.value);
     const result = {};
     panelRefs.value.forEach((panelRef, idx) => {
       const refs = panelRef?.getFileUploadRefs?.() || {};
       Object.entries(refs).forEach(([key, val]) => {
-        // ✅ 명확한 key 형식 사용: voType-index-field
         result[`mnulVo-${idx}-${key}`] = val;
       });
     });
@@ -77,14 +79,8 @@ defineExpose({
     </div>
     <template v-for="(item, i) in manualList" :key="item.mnlId">
         <VideoPanel 
-              :ref="el => {
-                if (!Array.isArray(panelRefs.value)) {
-                panelRefs.value = [];
-                }
-                panelRefs.value[i] = el;
-            }"
             :index="(i + 1)"
-            :id="item.mnlId" @del-manual="fnDelManual" v-show="show" :type="props.type"
+            :id="item.mnlId" @del-manual="fnDelManual" v-show="show" :type="type"
             :detailDatas="item" />
     </template>
 </template>

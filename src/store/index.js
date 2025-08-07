@@ -770,6 +770,8 @@ export const useFormStore = defineStore('form', {
         const result = await validate()
         this.values[formKey] = result.values?.[formKey] || {}
         if (!result.valid) allvalid = false
+        console.log('formKey :: ',formKey);
+        console.log('allvalid :: ',allvalid);
       }
 
       return allvalid
