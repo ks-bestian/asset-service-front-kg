@@ -115,10 +115,7 @@ onMounted(() => {
         <div class="content_section">
             <nav class="tab_menu type2 mb_6">
                 <ul class="tab_list">
-
-                    <li :class="{ on: tab == '' }" @click="tab = ''; fnTabChange()"><a href="javascript:void(0)">{{
-                        t('10066') }}</a></li>
-
+                    <li :class="{ on: tab == '' }" @click="tab = ''; fnTabChange()"><a href="javascript:void(0)">{{ t('10066') }}</a></li>
                     <template v-for="(item, i) in eqpmntSeList" :key="i">
                         <li :class="{ on: tab == item.codeId }" @click="tab = item.codeId; fnTabChange()"><a
                                 href="javascript:void(0)">{{ item.codeNm }}</a></li>
@@ -148,8 +145,8 @@ onMounted(() => {
                 </div>
 
                 <div class="search_btn">
-                    <button type="button" class="v_btn btn_primary btn_md">
-                        <i class="v_ico ico_search_white" @click="fnSearch"></i><span>{{ t("10053") }}</span></button>
+                    <button type="button" class="v_btn btn_primary btn_md" @click="fnSearch">
+                        <i class="v_ico ico_search_white" ></i><span>{{ t("10053") }}</span></button>
                     <button type="button" @click="fnReset" class="v_btn btn_outline_primary btn_md">
                         <i class="v_ico ico_reset_primary"></i><span></span></button>
                 </div>
@@ -174,8 +171,7 @@ onMounted(() => {
                 <template #header>
                     <div class="board_info ml_8">
                         <div class="left">
-                            <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ list.length
-                            }}</span></div>
+                            <div class="total_num text_xl">{{ "Total" }} <span class="text_primary">{{ list.length }}</span></div>
                         </div>
 
                         <div class="flex justify-end">
@@ -255,8 +251,7 @@ onMounted(() => {
 
                             <div style="display: flex;justify-content: flex-end;">
                                 <Button severity="info" rounded
-                                    @click.stop="dialogQna = true; eqpmntId = item.eqpmntId; bzentyId = item.bzentyId"><i
-                                        class="pi pi-question-circle"></i>
+                                    @click.stop="dialogQna = true; eqpmntId = item.eqpmntId; bzentyId = item.bzentyId"><i class="pi pi-question-circle"></i>
                                     <span style="font-size: 1.2rem;">FAQ</span>
                                 </Button>
                             </div>
@@ -264,8 +259,7 @@ onMounted(() => {
                             <div class="text_xl text_bold m_2 mb_4">{{ item.eqpmntNm }}</div>
                             <div class="text_lg m_2">
                                 <span class="info_text">{{ t('10752') }}</span>
-                                {{ lang === 'lng_type_1' ? item.bzentyNm1 : lang === 'lng_type_2' ? item.bzentyNm2 :
-                                    item.bzentyNm3 }}
+                                {{ lang === 'lng_type_1' ? item.bzentyNm1 : lang === 'lng_type_2' ? item.bzentyNm2 : item.bzentyNm3 }}
                             </div>
 
                             <div class="text_lg m_2" style="display: flex; align-items: center;">

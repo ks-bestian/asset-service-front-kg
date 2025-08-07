@@ -82,6 +82,6 @@ onMounted(() => {
     font-weight: 800;
     margin-right: 20px;
     display: inline-block;
-    min-width: 5rem;
+    min-width: 7rem;
 }
 </style>

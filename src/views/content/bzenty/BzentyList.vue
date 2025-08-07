@@ -47,6 +47,15 @@ const fnReset = () => {
     fnSearch();
 }
 
+const fnExcelDownload = () => {
+    // Header designation to include
+
+    const selectedHeaders = [ lang === 'lng_type_1' ? 'bzentyNm1' : (lang === 'lng_type_2' ? 'bzentyNm2' : 'bzentyNm3'), "telno", "eml", "picNm" ];
+    const wsCols = [t('10752'), t('10358'), t('10359'), t('10759')];
+    const title = t('10789')
+    store.fnExcelDownload(list.value, selectedHeaders, wsCols, title);
+};
+
 onMounted(() => {
     //const nameError = msg.validation.missing('이름');
     //alert(nameError);
@@ -87,10 +96,12 @@ onMounted(() => {
                 </div>
                 <div class="right">
                     <div class="btn_wrap">
+                        <button type="button" class="v_btn btn_outline_secondary btn_sm" @click="fnExcelDownload">
+                            <i class="v_ico ico_download_secondary"></i><span>{{ t('10055') }}</span>
+                        </button>  
                         <button type="button" class="v_btn btn_outline_primary btn_sm" @click="fnRouteCreate">{{ t("10746") }}</button>
                         <!-- <button type="button" class="v_btn btn_outline_secondary btn_sm">{{ "선택 삭제" }}</button> -->
-                        <!-- <button type="button" class="v_btn btn_outline_secondary btn_sm">
-                            <i class="v_ico ico_download_secondary"></i><span>{{ "엑셀 다운로드" }}</span></button> -->
+                         
                     </div>
                 </div>
             </div>
