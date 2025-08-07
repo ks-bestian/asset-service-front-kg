@@ -13,7 +13,11 @@ const props = defineProps({
     detailDatas: Object
 })
 
-
+const fileUploadPanelRef1 = ref(null);
+const fileUploadPanelRef2 = ref(null);
+const fileUploadPanelRef3 = ref(null);
+//const fileUploadPanelRef4 = ref(null);
+const fileUploadPanelRef = ref(null);
 const fileUploadRefs = ref({});
 const setFileUploadRef = (name) => (el) => {
   if (el) fileUploadRefs.value[name] = el;
@@ -43,6 +47,9 @@ function getInitialValuesFromFields(fields) {
   return result;
 }
 
+const fnSave = () => {
+    //fileUploader.value.fileUploader;
+}
 
 onMounted(() => {
     props.fields.forEach(item => {
@@ -51,6 +58,24 @@ onMounted(() => {
             fieldStore[col.name] = { value, attrs }
         })
     })
+
+
+    if (props.fields.some(row => row.some(col => col.name === 'files'))) {
+        
+        formStore.files = fileUploadPanelRef1;
+    }
+    if (props.fields.some(row => row.some(col => col.name === 'dtlImg'))) {
+        formStore.dtlImg = fileUploadPanelRef2;
+    }
+    if (props.fields.some(row => row.some(col => col.name === 'thumbnail'))) {
+        formStore.thumbnail = fileUploadPanelRef3;
+    }
+    if (props.fields.some(row => row.some(col => col.name === 'videoFile'))) {
+        formStore.videoFile = fileUploadPanelRef;
+    }
+    if (props.fields.some(row => row.some(col => col.name === 'instlFile'))) {
+        formStore.instlFile = fileUploadPanelRef;
+    }
 
     if (props.type === 'update') {
         resetForm({ values: { ...props.detailDatas } })
@@ -61,7 +86,9 @@ onMounted(() => {
 })
 
 defineExpose({
-  fileUploadRefs,
+  getFileUploadRefs: () => {
+    console.log('📌 fileUploadRefs.value', fileUploadRefs.value);
+    return fileUploadRefs.value},
 });
 </script>
 
@@ -91,10 +118,42 @@ defineExpose({
                         </template>
 
                         <template v-else-if="field.type === 'file'">
-                            <FileUploadPanel
-                            :ref="setFileUploadRef(field.name)"
-                            :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
-                            />
+                            <template v-if="field.name==='files'">
+                                <FileUploadPanel
+                                ref="fileUploadPanelRef1"
+                                :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                                />
+
+                            </template>
+                            <template v-if="field.name==='dtlImg'">
+                                <FileUploadPanel
+                                ref="fileUploadPanelRef2"
+                                :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                                />
+
+                            </template>
+                            <template v-if="field.name==='thumbnail'">
+                                <FileUploadPanel
+                                ref="fileUploadPanelRef3"
+                                :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                                />
+
+                            </template>                   
+                            <template v-if="field.name==='videoFile'">
+                                <FileUploadPanel
+                                ref="fileUploadPanelRef"
+                                :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                                />
+
+                            </template>    
+                            <template v-if="field.name==='instlFile'">
+                                <FileUploadPanel
+                                ref="fileUploadPanelRef5"
+                                :uploadedFilesFromDB="Array.isArray(fieldStore[field.name].value) ? [...fieldStore[field.name].value] : []"
+                                />
+
+                            </template>                                                                    
+
                             <!--
                             <div class="file_attatch">
                                 <div class="form_col type4">

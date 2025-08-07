@@ -14,7 +14,7 @@
         <!--
         <Toast />
         -->
-        <FileUpload :ref="fileUploader" :auto="false" :multiple="true" :customUpload="true" :files="defaultFiles" :maxFileSize="1000000000" @remove="onRemove" >
+        <FileUpload ref="fileUploader" :auto="false" :multiple="true" :customUpload="true" :files="defaultFiles" :maxFileSize="1000000000" @remove="onRemove" >
           <template #file="{ file }">
             <div class="custom-file-item flex align-items-center gap-3">
               <i class="pi pi-file-pdf text-2xl text-primary" v-if="file.name.endsWith('.pdf')"></i>
@@ -114,7 +114,9 @@ const getUploadSummary = () => {
 };
 
 defineExpose({
-  getUploadSummary
+  fileUploader,
+  getUploadSummary,
+  deletedFileList
 });
 </script>
 
