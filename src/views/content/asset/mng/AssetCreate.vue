@@ -50,7 +50,7 @@ const buildVoLists = () => {
   const videoFileKeepList = [];
   const instlFileKeepList = [];
 
-  formStore.fieldArr.forEach((item) => {
+  formStore.fieldArr.forEach((item, index) => {
     const obj = {};
     let isInstall = false, isManual = false, isFaq = false;
 
@@ -64,6 +64,7 @@ const buildVoLists = () => {
 
           const videoFile = formStore.videoFile?.[0]?.fileUploader;
           const files = videoFile?.files || [];
+          console.log('files ::::: ',files)
           files.forEach(file => {
             if (file instanceof File || file instanceof Blob) {
               tusVideoFiles.push({ file, targetObj: obj });
@@ -85,9 +86,11 @@ const buildVoLists = () => {
       } else if (instlField.value.includes(key)) {
         if (key === 'instlFile') {
 
-            const instlFile = formStore.instlFile?.[0]?.fileUploader;
+            //const instlFile = formStore.instlFile?.[0]?.fileUploader;
+            const instlFile = formStore.instlFile?.[index]?.fileUploader;
             const files = instlFile?.files || [];
-
+            console.log('formStore.instlFile ::::: ',formStore.instlFile)
+            console.log('files1212 ::::: ',files)
             files.forEach(file => {
 
                 if (file instanceof File || file instanceof Blob) {
@@ -201,6 +204,10 @@ const buildFormData = (sendData, formData, videoFileKeepList = [], instlFileKeep
 }
 
 const submitForm = async (formData) => {
+
+
+
+  
   const isValid = await formStore.fnSubmit();
   if (!isValid) return;
 

@@ -52,6 +52,9 @@ const props = defineProps({
   setSelfRef: {
     type: Function,
   },
+  index: {
+    type: Number
+  },
 });
 const fileUploader =ref(null);
 const deletedFileList =ref([]);
@@ -93,6 +96,11 @@ onMounted(() => {
 
     if (fileUploader.value && Array.isArray(fileUploader.value.files)) {
       fileUploader.value.files.splice(0, fileUploader.value.files.length, ...mappedFiles);
+    }
+
+    if (props.setSelfRef && typeof props.setSelfRef === 'function') {
+      // ✅ index를 키로 등록
+      props.setSelfRef(props.fieldName, props.index, fileUploader.value);
     }
   }
 

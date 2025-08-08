@@ -57,6 +57,9 @@ export const formSchemas = {
       ],
       [
         { name: 'rmrk', label: i18n.global.t('10742'), type: 'textarea' }, //비고
+      ],
+      [
+        { name: "instlId", label: 'instlId', type: 'text', hidden: true }, //설치아이디
       ]
     ]
   },
@@ -69,6 +72,9 @@ export const formSchemas = {
         { name: 'videoFile', label: i18n.global.t('10733'), type: 'file', upload: 'tus', attachType: 'video'}, //영상 메뉴얼
 
       ],
+      [
+        { name: "mnlId", label: 'mnlId', type: 'text', hidden: true }, //메뉴얼아이디
+      ]
     ]
   },
   faqVo: {
@@ -81,6 +87,9 @@ export const formSchemas = {
       ],
       [
         { name: 'ans', label: i18n.global.t('10496'), type: 'textarea', required: true }, //답변
+      ],
+      [
+        { name: "faqId", label: 'faqId', type: 'text', hidden: true }, //문의아이디
       ]
     ]
   },
